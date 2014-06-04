@@ -30,78 +30,78 @@
   </style>
 </head>
 <body>
-<div id="img"></div>
-<div id="title">Waiting for commands</div>
+  <div id="img"></div>
+  <div id="title">Waiting for commands</div>
 </body>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
 <script type="text/javascript">
-    var photos = [];
-    var urls = [];
-    var nextImg = new Image();
-    
-    function random(max) {
-        if (window.crypto) {
-            var array = new Uint32Array(1);
-            window.crypto.getRandomValues(array);
-            return array[0] % max;
-        }
-        else return parseInt(Math.random()*max);
-    }
-    
-    function loadRandom() {
-        if (urls.length == 0) urls = photos.slice(0);
-        if (urls.length == 0) return;
-        
-        var url = urls.splice(random(urls.length), 1)[0];
-        nextImg.src = '/photo.php?file=' + url;
-        var orientation = 1;
-        
-        $.get('/photo_meta.php?file=' + url, function(meta) {
-          orientation = meta.orientation;
-          console.log(meta);
-        });
-        
-        nextImg.onload = function() {
-          var img = $('#img');
-          img.css({'background-image': 'none', 'transform': 'none'});
-          var css = {'background-image': 'url(' + this.src + ')'};
-          switch (orientation) {
-            case '3': css.transform = 'rotate(180deg)'; css.height = '100%'; css.top = 0; break;
-            case '6': css.transform = 'rotate(90deg)'; css.height = '67%'; css.top = '17%'; break;
-            case '8': css.transform = 'rotate(270deg)'; css.height = '67%'; css.top = '17%'; break;
-            default: css.transform = 'none';  css.height = '100%'; css.top = 0; break;
-          }
-          img.css(css);
+  var photos = [];
+  var urls = [];
+  var nextImg = new Image();
 
-          setTimeout(function() {
-            $('#title').text(url.substring(0, url.lastIndexOf('/')));
-          }, 1000);
-        };
-        console.log('Shown ' + (photos.length - urls.length) + ' of ' + photos.length);
+  function random(max) {
+    if (window.crypto) {
+      var array = new Uint32Array(1);
+      window.crypto.getRandomValues(array);
+      return array[0] % max;
     }
-    
-    function loadPhotos(dir) {
-        $('#title').text('Loading photos from ' + dir);
-        $.get('photos_list.php', {dir: dir})
-            .done(function(data) {
-                window.photos = data.split('\n');
-                window.urls = [];
-                $('#title').text(dir + ': ' + window.photos.length);
-                loadRandom();
-            })
-            .fail(function() {
-                $('#title').text('Error: ' + arguments);
-            });
-    }
+    else return parseInt(Math.random()*max);
+  }
 
-    $(function() {
-        setInterval(loadRandom, 10000);
-        
-        document.addEventListener('message', function(e) {
-            loadPhotos(e.detail);
-        });
-    });        
+  function loadRandom() {
+    if (urls.length == 0) urls = photos.slice(0);
+    if (urls.length == 0) return;
+
+    var url = urls.splice(random(urls.length), 1)[0];
+    nextImg.src = '/photo.php?file=' + url;
+    var orientation = 1;
+
+    $.get('/photo_meta.php?file=' + url, function(meta) {
+      orientation = meta.orientation;
+      console.log(meta);
+    });
+
+    nextImg.onload = function() {
+      var img = $('#img');
+      img.css({'background-image': 'none', 'transform': 'none'});
+      var css = {'background-image': 'url(' + this.src + ')'};
+      switch (orientation) {
+        case '3': css.transform = 'rotate(180deg)'; css.height = '100%'; css.top = 0; break;
+        case '6': css.transform = 'rotate(90deg)'; css.height = '67%'; css.top = '17%'; break;
+        case '8': css.transform = 'rotate(270deg)'; css.height = '67%'; css.top = '17%'; break;
+        default: css.transform = 'none';  css.height = '100%'; css.top = 0; break;
+      }
+      img.css(css);
+
+      setTimeout(function() {
+        $('#title').text(url.substring(0, url.lastIndexOf('/')));
+      }, 1000);
+    };
+    console.log('Shown ' + (photos.length - urls.length) + ' of ' + photos.length);
+  }
+
+  function loadPhotos(dir) {
+    $('#title').text('Loading photos from ' + dir);
+    $.get('photos_list.php', {dir: dir})
+      .done(function(data) {
+        window.photos = data.split('\n');
+        window.urls = [];
+        $('#title').text(dir + ': ' + window.photos.length);
+        loadRandom();
+      })
+      .fail(function() {
+        $('#title').text('Error: ' + arguments);
+      });
+  }
+
+  $(function() {
+    setInterval(loadRandom, 10000);
+
+    document.addEventListener('message', function(e) {
+      loadPhotos(e.detail);
+    });
+  });
 </script>
 </html>
 
