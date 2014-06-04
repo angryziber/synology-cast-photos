@@ -17,7 +17,7 @@ if (file_exists($path)) {
   exec("$exiv2 -g Exif.Image.Orientation -g Exif.Image.DateTime -g Exif.Photo.ExposureTime -g Exif.Photo.FNumber -pv ".escapeshellarg($path), $lines);
   $result = array('file' => $file,
                   'orientation' => exif_value($lines[0]),
-                  'datetime' => exif_value($lines[1]),
+                  'date' => exif_value(str_replace(':', '-', $lines[1])),
                   'exposure' => exif_value($lines[2]),
                   'fnumber' => exif_value($lines[3]));
 
