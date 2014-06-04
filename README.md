@@ -8,7 +8,7 @@ To install:
 - Enable Web station on your Synology NAS
 - Copy/clone these files to the 'web' directory on your NAS
 - [Register a Chromecast app](https://cast.google.com/publish/) with Google pointing to http://your-nas-ip/random.html
-  (Note: that you need to also register your Chromecast device for development in order to be able to use http urls)
+  (Note: that you need to pay Google $5 and also register your Chromecast device for development in order to be able to use http urls)
 - Specify registered app ID in cast.html
 - Open http://your-nas-ip/cast.html in your browser, start casting!
 
