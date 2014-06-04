@@ -10,6 +10,7 @@ To use this stuff, you will need some hardware:
 To install:
 
 - Enable *Web Station* on your Synology NAS
+- In PHP settings (in a tab), add your photos directory to PHP open_basedir - otherwise photos won't be accessible to PHP
 - Copy/clone these files to the *'web'* directory on your NAS
 - [Register a Chromecast app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/random.html**
   (Note: you need to pay Google $5 and also register your Chromecast device for development in order to be able to use http urls)
