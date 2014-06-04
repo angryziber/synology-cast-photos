@@ -58,24 +58,25 @@
         var orientation = 1;
         
         $.get('/photo_meta.php?file=' + url, function(meta) {
-            orientation = meta.orientation;
-            console.log(meta);
+          orientation = meta.orientation;
+          console.log(meta);
         });
         
         nextImg.onload = function() {
-           $('#img').css({'background-image': 'none', 'transform': 'none'});
-           var css = {'background-image': 'url(' + this.src + ')'};
-           switch (orientation) {
-                case '3': css.transform = 'rotate(180deg)'; css.height = '100%'; css.top = 0; break;
-                case '6': css.transform = 'rotate(90deg)'; css.height = '67%'; css.top = '17%'; break;
-                case '8': css.transform = 'rotate(270deg)'; css.height = '67%'; css.top = '17%'; break;
-                default: css.transform = 'none';  css.height = '100%'; css.top = 0; break;
-           }
-           $('#img').css(css);
-                
-           setTimeout(function() {
-               $('#title').text(url.substring(0, url.lastIndexOf('/')));
-           }, 1000);
+          var img = $('#img');
+          img.css({'background-image': 'none', 'transform': 'none'});
+          var css = {'background-image': 'url(' + this.src + ')'};
+          switch (orientation) {
+            case '3': css.transform = 'rotate(180deg)'; css.height = '100%'; css.top = 0; break;
+            case '6': css.transform = 'rotate(90deg)'; css.height = '67%'; css.top = '17%'; break;
+            case '8': css.transform = 'rotate(270deg)'; css.height = '67%'; css.top = '17%'; break;
+            default: css.transform = 'none';  css.height = '100%'; css.top = 0; break;
+          }
+          img.css(css);
+
+          setTimeout(function() {
+            $('#title').text(url.substring(0, url.lastIndexOf('/')));
+          }, 1000);
         };
         console.log('Shown ' + (photos.length - urls.length) + ' of ' + photos.length);
     }
