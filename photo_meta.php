@@ -1,8 +1,9 @@
 <?
-$file = $_GET['file'];
 $prefix = '/volume1/Photos/';
-$path = $prefix.$file;
 $exiv2 = '/usr/syno/bin/exiv2';
+
+$file = $_GET['file'];
+$path = $prefix.$file;
 
 if (preg_match("/\.(CR2|cr2)\.jpg$/", $path)) {
   $path = preg_replace("/\.jpg$/", "", $path);
