@@ -89,7 +89,7 @@
 
     $.get('photos_list.php', {dir: dir})
       .done(function(data) {
-        photos = data.split('\n');
+        photos = data.trim().split('\n');
         current = [];
         $('#title').text(dir + ': ' + photos.length);
 
