@@ -1,5 +1,5 @@
-Cast your raw photos from NAS directly to TV
-============================================
+Cast photos from NAS directly to TV
+===================================
 
 Small set of scripts to cast photos stored on a Synology NAS directly to Google Chromecast.
 
