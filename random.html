@@ -40,6 +40,7 @@
   var nextImg = new Image();
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
+  var interval;
 
   function random(max) {
     if (window.crypto) {
@@ -84,24 +85,24 @@
 
   function loadPhotos(dir) {
     $('#title').text('Loading photos from ' + dir);
+    if (interval) clearInterval(interval);
+
     $.get('photos_list.php', {dir: dir})
       .done(function(data) {
         photos = data.split('\n');
         current = [];
         $('#title').text(dir + ': ' + photos.length);
+
         loadRandom();
+        interval = setInterval(loadRandom, 10000);
       })
       .fail(function() {
         $('#title').text('Error: ' + arguments);
       });
   }
 
-  $(function() {
-    setInterval(loadRandom, 10000);
-
-    document.addEventListener('message', function(e) {
-      loadPhotos(e.detail);
-    });
+  document.addEventListener('message', function(e) {
+    loadPhotos(e.detail);
   });
 </script>
 </html>
