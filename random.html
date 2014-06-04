@@ -36,28 +36,29 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
 <script type="text/javascript">
-  var photos = [];
-  var urls = [];
+  var photos = [], current = [];
   var nextImg = new Image();
+  var photoUrlPrefix = '/photo.php?file=';
+  var metaUrlPrefix = '/photo_meta.php?file=';
 
   function random(max) {
     if (window.crypto) {
       var array = new Uint32Array(1);
-      window.crypto.getRandomValues(array);
+      crypto.getRandomValues(array);
       return array[0] % max;
     }
     else return parseInt(Math.random()*max);
   }
 
   function loadRandom() {
-    if (urls.length == 0) urls = photos.slice(0);
-    if (urls.length == 0) return;
+    if (current.length == 0) current = photos.slice(0);
+    if (current.length == 0) return;
 
-    var url = urls.splice(random(urls.length), 1)[0];
-    nextImg.src = '/photo.php?file=' + url;
+    var url = current.splice(random(current.length), 1)[0];
+    nextImg.src = photoUrlPrefix + url;
     var orientation = 1;
 
-    $.get('/photo_meta.php?file=' + url, function(meta) {
+    $.get(metaUrlPrefix + url, function(meta) {
       orientation = meta.orientation;
       console.log(meta);
     });
@@ -78,16 +79,16 @@
         $('#title').text(url.substring(0, url.lastIndexOf('/')));
       }, 1000);
     };
-    console.log('Shown ' + (photos.length - urls.length) + ' of ' + photos.length);
+    console.log('Shown ' + (photos.length - current.length) + ' of ' + photos.length);
   }
 
   function loadPhotos(dir) {
     $('#title').text('Loading photos from ' + dir);
     $.get('photos_list.php', {dir: dir})
       .done(function(data) {
-        window.photos = data.split('\n');
-        window.urls = [];
-        $('#title').text(dir + ': ' + window.photos.length);
+        photos = data.split('\n');
+        current = [];
+        $('#title').text(dir + ': ' + photos.length);
         loadRandom();
       })
       .fail(function() {
