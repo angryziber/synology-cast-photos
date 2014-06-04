@@ -28,12 +28,14 @@
 <script type="text/javascript">
   chromecast.appId = '40FA4E04';
   $(function () {
+    setTimeout(chromecast.launch, 1000);
+
     var input = $('[name=prefix]').typeahead({hint: true, highlight: true, minLength: 3}, {
       name: 'photo-dirs',
       displayKey: 'value',
-      source: function (q, cb) {
-        $.get('/photos_dirs.php?dir=' + q, function (data) {
-          var values = data.split('\n');
+      source: function (dir, cb) {
+        $.get('/photos_dirs.php?dir=' + dir, function (data) {
+          var values = data.trim().split('\n');
           cb($.map(values, function (value) {
             return {value: value}
           }));
@@ -41,7 +43,6 @@
       }
     });
 
-    setTimeout(chromecast.launch, 1000);
     input.on('typeahead:selected', function (e) {
       chromecast.message(input.val(), function (e) {
         console.log(e);
