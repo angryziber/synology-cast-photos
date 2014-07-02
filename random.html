@@ -66,13 +66,13 @@
 
     nextImg.onload = function() {
       var img = $('#img');
-      img.css({'background-image': 'none', 'transform': 'none'});
+      img.css({'background-image': 'none', '-webkit-transform': 'none'});
       var css = {'background-image': 'url(' + this.src + ')'};
       switch (orientation) {
-        case '3': css.transform = 'rotate(180deg)'; css.height = '100%'; css.top = 0; break;
-        case '6': css.transform = 'rotate(90deg)'; css.height = '67%'; css.top = '17%'; break;
-        case '8': css.transform = 'rotate(270deg)'; css.height = '67%'; css.top = '17%'; break;
-        default: css.transform = 'none';  css.height = '100%'; css.top = 0; break;
+        case '3': css['-webkit-transform'] = 'rotate(180deg)'; css.height = '100%'; css.top = 0; break;
+        case '6': css['-webkit-transform'] = 'rotate(90deg)'; css.height = '67%'; css.top = '17%'; break;
+        case '8': css['-webkit-transform'] = 'rotate(270deg)'; css.height = '67%'; css.top = '17%'; break;
+        default: css['-webkit-transform'] = 'none';  css.height = '100%'; css.top = 0; break;
       }
       img.css(css);
 
