@@ -33,7 +33,7 @@
   <div id="img"></div>
   <div id="title">Waiting for commands</div>
 </body>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
 <script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
 <script type="text/javascript">
   var photos = [], current = [];
@@ -87,18 +87,19 @@
     $('#title').text('Loading photos from ' + dir);
     if (interval) clearInterval(interval);
 
-    $.get('photos_list.php', {dir: dir})
-      .done(function(data) {
+    $.ajax({url:'photos_list.php', data:{dir: dir},
+      success: function(data) {
         photos = data.trim().split('\n');
         current = [];
         $('#title').text(dir + ': ' + photos.length);
 
         loadRandom();
         interval = setInterval(loadRandom, 10000);
-      })
-      .fail(function() {
+      },
+      error: function() {
         $('#title').text('Error: ' + arguments);
-      });
+      }
+    });
   }
 
   document.addEventListener('message', function(e) {
