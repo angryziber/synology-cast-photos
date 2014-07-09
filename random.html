@@ -34,6 +34,7 @@
   <div id="title">Waiting for commands</div>
 </body>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
+<script type="text/javascript" src="http://rawgit.com/madrobby/zepto/master/src/fx.js"></script>
 <script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
 <script type="text/javascript">
   var photos = [], current = [];
@@ -105,6 +106,8 @@
   document.addEventListener('message', function(e) {
     loadPhotos(e.detail);
   });
+  
+  if (location.hash) loadPhotos(location.hash.substring(1));
 </script>
 </html>
 
