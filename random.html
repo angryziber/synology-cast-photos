@@ -107,7 +107,10 @@
     loadPhotos(e.detail);
   });
   
-  if (location.hash) loadPhotos(location.hash.substring(1));
+  window.onhashchange = function(e) {
+    if (location.hash) loadPhotos(location.hash.substring(1));
+  };
+  window.onhashchange();
 </script>
 </html>
 
