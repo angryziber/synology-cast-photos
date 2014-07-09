@@ -18,20 +18,35 @@
       background-repeat: no-repeat;
       background-size: contain;
     }
-    #title {
+    #title, #status, #meta {
       position: absolute;
       bottom: 30px;
       width: 100%;
       color: white;
       text-shadow: 0 0 10px black;
+      font-size: 16px;
+    }
+    #title {
       text-align: center;
-      font-size: 24px;
+      font-size: 20px;
+    }
+    #meta {
+      font-size: 14px;
+      left: 40px;
+      width: auto;
+    }
+    #status {
+      text-align: right;
+      right: 40px;
+      width: auto;
     }
   </style>
 </head>
 <body>
   <div id="img"></div>
+  <div id="meta"></div>
   <div id="title">Waiting for commands</div>
+  <div id="status"></div>
 </body>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
 <script type="text/javascript" src="http://rawgit.com/madrobby/zepto/master/src/fx.js"></script>
@@ -58,10 +73,10 @@
 
     var url = current.splice(random(current.length), 1)[0];
     nextImg.src = photoUrlPrefix + url;
-    var orientation = 1;
+    var meta = {};
 
-    $.get(metaUrlPrefix + url, function(meta) {
-      orientation = meta.orientation;
+    $.get(metaUrlPrefix + url, function(data) {
+      meta = data;
       console.log(meta);
     });
 
@@ -69,7 +84,7 @@
       var img = $('#img');
       img.css({'background-image': 'none', '-webkit-transform': 'none'});
       var css = {'background-image': 'url(' + this.src + ')'};
-      switch (orientation) {
+      switch (meta.orientation) {
         case '3': css['-webkit-transform'] = 'rotate(180deg)'; css.height = '100%'; css.top = 0; break;
         case '6': css['-webkit-transform'] = 'rotate(90deg)'; css.height = '67%'; css.top = '17%'; break;
         case '8': css['-webkit-transform'] = 'rotate(270deg)'; css.height = '67%'; css.top = '17%'; break;
@@ -77,11 +92,12 @@
       }
       img.css(css);
 
-      setTimeout(function() {
+//      setTimeout(function() {
         $('#title').text(url.substring(0, url.lastIndexOf('/')));
-      }, 1000);
+        $('#status').text((photos.length - current.length) + '/' + photos.length);
+        $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
+//      }, 1000);
     };
-    console.log('Shown ' + (photos.length - current.length) + ' of ' + photos.length);
   }
 
   function loadPhotos(dir) {
@@ -92,7 +108,8 @@
       success: function(data) {
         photos = data.trim().split('\n');
         current = [];
-        $('#title').text(dir + ': ' + photos.length);
+        $('#title').text(dir);
+        $('#status').text(photos.length);
 
         loadRandom();
         interval = setInterval(loadRandom, 10000);
