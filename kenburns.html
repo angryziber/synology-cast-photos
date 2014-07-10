@@ -20,7 +20,7 @@
       position: absolute;
       width: 100%;
       opacity: 0;
-      -webkit-transition: opacity 1s, -webkit-transform 8s;
+      -webkit-transition: opacity 2s, -webkit-transform 10s;
     }
 
     #slideshow img.org0 {
@@ -69,7 +69,7 @@
 <script type="text/javascript">
   var images = $('#slideshow img'), i = 1;
   images[0].className = 'fx';
-  setInterval(kenBurns, 5000);
+  setInterval(kenBurns, 8000);
   function kenBurns() {
     if (i == images.length) i = 0;
 
