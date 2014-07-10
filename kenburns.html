@@ -4,77 +4,81 @@
   <title>Kenburns slideshow</title>
   <meta charset="utf-8">
   <style type="text/css">
-  html,body {
-    height: 100%;
-    margin: 0;
-  }
-  #slideshow {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  #slideshow img {
-    max-width: none;
-    position:absolute;
-    height:150%;
-    top:50%;
-    left:50%;
-    margin-left:-50%;
-    margin-top:-50%;
-    opacity:0;
-    -webkit-transition: opacity 1s, -webkit-transform 8s;
-  }
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #slideshow {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #slideshow img {
+      max-width: none;
+      position: absolute;
+      height: 150%;
+      top: 50%;
+      left: 50%;
+      margin-left: -50%;
+      margin-top: -50%;
+      opacity: 0;
+      -webkit-transition: opacity 1s, -webkit-transform 8s;
+    }
+
     #slideshow img.org0 {
-        -webkit-transform-origin: bottom left;
+      -webkit-transform-origin: bottom left;
     }
+
     #slideshow img.org1 {
-        -webkit-transform-origin: top right;
+      -webkit-transform-origin: top right;
     }
+
     #slideshow img.org2 {
-        -webkit-transform-origin: top left;
+      -webkit-transform-origin: top left;
     }
+
     #slideshow img.org3 {
-        -webkit-transform-origin: bottom right;
+      -webkit-transform-origin: bottom right;
     }
-    #slideshow .fx:first-child + img ~ img  {
-        z-index:-1;    
+
+    #slideshow .fx:first-child + img ~ img {
+      z-index: -1;
     }
+
     #slideshow .fx {
-        opacity:1;
-        -webkit-transform: scale(1.2) translate(30px);
+      opacity: 1;
+      -webkit-transform: scale(1.2) translate(30px);
     }
   </style>
 </head>
 <body>
-    <div id="slideshow">
-        <img src="/photo.php?file=2014/Filming/IMG_7503.JPG">
-        <img src="/photo.php?file=2014/Filming/IMG_7408.JPG">
-        <img src="/photo.php?file=2014/Filming/IMG_7428.JPG">
-        <img src="/photo.php?file=2014/Filming/IMG_7467.JPG">
-        <img src="/photo.php?file=2014/Filming/IMG_7424.JPG">
-    </div>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
-  <script type="text/javascript">
-    $('#slideshow img')[0].className = 'fx';
-    setInterval(kenBurns, 5000);
-    var images = $('#slideshow img'),
-        i = 1;
-    function kenBurns() {
-        if (i == images.length) i = 0;
-        
-        var none = {opacity:0, '-webkit-transform':'none'};
-        var fx = {opacity:1, '-webkit-transform':'scale(1.1)'}
-        
-//        switch ((Math.random()*4)) {
-  //      }
-        
-        images[i].className = 'fx org' + (Math.random()*4).toFixed();
-        if (i == 0) images[images.length-2].className = '';
-        else if (i == 1) images[images.length-1].className = '';
-        else if (i > 1) images[i-2].className = '';
-        i++;
-    }
-  </script>
+<div id="slideshow">
+  <img src="/photo.php?file=2014/Filming/IMG_7503.JPG">
+  <img src="/photo.php?file=2014/Filming/IMG_7408.JPG">
+  <img src="/photo.php?file=2014/Filming/IMG_7428.JPG">
+  <img src="/photo.php?file=2014/Filming/IMG_7467.JPG">
+  <img src="/photo.php?file=2014/Filming/IMG_7424.JPG">
+</div>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
+<script type="text/javascript">
+  var images = $('#slideshow img'), i = 1;
+  images[0].className = 'fx';
+  setInterval(kenBurns, 5000);
+  function kenBurns() {
+    if (i == images.length) i = 0;
+
+    var none = {opacity: 0, '-webkit-transform': 'none'};
+    var fx = {opacity: 1, '-webkit-transform': 'scale(1.1)'};
+
+    images[i].className = 'fx org' + (Math.random() * 4).toFixed();
+    if (i == 0) images[images.length - 2].className = '';
+    else if (i == 1) images[images.length - 1].className = '';
+    else if (i > 1) images[i - 2].className = '';
+    i++;
+  }
+</script>
 </body>
 </html>
