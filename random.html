@@ -31,13 +31,15 @@
       font-size: 20px;
     }
     #meta {
+      opacity: 0.7;
       font-size: 14px;
-      left: 40px;
+      left: 50px;
       width: auto;
     }
     #status {
+      opacity: 0.7;
       text-align: right;
-      right: 40px;
+      right: 50px;
       width: auto;
     }
   </style>
@@ -92,11 +94,9 @@
       }
       img.css(css);
 
-//      setTimeout(function() {
-        $('#title').text(url.substring(0, url.lastIndexOf('/')));
-        $('#status').text((photos.length - current.length) + '/' + photos.length);
-        $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
-//      }, 1000);
+      $('#title').text(url.substring(0, url.lastIndexOf('/')));
+      $('#status').text((photos.length - current.length) + '/' + photos.length);
+      $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
     };
   }
 
