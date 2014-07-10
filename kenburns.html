@@ -17,31 +17,35 @@
     }
 
     #slideshow img {
-      max-width: none;
       position: absolute;
-      height: 150%;
-      top: 50%;
-      left: 50%;
-      margin-left: -50%;
-      margin-top: -50%;
+      width: 100%;
       opacity: 0;
       -webkit-transition: opacity 1s, -webkit-transform 8s;
     }
 
     #slideshow img.org0 {
-      -webkit-transform-origin: bottom left;
+      -webkit-transform-origin: center center;
+      -webkit-transform: scale(1.2);
     }
 
     #slideshow img.org1 {
-      -webkit-transform-origin: top right;
+      -webkit-transform-origin: bottom left;
+      -webkit-transform: scale(1.2) translate(-30px, 30px);
     }
 
     #slideshow img.org2 {
-      -webkit-transform-origin: top left;
+      -webkit-transform-origin: top right;
+      -webkit-transform: scale(1.2) translate(30px, -30px);
     }
 
     #slideshow img.org3 {
+      -webkit-transform-origin: top left;
+      -webkit-transform: scale(1.2) translate(-30px, -30px);
+    }
+
+    #slideshow img.org4 {
       -webkit-transform-origin: bottom right;
+      -webkit-transform: scale(1.2) translate(30px, -30px);
     }
 
     #slideshow .fx:first-child + img ~ img {
@@ -50,7 +54,6 @@
 
     #slideshow .fx {
       opacity: 1;
-      -webkit-transform: scale(1.2) translate(30px);
     }
   </style>
 </head>
@@ -73,7 +76,7 @@
     var none = {opacity: 0, '-webkit-transform': 'none'};
     var fx = {opacity: 1, '-webkit-transform': 'scale(1.1)'};
 
-    images[i].className = 'fx org' + (Math.random() * 4).toFixed();
+    images[i].className = 'fx org' + (Math.random() * 5).toFixed();
     if (i == 0) images[images.length - 2].className = '';
     else if (i == 1) images[images.length - 1].className = '';
     else if (i > 1) images[i - 2].className = '';
