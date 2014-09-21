@@ -60,7 +60,7 @@
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
   var timeout = 10000;
-  var timer;
+  var timer, meta;
 
   function random(max) {
     if (window.crypto) {
@@ -76,15 +76,14 @@
     if (current.length == 0) return;
 
     var url = current.splice(random(current.length), 1)[0];
+    nextImg.onload = nextPhotoLoaded;
     nextImg.src = photoUrlPrefix + url;
-    var meta = {};
+    meta = {};
 
     $.get(metaUrlPrefix + url, function(data) {
       meta = data;
       console.log(meta);
     });
-
-    nextImg.onload = nextPhotoLoaded;
   }
 
   function nextPhotoLoaded() {
