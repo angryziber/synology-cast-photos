@@ -57,6 +57,7 @@
 <script type="text/javascript">
   var photos = [], index = 0;
   var nextImg = new Image();
+  var photoListUrl = '/photos_list.php';
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
   var timeout = 10000;
@@ -115,7 +116,7 @@
     $('#title').text('Loading photos from ' + dir);
     if (timer) clearTimeout(timer);
 
-    $.ajax({url:'photos_list.php', data:{dir: dir},
+    $.ajax({url:photoListUrl, data:{dir: dir},
       success: function(data) {
         photos = data.trim().split('\n');
         shuffle(photos);
