@@ -55,7 +55,7 @@
 <script type="text/javascript" src="http://rawgit.com/madrobby/zepto/master/src/fx.js"></script>
 <script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
 <script type="text/javascript">
-  var photos = [], current = [];
+  var photos = [], index = 0;
   var nextImg = new Image();
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
@@ -68,14 +68,19 @@
       crypto.getRandomValues(array);
       return array[0] % max;
     }
-    else return parseInt(Math.random()*max);
+    else return Math.floor(Math.random()*max);
+  }
+
+  function shuffle(o) {
+    for (var j, x, i = o.length; i; j = random(i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
   }
 
   function loadNextRandom() {
-    if (current.length == 0) current = photos.slice(0);
-    if (current.length == 0) return;
+    if (!photos.length) return;
+    if (index == photos.length) index = 0;
 
-    var url = current.splice(random(current.length), 1)[0];
+    var url = photos[index++];
     nextImg.onload = nextPhotoLoaded;
     nextImg.src = photoUrlPrefix + url;
     meta = {};
@@ -101,7 +106,7 @@
     img.css(css);
 
     $('#title').text(url.substring(url.indexOf('=')+1, url.lastIndexOf('/')));
-    $('#status').text((photos.length - current.length) + '/' + photos.length);
+    $('#status').text(index + '/' + photos.length);
     $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
     timer = setTimeout(loadNextRandom, timeout);
   }
@@ -113,7 +118,8 @@
     $.ajax({url:'photos_list.php', data:{dir: dir},
       success: function(data) {
         photos = data.trim().split('\n');
-        current = [];
+        shuffle(photos);
+        index = 0;
         $('#title').text(dir);
         $('#status').text(photos.length);
         loadNextRandom();
