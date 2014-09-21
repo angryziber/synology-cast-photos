@@ -85,12 +85,13 @@
     nextImg.src = photoUrlPrefix + url;
     meta = {};
 
-    $.get(metaUrlPrefix + url, function(data) {
-      meta = data;
-      console.log(meta);
-    });
-
+    $.get(metaUrlPrefix + url, nextMetaLoaded);
     $('#status').text('Loading...');
+  }
+
+  function nextMetaLoaded(data) {
+    meta = data;
+    console.log(meta);
   }
 
   function nextPhotoLoaded() {
