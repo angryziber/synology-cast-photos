@@ -60,7 +60,7 @@
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
   var timeout = 10000;
-  var timer, meta;
+  var timer, meta, loading;
 
   function random(max) {
     if (window.crypto) {
@@ -77,7 +77,7 @@
   }
 
   function loadNextRandom() {
-    if (!photos.length) return;
+    if (loading || !photos.length) return;
     if (index == photos.length) index = 0;
 
     var url = photos[index++];
@@ -86,6 +86,7 @@
     meta = {};
 
     $.get(metaUrlPrefix + url, nextMetaLoaded);
+    loading = true;
     $('#status').text('Loading...');
   }
 
@@ -109,12 +110,14 @@
     $('#title').text(decodeURI(url.substring(url.indexOf('=')+1, url.lastIndexOf('/'))));
     $('#status').text(index + '/' + photos.length);
     $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
+
+    loading = false;
+    if (timer) clearTimeout(timer);
     timer = setTimeout(loadNextRandom, timeout);
   }
 
   function loadPhotos(dir) {
     $('#title').text('Loading photos from ' + dir);
-    if (timer) clearTimeout(timer);
 
     $.ajax({url:photoListUrl, data:{dir: dir},
       success: function(data) {
@@ -131,12 +134,26 @@
     });
   }
 
+  function onCommand(cmd) {
+    $('#title').text(cmd);
+    if (cmd.indexOf('dir:') == 0) {
+      loadPhotos(cmd.substring('dir:'.length));
+    }
+    else if (cmd == 'prev') {
+      index-=2; if (index < 0) index = photos.length-1;
+      setTimeout(loadNextRandom, 0);
+    }
+    else if (cmd == 'next') {
+      setTimeout(loadNextRandom, 0);
+    }
+  }
+
   document.addEventListener('message', function(e) {
-    loadPhotos(e.detail);
+    onCommand(e.detail);
   });
   
   window.onhashchange = function(e) {
-    if (location.hash) loadPhotos(location.hash.substring(1));
+    if (location.hash) onCommand(location.hash.substring(1));
   };
   window.onhashchange();
 </script>

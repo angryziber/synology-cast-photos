@@ -22,6 +22,9 @@
 
     <form>
       <input class="typeahead" type="text" name="prefix" value="" placeholder="2014" autofocus>
+      <br>
+      <button id="prev" type="button">Prev</button>
+      <button id="next" type="button">Next</button>
     </form>
   </div>
 </div>
@@ -45,9 +48,15 @@
     });
 
     input.on('typeahead:selected', function (e) {
-      chromecast.message(input.val(), function (e) {
-        console.log(e);
-      });
+      chromecast.message('dir:' + input.val());
+    });
+
+    $('#prev').on('click', function() {
+      chromecast.message('prev');
+    });
+
+    $('#next').on('click', function() {
+      chromecast.message('next');
     });
   });
 </script>
