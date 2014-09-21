@@ -106,7 +106,7 @@
     }
     img.css(css);
 
-    $('#title').text(url.substring(url.indexOf('=')+1, url.lastIndexOf('/')));
+    $('#title').text(decodeURI(url.substring(url.indexOf('=')+1, url.lastIndexOf('/'))));
     $('#status').text(index + '/' + photos.length);
     $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
     timer = setTimeout(loadNextRandom, timeout);
