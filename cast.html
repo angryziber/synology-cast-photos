@@ -52,11 +52,17 @@
     });
 
     $('#prev').on('click', function() {
+      $(this).prop('disabled', true);
       chromecast.message('prev');
     });
 
     $('#next').on('click', function() {
+      $(this).prop('disabled', true);
       chromecast.message('next');
+    });
+
+    chromecast.onMessage(function(cmd) {
+      $('button').prop('disabled', false);
     });
   });
 </script>
