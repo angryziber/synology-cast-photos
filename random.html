@@ -111,16 +111,15 @@
     $('#title').text(decodeURI(url.substring(url.indexOf('=')+1, url.lastIndexOf('/'))));
     $('#status').text(index + '/' + photos.length);
     $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
-    loadNextPhotoAfterTimeout();
+    loadNextPhotoAfter(timeout);
   }
 
   function nextPhotoFailed() {
-    var url = this.src;
-    $('#title').text(decodeURI(url.substring(url.indexOf('=')+1)) + ': failed');
-    loadNextPhotoAfterTimeout();
+    $('#status').text(index + '/' + photos.length + ': failed');
+    loadNextPhotoAfter(timeo  ut/4);
   }
 
-  function loadNextPhotoAfterTimeout() {
+  function loadNextPhotoAfter(timeout) {
     loading = false;
     if (timer) clearTimeout(timer);
     timer = setTimeout(loadNextRandom, timeout);
