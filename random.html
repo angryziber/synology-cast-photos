@@ -116,7 +116,7 @@
 
   function nextPhotoFailed() {
     var url = this.src;
-    $('#title').text(decodeURI(url.substring(url.indexOf('=')+1, url.lastIndexOf('/'))) + ': failed');
+    $('#title').text(decodeURI(url.substring(url.indexOf('=')+1)) + ': failed');
     loadNextPhotoAfterTimeout();
   }
 
