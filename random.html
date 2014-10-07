@@ -82,6 +82,7 @@
 
     var url = photos[index++];
     nextImg.onload = nextPhotoLoaded;
+    nextImg.onerror = nextPhotoFailed;
     nextImg.src = photoUrlPrefix + url;
     meta = {};
 
@@ -110,7 +111,15 @@
     $('#title').text(decodeURI(url.substring(url.indexOf('=')+1, url.lastIndexOf('/'))));
     $('#status').text(index + '/' + photos.length);
     $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
+    loadNextPhotoAfterTimeout();
+  }
 
+  function nextPhotoFailed() {
+    $('#title').text(decodeURI(url.substring(url.indexOf('=')+1, url.lastIndexOf('/'))) + ': failed');
+    loadNextPhotoAfterTimeout();
+  }
+
+  function loadNextPhotoAfterTimeout() {
     loading = false;
     if (timer) clearTimeout(timer);
     timer = setTimeout(loadNextRandom, timeout);
