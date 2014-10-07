@@ -110,7 +110,7 @@
 
     $('#title').text(decodeURI(url.substring(url.indexOf('=')+1, url.lastIndexOf('/'))));
     $('#status').text(index + '/' + photos.length);
-    $('#meta').html(meta.date + '<br>' + meta.exposure + ', F' + eval(meta.fnumber));
+    $('#meta').html((meta.date || '') + '<br>' + (meta.exposure || '') + (meta.fnumber ? ', F' + eval(meta.fnumber) : ''));
     loadNextPhotoAfter(timeout);
   }
 
