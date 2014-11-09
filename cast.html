@@ -10,6 +10,16 @@
       max-height: 300px;
       overflow-y: auto;
     }
+
+    button {
+      font-size: 24px;
+      line-height: 30px;
+      position: relative;
+      top: 15px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 2px solid #b8b8b8;
+    }
   </style>
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
@@ -22,9 +32,10 @@
 
     <form>
       <input class="typeahead" type="text" name="prefix" value="" placeholder="2014" autofocus>
-      <br>
-      <button id="prev" type="button">Prev</button>
-      <button id="next" type="button">Next</button>
+      <button>Go</button>
+      <div style="margin-top: 20px">
+        <label><input type="checkbox" name="random" checked> Random</label>
+      </div>
     </form>
   </div>
 </div>
@@ -47,18 +58,21 @@
       }
     });
 
-    input.on('typeahead:selected', function (e) {
-      chromecast.message('dir:' + input.val());
+    var random = $('[name=random]');
+
+    function sendDir() {
+      chromecast.message((random.is(':checked') ? 'rnd:' : 'seq:') + input.val());
+    }
+
+    input.on('typeahead:selected', sendDir);
+
+    input.closest('form').on('submit', function() {
+      sendDir();
+      return false;
     });
 
-    $('#prev').on('click', function() {
-      $(this).prop('disabled', true);
-      chromecast.message('prev');
-    });
-
-    $('#next').on('click', function() {
-      $(this).prop('disabled', true);
-      chromecast.message('next');
+    random.on('click', function() {
+      if (input.val()) sendDir();
     });
 
     chromecast.onMessage(function(cmd) {

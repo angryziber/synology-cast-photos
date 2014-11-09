@@ -76,7 +76,7 @@
     return o;
   }
 
-  function loadNextRandom() {
+  function loadNext() {
     if (loading || !photos.length) return;
     if (index == photos.length) index = 0;
 
@@ -122,20 +122,20 @@
   function loadNextPhotoAfter(timeout) {
     loading = false;
     if (timer) clearTimeout(timer);
-    timer = setTimeout(loadNextRandom, timeout);
+    timer = setTimeout(loadNext, timeout);
   }
 
-  function loadPhotos(dir) {
+  function loadPhotos(dir, random) {
     $('#title').text('Loading photos from ' + dir);
 
     $.ajax({url:photoListUrl, data:{dir: dir},
       success: function(data) {
         photos = data.trim().split('\n');
-        shuffle(photos);
+        if (random) shuffle(photos); else photos.sort();
         index = 0;
-        $('#title').text(dir);
+        $('#title').text((random ? 'Random: ' : 'Sequential: ') + dir);
         $('#status').text(photos.length);
-        loadNextRandom();
+        loadNext();
       },
       error: function() {
         $('#title').text('Error: ' + arguments);
@@ -145,15 +145,18 @@
 
   function onCommand(cmd) {
     $('#title').text(cmd);
-    if (cmd.indexOf('dir:') == 0) {
-      loadPhotos(cmd.substring('dir:'.length));
+    if (cmd.indexOf('rnd:') == 0) {
+      loadPhotos(cmd.substring(4), true);
+    }
+    else if (cmd.indexOf('seq:') == 0) {
+      loadPhotos(cmd.substring(4), false);
     }
     else if (cmd == 'prev') {
       index-=2; if (index < 0) index = photos.length-1;
-      setTimeout(loadNextRandom, 0);
+      setTimeout(loadNext, 0);
     }
     else if (cmd == 'next') {
-      setTimeout(loadNextRandom, 0);
+      setTimeout(loadNext, 0);
     }
   }
 
