@@ -144,12 +144,16 @@
   }
 
   function onCommand(cmd) {
-    $('#title').text(cmd);
+    var title = $('#title').text(cmd);
     if (cmd.indexOf('rnd:') == 0) {
       loadPhotos(cmd.substring(4), true);
     }
     else if (cmd.indexOf('seq:') == 0) {
       loadPhotos(cmd.substring(4), false);
+    }
+    else if (cmd.indexOf('timeout:') == 0) {
+      timeout = parseInt(cmd.substring('timeout:'.length))*1000;
+      title.val('Timeout: ' + timeout/1000 + 's');
     }
     else if (cmd == 'prev') {
       index-=2; if (index < 0) index = photos.length-1;

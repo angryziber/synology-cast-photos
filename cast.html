@@ -20,6 +20,11 @@
       border-radius: 8px;
       border: 2px solid #b8b8b8;
     }
+
+    #last-cmd {
+      margin-top: 20px;
+      color: red;
+    }
   </style>
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
@@ -36,7 +41,11 @@
       <div style="margin-top: 20px">
         <label><input type="checkbox" name="random" checked> Random</label>
       </div>
+      <div style="margin-top: 20px">
+        Timeout: <input type="number" name="timeout" value="10" min="0" style="width: 50px"> s
+      </div>
     </form>
+    <div id="last-cmd"></div>
   </div>
 </div>
 </body>
@@ -44,6 +53,11 @@
   chromecast.appId = '40FA4E04';
   $(function () {
     setTimeout(chromecast.launch, 1000);
+
+    function sendCommand(cmd) {
+      chromecast.message(cmd);
+      $('#last-cmd').text(cmd).show().fadeOut(2000);
+    }
 
     var input = $('[name=prefix]').typeahead({hint: true, highlight: true, minLength: 3}, {
       name: 'photo-dirs',
@@ -59,9 +73,10 @@
     });
 
     var random = $('[name=random]');
+    var timeout = $('[name=timeout]');
 
     function sendDir() {
-      chromecast.message((random.is(':checked') ? 'rnd:' : 'seq:') + input.val());
+      sendCommand((random.is(':checked') ? 'rnd:' : 'seq:') + input.val());
     }
 
     input.on('typeahead:selected', sendDir);
@@ -73,6 +88,10 @@
 
     random.on('click', function() {
       if (input.val()) sendDir();
+    });
+
+    timeout.on('change', function() {
+      sendCommand('timeout:' + timeout.val());
     });
 
     chromecast.onMessage(function(cmd) {
