@@ -88,12 +88,13 @@
 
     $.get(metaUrlPrefix + url, nextMetaLoaded);
     loading = true;
-    $('#status').text('Loading...');
+    $('#img').css({'background-image': 'none'});
+    $('#status').text('Loading ' + index + '/' + photos.length);
   }
 
   function nextMetaLoaded(data) {
     meta = data;
-    console.log(meta);
+    //console.log(meta);
   }
 
   function nextPhotoLoaded() {
