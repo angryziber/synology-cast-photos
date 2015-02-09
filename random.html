@@ -45,12 +45,15 @@
     }
   </style>
 </head>
+
 <body>
   <div id="img"></div>
   <div id="meta"></div>
   <div id="title">Waiting for commands</div>
   <div id="status"></div>
+  <audio loop></audio>
 </body>
+
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
 <script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
 <script type="text/javascript">
@@ -151,6 +154,9 @@
     }
     else if (cmd.indexOf('seq:') == 0) {
       loadPhotos(cmd.substring(4), false);
+    }
+    else if (cmd.indexOf('audio:') == 0) {
+      $('audio').attr('src', cmd.substring(6))[0].play();
     }
     else if (cmd.indexOf('timeout:') == 0) {
       timeout = parseInt(cmd.substring('timeout:'.length))*1000;

@@ -38,11 +38,19 @@
     <form>
       <input class="typeahead" type="text" name="prefix" value="" placeholder="2014" autofocus>
       <button>Go</button>
+
       <div style="margin-top: 20px">
         <label><input type="checkbox" name="random" checked> Random</label>
       </div>
+
       <div style="margin-top: 20px">
         Timeout: <input type="number" name="timeout" value="10" min="0" style="width: 50px"> s
+      </div>
+
+      <div style="margin-top: 20px">
+        <input type="text" class="typeahead" name="audio" placeholder="Audio URL" value="https://psv4.vk.me/c4513/u9052545/audios/54aa4fe5c60b.mp3">
+        <button type="button" id="play">Play</button>
+        <button type="button" id="stop">Stop</button>
       </div>
     </form>
     <div id="last-cmd"></div>
@@ -92,6 +100,15 @@
 
     timeout.on('change', function() {
       sendCommand('timeout:' + timeout.val());
+    });
+
+    $('#play').on('click', function() {
+      var url = $('[name=audio]').val();
+      sendCommand('audio:' + url);
+    });
+
+    $('#stop').on('click', function() {
+      sendCommand('audio:');
     });
 
     chromecast.onMessage(function(cmd) {
