@@ -47,9 +47,11 @@
         Timeout: <input type="number" name="timeout" value="10" min="0" style="width: 50px"> s
       </div>
 
-      <div style="margin-top: 20px">
-        <input type="text" class="typeahead" name="audio" placeholder="Audio URL" value="https://psv4.vk.me/c4513/u9052545/audios/54aa4fe5c60b.mp3">
-        <button type="button" id="play">Play</button>
+      <div style="margin-top: 100px">
+        <input type="text" class="typeahead" name="audio" placeholder="Audio">
+        <br>
+        <button type="button" id="play">Play URL</button>
+        <button type="button" id="vk">Play from VK</button>
         <button type="button" id="stop">Stop</button>
       </div>
     </form>
@@ -109,6 +111,22 @@
 
     $('#stop').on('click', function() {
       sendCommand('audio:');
+    });
+
+    var vkToken = '3aa5c23952aadbf1f3f0f18eaa9a30b9dc6344c54a257d84c188e856e945bd25e35cd5c815bf7d8cca105';
+
+    $('#vk').on('click', function() {
+//      window.open('https://oauth.vk.com/authorize?client_id=4774342&scope=audio&redirect_uri=https://oauth.vk.com/blank.html&display=popup&v=5.28&response_type=token');
+      var q = $('[name=audio]').val();
+      $.getJSON('https://api.vk.com/method/audio.search?q=' + q + '&access_token=' + vkToken + '&callback=?', function(data) {
+        sendCommand('audio:' + data.response[1].url);
+        $.each(data.response, function(i, item) {
+          if (typeof item == 'object') {
+            console.log(item.artist + ' - ' + item.title);
+            console.log(item.url);
+          }
+        });
+      });
     });
 
     chromecast.onMessage(function(cmd) {
