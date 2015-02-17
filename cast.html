@@ -85,13 +85,17 @@
       }
     });
 
-    self.sendCommand = function(cmd) {
+    function sendCommand(cmd) {
       chromecast.message(cmd);
       $('#last-cmd').text(cmd).show().fadeOut(2000);
+    }
+
+    self.sendPhotoDir = function() {
+      sendCommand((random.is(':checked') ? 'rnd:' : 'seq:') + dirInput.val());
     };
 
-    self.sendPhotoDir = function(dir) {
-      self.sendCommand((random.is(':checked') ? 'rnd:' : 'seq:') + (dir || dirInput.val()));
+    self.sendAudio = function(url) {
+      sendCommand('audio:' + url);
     };
 
     dirInput.on('typeahead:selected', self.sendPhotoDir);
@@ -105,22 +109,22 @@
     });
 
     timeout.on('change', function() {
-      self.sendCommand('timeout:' + timeout.val());
+      sendCommand('timeout:' + timeout.val());
     });
   }
 
-  $(function () {
+  $(function() {
     setTimeout(chromecast.launch, 1000);
 
     window.tv = new TVClass();
 
     $('#play').on('click', function() {
       var url = $('[name=audio]').val();
-      tv.sendCommand('audio:' + url);
+      tv.sendAudio(url);
     });
 
     $('#stop').on('click', function() {
-      tv.sendCommand('audio:');
+      tv.sendAudio('');
     });
 
     var vkToken = localStorage['vkToken'];
@@ -131,7 +135,6 @@
 
     function newVKToken(callback) {
       window.open('https://oauth.vk.com/authorize?client_id=4774342&scope=audio&redirect_uri=' + location.protocol + '//' + location.hostname + '/vk-callback.html&display=popup&v=5.28&response_type=token');
-
     }
 
     function vkSearch(q) {
@@ -146,7 +149,7 @@
           return;
         }
 
-        tv.sendCommand('audio:' + data.response[1].url);
+        tv.sendAudio(data.response[1].url);
         $.each(data.response, function(i, item) {
           if (typeof item == 'object') {
             console.log(item.artist + ' - ' + item.title);
@@ -188,7 +191,7 @@
     });
 
     audioInput.on('typeahead:selected', function(e, item) {
-      tv.sendCommand('audio:' + item.url);
+      tv.sendAudio(item.url);
     });
   });
 </script>
