@@ -184,7 +184,7 @@
 
           data.response.shift();
           cb($.map(data.response, function (item) {
-            return {name: item.artist + ' - ' + item.title, url: item.url}
+            return {name: item.artist + ' - ' + item.title, url: item.url.replace(/\?extra.*/, '')}
           }));
         });
       }
