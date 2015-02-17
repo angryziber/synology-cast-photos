@@ -61,56 +61,66 @@
 </body>
 <script type="text/javascript">
   chromecast.appId = '40FA4E04';
-  $(function () {
-    setTimeout(chromecast.launch, 1000);
+  chromecast.onMessage(function(cmd) {
+    $('button').prop('disabled', false);
+  });
 
-    function sendCommand(cmd) {
-      chromecast.message(cmd);
-      $('#last-cmd').text(cmd).show().fadeOut(2000);
-    }
+  function TVClass() {
+    var self = this;
 
-    var input = $('[name=prefix]').typeahead({hint: true, highlight: true, minLength: 3}, {
+    var dirInput = $('[name=prefix]');
+    var random = $('[name=random]');
+    var timeout = $('[name=timeout]');
+
+    dirInput.typeahead({hint: true, highlight: true, minLength: 3}, {
       name: 'photo-dirs',
-      displayKey: 'value',
+      displayKey: 'dir',
       source: function (dir, cb) {
         $.get('/photos_dirs.php?dir=' + dir, function (data) {
           var values = data.trim().split('\n');
           cb($.map(values, function (value) {
-            return {value: value}
+            return {dir: value};
           }));
         });
       }
     });
 
-    var random = $('[name=random]');
-    var timeout = $('[name=timeout]');
+    self.sendCommand = function(cmd) {
+      chromecast.message(cmd);
+      $('#last-cmd').text(cmd).show().fadeOut(2000);
+    };
 
-    function sendDir() {
-      sendCommand((random.is(':checked') ? 'rnd:' : 'seq:') + input.val());
-    }
+    self.sendPhotoDir = function(dir) {
+      self.sendCommand((random.is(':checked') ? 'rnd:' : 'seq:') + (dir || dirInput.val()));
+    };
 
-    input.on('typeahead:selected', sendDir);
-
-    input.closest('form').on('submit', function() {
-      sendDir();
+    dirInput.on('typeahead:selected', self.sendPhotoDir);
+    dirInput.closest('form').on('submit', function() {
+      self.sendPhotoDir();
       return false;
     });
 
     random.on('click', function() {
-      if (input.val()) sendDir();
+      if (dirInput.val()) self.sendPhotoDir();
     });
 
     timeout.on('change', function() {
-      sendCommand('timeout:' + timeout.val());
+      self.sendCommand('timeout:' + timeout.val());
     });
+  }
+
+  $(function () {
+    setTimeout(chromecast.launch, 1000);
+
+    window.tv = new TVClass();
 
     $('#play').on('click', function() {
       var url = $('[name=audio]').val();
-      sendCommand('audio:' + url);
+      tv.sendCommand('audio:' + url);
     });
 
     $('#stop').on('click', function() {
-      sendCommand('audio:');
+      tv.sendCommand('audio:');
     });
 
     var vkToken = localStorage['vkToken'];
@@ -136,7 +146,7 @@
           return;
         }
 
-        sendCommand('audio:' + data.response[1].url);
+        tv.sendCommand('audio:' + data.response[1].url);
         $.each(data.response, function(i, item) {
           if (typeof item == 'object') {
             console.log(item.artist + ' - ' + item.title);
@@ -178,11 +188,7 @@
     });
 
     audioInput.on('typeahead:selected', function(e, item) {
-      sendCommand('audio:' + item.url);
-    });
-
-    chromecast.onMessage(function(cmd) {
-      $('button').prop('disabled', false);
+      tv.sendCommand('audio:' + item.url);
     });
   });
 </script>
