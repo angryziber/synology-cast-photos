@@ -63,6 +63,10 @@
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
   var timeout = 10000;
+  var $img = $('#img');
+  var $title = $('#title');
+  var $status = $('#status');
+  var $meta = $('#meta');
   var timer, meta, loading;
 
   function random(max) {
@@ -91,8 +95,7 @@
 
     $.get(metaUrlPrefix + url, nextMetaLoaded);
     loading = true;
-    $('#img').css({'background-image': 'none'});
-    $('#status').text('Loading ' + index + '/' + photos.length);
+    $status.text('Loading ' + index + '/' + photos.length);
   }
 
   function nextMetaLoaded(data) {
@@ -102,24 +105,48 @@
 
   function nextPhotoLoaded() {
     var url = this.src;
-    var img = $('#img');
+    $img.css({'background-image': 'none'});
+    $status.text('Loaded ' + index + '/' + photos.length);
+
+    setTimeout(function() {
+      showPhoto(url);
+    }, 0);
+  }
+
+  function showPhoto(url) {
     var css = {'background-image': 'url(' + url + ')'};
     switch (meta.orientation) {
-      case '3': css['-webkit-transform'] = 'rotate(180deg)'; css.height = '100%'; css.top = 0; break;
-      case '6': css['-webkit-transform'] = 'rotate(90deg)'; css.height = '67%'; css.top = '17%'; break;
-      case '8': css['-webkit-transform'] = 'rotate(270deg)'; css.height = '67%'; css.top = '17%'; break;
-      default: css['-webkit-transform'] = 'none';  css.height = '100%'; css.top = 0; break;
+      case '3':
+        css['-webkit-transform'] = 'rotate(180deg)';
+        css.height = '100%';
+        css.top = 0;
+        break;
+      case '6':
+        css['-webkit-transform'] = 'rotate(90deg)';
+        css.height = '67%';
+        css.top = '17%';
+        break;
+      case '8':
+        css['-webkit-transform'] = 'rotate(270deg)';
+        css.height = '67%';
+        css.top = '17%';
+        break;
+      default:
+        css['-webkit-transform'] = 'none';
+        css.height = '100%';
+        css.top = 0;
+        break;
     }
-    img.css(css);
+    $img.css(css);
 
-    $('#title').text(decodeURI(url.substring(url.indexOf('=')+1, url.lastIndexOf('/'))));
-    $('#status').text(index + '/' + photos.length);
-    $('#meta').html((meta.date || '') + '<br>' + (meta.exposure || '') + (meta.fnumber ? ', F' + eval(meta.fnumber) : ''));
+    $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
+    $status.text(index + '/' + photos.length);
+    $meta.html((meta.date || '') + '<br>' + (meta.exposure || '') + (meta.fnumber ? ', F' + eval(meta.fnumber) : ''));
     loadNextPhotoAfter(timeout);
   }
 
   function nextPhotoFailed() {
-    $('#status').text(index + '/' + photos.length + ': failed');
+    $status.text(index + '/' + photos.length + ': failed');
     loadNextPhotoAfter(timeout/4);
   }
 
@@ -130,19 +157,19 @@
   }
 
   function loadPhotos(dir, random) {
-    $('#title').text('Loading photos from ' + dir);
+    $title.text('Loading photos from ' + dir);
 
     $.ajax({url:photoListUrl, data:{dir: dir},
       success: function(data) {
         photos = data.trim().split('\n');
         if (random) shuffle(photos); else photos.sort();
         index = 0;
-        $('#title').text((random ? 'Random: ' : 'Sequential: ') + dir);
-        $('#status').text(photos.length);
+        $title.text((random ? 'Random: ' : 'Sequential: ') + dir);
+        $status.text(photos.length);
         loadNext();
       },
       error: function() {
-        $('#title').text('Error: ' + arguments);
+        $title.text('Error: ' + arguments);
       }
     });
   }
@@ -177,7 +204,7 @@
       if (arg.length > 1) title = 'Playing: ' + arg[1];
     }
 
-    $('#title').text(title);
+    $title.text(title);
   }
 
   document.addEventListener('message', function(e) {
