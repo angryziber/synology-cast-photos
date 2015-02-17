@@ -37,7 +37,7 @@
 
     <form>
       <input class="typeahead" type="text" name="prefix" value="" placeholder="2014" autofocus>
-      <button>Go</button>
+      <br>
 
       <div style="margin-top: 20px">
         <label><input type="checkbox" name="random" checked> Random</label>
@@ -48,13 +48,12 @@
       </div>
 
       <div style="margin-top: 100px">
-        <input type="text" class="typeahead" name="audio" placeholder="Audio">
+        <input type="text" class="typeahead" name="audio" placeholder="Search VK Music">
         <br>
-        <button type="button" id="play">Play URL</button>
-        <button type="button" id="vk">Play from VK</button>
         <button type="button" id="stop">Stop</button>
       </div>
     </form>
+    <br>
     <div id="last-cmd"></div>
   </div>
 </div>
@@ -64,8 +63,9 @@
   chromecast.onMessage(function(cmd) {
     $('button').prop('disabled', false);
   });
+  setTimeout(chromecast.launch, 1000);
 
-  function TVClass() {
+  var tv = new (function() {
     var self = this;
 
     var input = $('[name=prefix]');
@@ -111,74 +111,45 @@
     timeout.on('change', function() {
       sendCommand('timeout:' + timeout.val());
     });
-  }
+  })();
 
-  $(function() {
-    setTimeout(chromecast.launch, 1000);
-
-    window.tv = new TVClass();
-
-    $('#play').on('click', function() {
-      var url = $('[name=audio]').val();
-      tv.sendAudio(url);
-    });
-
-    $('#stop').on('click', function() {
-      tv.sendAudio('');
-    });
+  var vk = new (function() {
+    var self = this;
 
     var vkToken = localStorage['vkToken'];
-    window.vkCallback = function(token) {
+    var input = $('[name=audio]');
+
+    self.tokenCallback = function(token) {
       vkToken = localStorage['vkToken'] = token;
       vkSearch();
     };
 
-    function newVKToken(callback) {
+    function newToken(callback) {
       window.open('https://oauth.vk.com/authorize?client_id=4774342&scope=audio&redirect_uri=' + location.protocol + '//' + location.hostname + '/vk-callback.html&display=popup&v=5.28&response_type=token');
     }
 
-    function vkSearch(q) {
-      if (!q) q = $('[name=audio]').val();
-      $.getJSON('https://api.vk.com/method/audio.search?q=' + q + '&access_token=' + vkToken + '&auto_complete=true&callback=?', function(data) {
-        if (data.error) {
-          console.log(data);
-          if (data.error.error_code == 5)
-            newVKToken();
-          else
-            alert(data.error.error_msg);
-          return;
-        }
-
-        tv.sendAudio(data.response[1].url);
-        $.each(data.response, function(i, item) {
-          if (typeof item == 'object') {
-            console.log(item.artist + ' - ' + item.title);
-            console.log(item.url);
-          }
-        });
-      });
+    function handleError(e) {
+      console.log(e);
+      if (e.error_code == 6) // too many rps
+        return;
+      if (e.error_code == 5) // token expired
+        newToken();
+      else
+        alert(e.error_msg);
     }
 
-    $('#vk').on('click', function() {
+    input.on('focus', function() {
       if (!vkToken)
-        newVKToken();
-      else
-        vkSearch();
+        newToken();
     });
 
-    var audioInput = $('[name=audio]').typeahead({hint: true, highlight: true, minLength: 5}, {
+    input.typeahead({hint: true, highlight: true, minLength: 5}, {
       name: 'vk-audio',
       displayKey: 'name',
       source: function (q, cb) {
         $.getJSON('https://api.vk.com/method/audio.search?q=' + q + '&access_token=' + vkToken + '&auto_complete=true&callback=?', function(data) {
           if (data.error) {
-            console.log(data);
-            if (data.error.error_code == 6) // too many rps
-              return;
-            if (data.error.error_code == 5) // token expired
-              newVKToken();
-            else
-              alert(data.error.error_msg);
+            handleError(data.error);
             return;
           }
 
@@ -190,10 +161,14 @@
       }
     });
 
-    audioInput.on('typeahead:selected', function(e, item) {
+    input.on('typeahead:selected', function(e, item) {
       tv.sendAudio(item.url);
     });
-  });
+
+    $('#stop').on('click', function() {
+      tv.sendAudio('');
+    });
+  })();
 </script>
 </html>
 
