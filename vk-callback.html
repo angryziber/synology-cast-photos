@@ -1,0 +1,6 @@
+<script>
+  var params = location.hash.substring(1).split('&');
+  var token = params[0].split('=')[1];
+  window.opener.vkCallback(token);
+  window.close();
+</script>

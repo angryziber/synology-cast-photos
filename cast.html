@@ -113,12 +113,29 @@
       sendCommand('audio:');
     });
 
-    var vkToken = '3aa5c23952aadbf1f3f0f18eaa9a30b9dc6344c54a257d84c188e856e945bd25e35cd5c815bf7d8cca105';
+    var vkToken = localStorage['vkToken'];
+    window.vkCallback = function(token) {
+      vkToken = localStorage['vkToken'] = token;
+      vkSearch();
+    };
 
-    $('#vk').on('click', function() {
-//      window.open('https://oauth.vk.com/authorize?client_id=4774342&scope=audio&redirect_uri=https://oauth.vk.com/blank.html&display=popup&v=5.28&response_type=token');
+    function newVKToken(callback) {
+      window.open('https://oauth.vk.com/authorize?client_id=4774342&scope=audio&redirect_uri=' + location.protocol + '//' + location.hostname + '/vk-callback.html&display=popup&v=5.28&response_type=token');
+
+    }
+
+    function vkSearch() {
       var q = $('[name=audio]').val();
       $.getJSON('https://api.vk.com/method/audio.search?q=' + q + '&access_token=' + vkToken + '&callback=?', function(data) {
+        if (data.error) {
+          console.log(data);
+          if (data.error.error_code == 5)
+            newVKToken();
+          else
+            alert(data.error.error_msg);
+          return;
+        }
+
         sendCommand('audio:' + data.response[1].url);
         $.each(data.response, function(i, item) {
           if (typeof item == 'object') {
@@ -127,6 +144,13 @@
           }
         });
       });
+    }
+
+    $('#vk').on('click', function() {
+      if (!vkToken)
+        newVKToken();
+      else
+        vkSearch();
     });
 
     chromecast.onMessage(function(cmd) {
