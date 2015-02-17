@@ -94,8 +94,8 @@
       sendCommand((random.is(':checked') ? 'rnd:' : 'seq:') + input.val());
     };
 
-    self.sendAudio = function(url) {
-      sendCommand('audio:' + url);
+    self.sendAudio = function(url, name) {
+      sendCommand('audio:' + url + (name ? '#' + name : ''));
     };
 
     input.on('typeahead:selected', self.sendPhotoDir);
@@ -162,7 +162,7 @@
     });
 
     input.on('typeahead:selected', function(e, item) {
-      tv.sendAudio(item.url);
+      tv.sendAudio(item.url, item.name);
     });
 
     $('#stop').on('click', function() {

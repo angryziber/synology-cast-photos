@@ -147,20 +147,22 @@
     });
   }
 
-  function onCommand(cmd) {
-    var title = $('#title').text(cmd);
-    if (cmd.indexOf('rnd:') == 0) {
-      loadPhotos(cmd.substring(4), true);
+  function onCommand(command) {
+    var separatorPos = command.indexOf(':');
+    if (separatorPos == -1) separatorPos = command.length();
+    var cmd = command.substring(0, separatorPos);
+    var arg = command.substring(separatorPos+1);
+    var title = command;
+
+    if (cmd == 'rnd') {
+      loadPhotos(arg, true);
     }
-    else if (cmd.indexOf('seq:') == 0) {
-      loadPhotos(cmd.substring(4), false);
+    else if (cmd == 'seq') {
+      loadPhotos(arg, false);
     }
-    else if (cmd.indexOf('audio:') == 0) {
-      $('audio').attr('src', cmd.substring(6))[0].play();
-    }
-    else if (cmd.indexOf('timeout:') == 0) {
-      timeout = parseInt(cmd.substring('timeout:'.length))*1000;
-      title.val('Timeout: ' + timeout/1000 + 's');
+    else if (cmd == 'timeout') {
+      timeout = parseInt(arg)*1000;
+      title = 'Timeout: ' + arg + 's';
     }
     else if (cmd == 'prev') {
       index-=2; if (index < 0) index = photos.length-1;
@@ -169,6 +171,13 @@
     else if (cmd == 'next') {
       setTimeout(loadNext, 0);
     }
+    else if (cmd == 'audio') {
+      arg = arg.split('#');
+      $('audio').attr('src', arg[0])[0].play();
+      if (arg.length > 1) title = 'Playing: ' + arg[1];
+    }
+
+    $('#title').text(title);
   }
 
   document.addEventListener('message', function(e) {
