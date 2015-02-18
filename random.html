@@ -148,7 +148,7 @@
         break;
     }
 
-    canvas.drawImage(nextImg, offsetX, offsetY, scaledWidth, scaledHeight);
+    canvas.drawImage(nextImg, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
 
     $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
     $status.text(index + '/' + photos.length);
