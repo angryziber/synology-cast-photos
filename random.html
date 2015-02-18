@@ -9,10 +9,11 @@
       height: 100%;
       background: black;
       margin: 0;
+      padding: 0;
       font-family: sans-serif;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
+    }
+    canvas {
+      position: absolute;
     }
     #title, #status, #meta {
       position: absolute;
@@ -42,6 +43,7 @@
 </head>
 
 <body>
+  <canvas id="img"></canvas>
   <div id="meta"></div>
   <div id="title">Waiting for commands</div>
   <div id="status"></div>
@@ -57,11 +59,20 @@
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
   var timeout = 10000;
-  var $img = $('body');
+  var $img = $('#img');
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
   var timer, meta, loading;
+  var canvas = $img[0].getContext('2d');
+  var width, height;
+
+  window.onresize = function() {
+    width = $img[0].width = document.body.clientWidth;
+    height = $img[0].height = document.body.clientHeight;
+  };
+
+  onresize();
 
   function random(max) {
     if (window.crypto) {
@@ -90,12 +101,11 @@
     $.get(metaUrlPrefix + url, nextMetaLoaded);
     loading = true;
     $status.text('Loading ' + index + '/' + photos.length);
-    $img.css({'background-image': 'none'});
   }
 
   function nextMetaLoaded(data) {
     meta = data;
-    //console.log(meta);
+    console.log(meta);
   }
 
   function nextPhotoLoaded() {
@@ -108,30 +118,37 @@
   }
 
   function showPhoto(url) {
-    var css = {'background-image': 'url(' + url + ')'};
+    var scaledHeight = height;
+    var scaledWidth = nextImg.width / nextImg.height * height;
+    var offsetX = -width/2 + (width - scaledWidth)/2, offsetY = -height/2;
+
+    canvas.setTransform(1, 0, 0, 1, 0, 0);
+    canvas.translate(width/2, height/2);
+
+    function vertical() {
+      canvas.clearRect(-width/2, -height/2, width, height);
+      canvas.scale(0.7, 0.7);
+      offsetX = -height*0.72; offsetY = -width/4;
+    }
+
     switch (meta.orientation) {
       case '3':
-        css['-webkit-transform'] = 'rotate(180deg)';
-        css.height = '100%';
-        css.top = 0;
+        canvas.rotate(Math.PI);
         break;
       case '6':
-        css['-webkit-transform'] = 'rotate(90deg)';
-        css.height = '67%';
-        css.top = '17%';
+        vertical();
+        canvas.rotate(Math.PI/2);
         break;
       case '8':
-        css['-webkit-transform'] = 'rotate(270deg)';
-        css.height = '67%';
-        css.top = '17%';
+        vertical();
+        canvas.rotate(-Math.PI/2);
         break;
       default:
-        css['-webkit-transform'] = 'none';
-        css.height = '100%';
-        css.top = 0;
+        canvas.rotate(0);
         break;
     }
-    $img.css(css);
+
+    canvas.drawImage(nextImg, offsetX, offsetY, scaledWidth, scaledHeight);
 
     $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
     $status.text(index + '/' + photos.length);
