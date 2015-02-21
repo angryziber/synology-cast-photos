@@ -51,7 +51,7 @@
 </body>
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
-<script type="text/javascript" src="http://photos.azib.net/chromecast.js"></script>
+<script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
 <script type="text/javascript">
   var photos = [], index = 0;
   var nextImg = new Image();
@@ -71,8 +71,16 @@
     width = $img[0].width = document.body.clientWidth;
     height = $img[0].height = document.body.clientHeight;
   };
-
   onresize();
+
+  var castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+  var castReceiverConfig = new cast.receiver.CastReceiverManager.Config();
+  castReceiverConfig.maxInactivity = 60000;
+  var messageBus = castReceiverManager.getCastMessageBus('urn:x-cast:message');
+  messageBus.onMessage = function(e) {
+    onCommand(e.data);
+  };
+  castReceiverManager.start(castReceiverConfig);
 
   function random(max) {
     if (window.crypto) {
@@ -218,10 +226,6 @@
     $title.text(title);
   }
 
-  document.addEventListener('message', function(e) {
-    onCommand(e.detail);
-  });
-  
   window.onhashchange = function(e) {
     if (location.hash) onCommand(location.hash.substring(1));
   };
