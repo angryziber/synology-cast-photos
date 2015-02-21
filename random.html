@@ -158,6 +158,7 @@
 
     $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
     $status.text(index + '/' + photos.length);
+    messageBus.broadcast($title.text());
     $meta.html((meta.date || '') + '<br>' + (meta.exposure || '') + (meta.fnumber ? ', F' + eval(meta.fnumber) : ''));
     loadNextPhotoAfter(timeout);
   }
@@ -182,6 +183,7 @@
         if (random) shuffle(photos); else photos.sort();
         index = 0;
         $title.text((random ? 'Random: ' : 'Sequential: ') + dir);
+        messageBus.broadcast($title.text());
         $status.text(photos.length);
         loadNext();
       },
@@ -222,6 +224,7 @@
     }
 
     $title.text(title);
+    messageBus.broadcast(title);
   }
 
   window.onhashchange = function(e) {
