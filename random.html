@@ -106,14 +106,12 @@
     nextImg.src = photoUrlPrefix + url;
     meta = {};
 
-    $.get(metaUrlPrefix + url, nextMetaLoaded);
+    $.get(metaUrlPrefix + url, function(data) {
+      meta = data;
+//    console.log(meta);
+    });
     loading = true;
     $status.text('Loading ' + index + '/' + photos.length);
-  }
-
-  function nextMetaLoaded(data) {
-    meta = data;
-//    console.log(meta);
   }
 
   function nextPhotoLoaded() {
