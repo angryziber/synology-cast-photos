@@ -73,7 +73,7 @@
   };
   onresize();
 
-  if (navigator.appName.indexOf('CrKey') >= 0) {
+  if (navigator.userAgent.indexOf('CrKey') >= 0) {
     var castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
     var castReceiverConfig = new cast.receiver.CastReceiverManager.Config();
     castReceiverConfig.maxInactivity = 60000;
