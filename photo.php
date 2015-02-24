@@ -1,7 +1,10 @@
 <?
-$file=$_GET['file'];
 $prefix = '/volume1/photo/';
-$path = $prefix.$file;
+
+$file=$_GET['file'];
+$path = realpath($prefix.$file);
+if (strpos($path, $prefix) !== 0) return;
+
 if (file_exists($path)) {
   header("Content-type: image/jpeg");
   header("Content-disposition: inline;filename=" . basename($file));

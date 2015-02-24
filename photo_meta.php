@@ -9,6 +9,9 @@ if (preg_match("/\.(CR2|cr2)\.jpg$/", $path)) {
   $path = preg_replace("/\.jpg$/", "", $path);
 }
 
+$path = realpath($path);
+if (strpos($path, $prefix) !== 0) return;
+
 function exif_value($line) {
   return preg_split("/\s+/", $line)[5];
 }

@@ -1,11 +1,13 @@
 <?
 $prefix = '/volume1/Photos/';
 
-$dir = $_GET['dir'] ? $_GET['dir'] : '2013/Annabel';
+$dir = $_GET['dir'];
 header('Content-type: text/plain; charset=utf8');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($prefix)).' GMT');
 
-$dir = escapeshellarg($dir);
 chdir($prefix);
+if (strpos(realpath($dir), $prefix) !== 0) return;
+$dir = escapeshellarg($dir);
+
 passthru("find $dir* -type d -maxdepth 1");
 ?>
