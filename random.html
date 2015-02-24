@@ -135,10 +135,10 @@
     var offsetX = -width/2 + (width - scaledWidth)/2, offsetY = -height/2;
 
     canvas.setTransform(1, 0, 0, 1, 0, 0);
+    canvas.clearRect(0, 0, width, height);
     canvas.translate(width/2, height/2);
 
     function vertical() {
-      canvas.clearRect(-width/2, -height/2, width, height);
       canvas.scale(0.7, 0.7);
       offsetX = -height*0.72; offsetY = -width/4;
     }
