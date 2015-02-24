@@ -201,7 +201,7 @@
 
   function onCommand(command) {
     var separatorPos = command.indexOf(':');
-    if (separatorPos == -1) separatorPos = command.length();
+    if (separatorPos == -1) separatorPos = command.length;
     var cmd = command.substring(0, separatorPos);
     var arg = command.substring(separatorPos+1);
     var title = command;
@@ -227,6 +227,9 @@
       arg = arg.split('#');
       $('audio').attr('src', arg[0])[0].play();
       if (arg.length > 1) title = 'Playing: ' + arg[1];
+    }
+    else {
+      loadPhotos(cmd, true);
     }
 
     $title.text(title);
