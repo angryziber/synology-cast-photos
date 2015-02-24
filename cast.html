@@ -2,7 +2,7 @@
 <!-- This is Chromecast sender -->
 <html>
 <head>
-  <title>Random photos from nas</title>
+  <title>Cast NAS photos</title>
   <meta charset="utf-8">
   <style type="text/css">
     @import 'http://twitter.github.io/typeahead.js/css/examples.css';
@@ -33,7 +33,7 @@
 <body>
 <div class="container">
   <div class="demo">
-    Send random photos from nas to Chromecast!<br><br>
+    Send photos from NAS to Chromecast!<br><br>
 
     <form>
       <input class="typeahead" type="text" name="prefix" value="" placeholder="2014" autofocus>
@@ -59,7 +59,7 @@
 </div>
 </body>
 <script type="text/javascript">
-  chromecast.appId = location.host.indexOf('.local') > 0 ? '40FA4E04' : '87673D37';
+  chromecast.appId = location.host.indexOf('192.168.') >= 0 || location.host.indexOf('.local') >= 0 ? '40FA4E04' : '87673D37';
   chromecast.onMessage(function(cmd) {
     console.log(cmd);
   });
@@ -124,7 +124,8 @@
     };
 
     function newToken(callback) {
-      window.open('https://oauth.vk.com/authorize?client_id=4774342&scope=audio&redirect_uri=' + location.protocol + '//' + location.hostname + '/vk-callback.html&display=popup&v=5.28&response_type=token');
+      window.open('https://oauth.vk.com/authorize?client_id=4774342&scope=audio&redirect_uri=' +
+                  location.href.replace('/cast.html', '/vk-callback.html') + '&display=popup&v=5.28&response_type=token', 'width=640,height=480');
     }
 
     function handleError(e) {
