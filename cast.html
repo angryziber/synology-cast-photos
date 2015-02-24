@@ -59,9 +59,9 @@
 </div>
 </body>
 <script type="text/javascript">
-  chromecast.appId = '40FA4E04';
+  chromecast.appId = location.host.indexOf('.local') > 0 ? '40FA4E04' : '87673D37';
   chromecast.onMessage(function(cmd) {
-    $('button').prop('disabled', false);
+    console.log(cmd);
   });
   setTimeout(chromecast.launch, 1000);
 
