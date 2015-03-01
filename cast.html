@@ -47,6 +47,9 @@
         Timeout: <input type="number" name="timeout" value="10" min="0" style="width: 50px"> s
       </div>
 
+      <button type="button" id="prev">Prev</button>
+      <button type="button" id="next">Next</button>
+
       <div style="margin-top: 100px">
         <input type="text" class="typeahead" name="audio" placeholder="Search VK Music">
         <br>
@@ -110,6 +113,14 @@
 
     timeout.on('change', function() {
       sendCommand('timeout:' + timeout.val());
+    });
+
+    $('#prev').on('click', function() {
+      sendCommand('prev');
+    });
+
+    $('#next').on('click', function() {
+      sendCommand('next');
     });
   })();
 
