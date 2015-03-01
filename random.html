@@ -47,7 +47,7 @@
   <div id="meta"></div>
   <div id="title">Waiting for commands</div>
   <div id="status"></div>
-  <audio loop></audio>
+  <audio></audio>
 </body>
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
@@ -224,9 +224,14 @@
       setTimeout(loadNext, 0);
     }
     else if (cmd == 'audio') {
-      arg = arg.split('#');
-      $('audio').attr('src', arg[0])[0].play();
-      if (arg.length > 1) title = 'Playing: ' + arg[1];
+      if (arg == 'prev') audio.prev();
+      else if (arg == 'next') audio.next();
+      else if (arg == 'stop') audio.stop();
+      else {
+        arg = arg.split('#');
+        audio.addToPlaylist(arg[0], arg[1]);
+        title = 'Added: ' + arg[1];
+      }
     }
     else {
       loadPhotos(cmd, true);
@@ -236,10 +241,43 @@
     broadcast(title);
   }
 
+  var audio = new (function() {
+    var self = this;
+    var player = $('audio')[0];
+    var playlist = [];
+    var playlistIndex = 0;
+
+    self.addToPlaylist = function(url, name) {
+      playlist.push({url:url, name:name});
+      if (!player.src) self.play();
+    };
+
+    self.play = function() {
+      player.src = playlist[playlistIndex].url;
+      player.play();
+      $title.text('Playing: ' + playlist[playlistIndex].name);
+    };
+
+    self.stop = function() {
+      player.stop();
+    };
+
+    self.prev = function() {
+      if (--playlistIndex < 0) playlistIndex = playlist.length-1;
+      self.play();
+    };
+
+    self.next = function() {
+      if (++playlistIndex >= playlist.length) playlistIndex = 0;
+      self.play();
+    };
+
+    $(player).on('ended', self.next);
+  })();
+
   window.onhashchange = function(e) {
     if (location.hash) onCommand(location.hash.substring(1));
   };
-
   window.onhashchange();
 </script>
 </html>

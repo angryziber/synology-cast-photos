@@ -53,7 +53,9 @@
       <div style="margin-top: 100px">
         <input type="text" class="typeahead" name="audio" placeholder="Search VK Music">
         <br>
-        <button type="button" id="stop">Stop</button>
+        <button type="button" id="audio-prev">Prev</button>
+        <button type="button" id="audio-stop">Stop</button>
+        <button type="button" id="audio-next">Next</button>
       </div>
     </form>
     <br>
@@ -176,8 +178,16 @@
       tv.sendAudio(item.url, item.name);
     });
 
-    $('#stop').on('click', function() {
-      tv.sendAudio('');
+    $('#audio-stop').on('click', function() {
+      tv.sendAudio('stop');
+    });
+
+    $('#audio-prev').on('click', function() {
+      tv.sendAudio('prev');
+    });
+
+    $('#audio-next').on('click', function() {
+      tv.sendAudio('next');
     });
   })();
 </script>
