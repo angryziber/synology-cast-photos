@@ -76,6 +76,7 @@
   onresize();
 
   if (navigator.userAgent.indexOf('CrKey') >= 0) {
+    // Running under Chromecast - receive commands from Chromecast senders
     var castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
     var castReceiverConfig = new cast.receiver.CastReceiverManager.Config();
     castReceiverConfig.maxInactivity = 60000;
@@ -84,6 +85,13 @@
       onCommand(e.data);
     };
     castReceiverManager.start(castReceiverConfig);
+  }
+  else {
+    // Running as standalone web page - take commands from location hash
+    window.onhashchange = function() {
+      if (location.hash) onCommand(location.hash.substring(1));
+    };
+    onhashchange();
   }
 
   function broadcast(message) {
@@ -276,11 +284,6 @@
 
     $(player).on('ended', self.next);
   })();
-
-  window.onhashchange = function(e) {
-    if (location.hash) onCommand(location.hash.substring(1));
-  };
-  window.onhashchange();
 </script>
 </html>
 
