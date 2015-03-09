@@ -90,6 +90,7 @@
     window.onresize = function() {
       width = $img[0].width = document.body.clientWidth;
       height = $img[0].height = document.body.clientHeight;
+      if (nextImg.width) renderPhoto();
     };
     onresize();
 
@@ -140,8 +141,8 @@
 
   function loadCurrent() {
     var url = photos[index-1];
-    nextImg.onload = nextPhotoLoaded;
-    nextImg.onerror = nextPhotoFailed;
+    nextImg.onload = photoLoaded;
+    nextImg.onerror = photoLoadingFailed;
     nextImg.src = photoUrlPrefix + url;
     meta = {};
 
@@ -153,16 +154,18 @@
     $status.text('Loading ' + index + '/' + photos.length);
   }
 
-  function nextPhotoLoaded() {
+  function photoLoaded() {
     var url = this.src;
     $status.text('Loaded ' + index + '/' + photos.length);
 
     setTimeout(function() {
-      showPhoto(url);
+      renderPhoto();
+      updateStatus(url);
+      loadNextPhotoAfter(timeout);
     }, 0);
   }
 
-  function showPhoto(url) {
+  function renderPhoto() {
     var scaledHeight = height;
     var scaledWidth = nextImg.width / nextImg.height * height;
     var offsetX = -width/2 + (width - scaledWidth)/2, offsetY = -height/2;
@@ -194,15 +197,16 @@
     }
 
     canvas.drawImage(nextImg, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
+  }
 
+  function updateStatus(url) {
     $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
     $status.text(index + '/' + photos.length);
     broadcast($title.text());
     $meta.html((meta.date || '') + '<br>' + (meta.exposure || '') + (meta.fnumber ? ', F' + eval(meta.fnumber) : ''));
-    loadNextPhotoAfter(timeout);
   }
 
-  function nextPhotoFailed() {
+  function photoLoadingFailed() {
     $status.text(index + '/' + photos.length + ': failed');
     loadNextPhotoAfter(timeout/4);
   }
