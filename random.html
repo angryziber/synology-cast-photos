@@ -95,15 +95,19 @@
 
     window.onkeydown = function(e) {
       switch (e.which) {
-        case 33:
         case 37:
         case 38:
           onCommand('prev');
           break;
-        case 34:
+        case 33:
+          onCommand('prev:10');
+          break;
         case 39:
         case 40:
           onCommand('next');
+          break;
+        case 34:
+          onCommand('next:10');
           break;
       }
     };
@@ -130,8 +134,12 @@
   function loadNext() {
     if (loading || !photos.length) return;
     if (index == photos.length) index = 0;
+    index++;
+    loadCurrent();
+  }
 
-    var url = photos[index++];
+  function loadCurrent() {
+    var url = photos[index-1];
     nextImg.onload = nextPhotoLoaded;
     nextImg.onerror = nextPhotoFailed;
     nextImg.src = photoUrlPrefix + url;
@@ -242,11 +250,12 @@
       title = 'Timeout: ' + arg + 's';
     }
     else if (cmd == 'prev') {
-      index-=2; if (index < 0) index = photos.length-1;
-      setTimeout(loadNext, 0);
+      index -= parseInt(arg || 1); if (index <= 0) index = photos.length;
+      setTimeout(loadCurrent, 0);
     }
     else if (cmd == 'next') {
-      setTimeout(loadNext, 0);
+      index += parseInt(arg || 1); if (index > photos.length) index = 1;
+      setTimeout(loadCurrent, 0);
     }
     else if (cmd == 'audio') {
       if (arg == 'prev') audio.prev();
