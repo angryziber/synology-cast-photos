@@ -69,12 +69,6 @@
   var canvas = $img[0].getContext('2d');
   var width, height;
 
-  window.onresize = function() {
-    width = $img[0].width = document.body.clientWidth;
-    height = $img[0].height = document.body.clientHeight;
-  };
-  onresize();
-
   if (navigator.userAgent.indexOf('CrKey') >= 0) {
     // Running under Chromecast - receive commands from Chromecast senders
     var castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
@@ -92,6 +86,27 @@
       if (location.hash) onCommand(location.hash.substring(1));
     };
     onhashchange();
+
+    window.onresize = function() {
+      width = $img[0].width = document.body.clientWidth;
+      height = $img[0].height = document.body.clientHeight;
+    };
+    onresize();
+
+    window.onkeydown = function(e) {
+      switch (e.which) {
+        case 33:
+        case 37:
+        case 38:
+          onCommand('prev');
+          break;
+        case 34:
+        case 39:
+        case 40:
+          onCommand('next');
+          break;
+      }
+    };
   }
 
   function broadcast(message) {
