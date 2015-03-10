@@ -167,15 +167,17 @@
   function renderPhoto() {
     var canvasRatio = canvas.width/canvas.height;
     var imgRatio = nextImg.width/nextImg.height;
-    var scaledWidth, scaledHeight;
+    var scaledWidth, scaledHeight, verticalScale;
 
     if (canvasRatio > imgRatio) {
       scaledHeight = canvas.height;
       scaledWidth = imgRatio * scaledHeight;
+      verticalScale = 1/imgRatio;
     }
     else {
       scaledWidth = canvas.width;
       scaledHeight = scaledWidth / imgRatio;
+      verticalScale = imgRatio;
     }
 
     var offsetX = -canvas.width/2 + (canvas.width - scaledWidth)/2;
@@ -185,25 +187,17 @@
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
     canvasCtx.translate(canvas.width/2, canvas.height/2);
 
-    function vertical() {
-      var scale = canvasRatio > imgRatio ? 1/imgRatio : imgRatio;
-      canvasCtx.scale(scale, scale);
-    }
-
     switch (meta.orientation) {
       case '3':
         canvasCtx.rotate(Math.PI);
         break;
       case '6':
-        vertical();
+        canvasCtx.scale(verticalScale, verticalScale);
         canvasCtx.rotate(Math.PI/2);
         break;
       case '8':
-        vertical();
+        canvasCtx.scale(verticalScale, verticalScale);
         canvasCtx.rotate(-Math.PI/2);
-        break;
-      default:
-        canvasCtx.rotate(0);
         break;
     }
 
