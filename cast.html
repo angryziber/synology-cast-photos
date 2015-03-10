@@ -47,15 +47,17 @@
         Timeout: <input type="number" name="timeout" value="10" min="0" style="width: 50px"> s
       </div>
 
-      <button type="button" id="prev">Prev</button>
-      <button type="button" id="next">Next</button>
+      <button type="button" id="prev-more">&lt;&lt;</button>
+      <button type="button" id="prev">&lt;</button>
+      <button type="button" id="next">&gt;</button>
+      <button type="button" id="next-more">&gt;&gt;</button>
 
       <div style="margin-top: 100px">
         <input type="text" class="typeahead" name="audio" placeholder="Search VK Music">
         <br>
-        <button type="button" id="audio-prev">Prev</button>
+        <button type="button" id="audio-prev">&lt;</button>
         <button type="button" id="audio-stop">Stop</button>
-        <button type="button" id="audio-next">Next</button>
+        <button type="button" id="audio-next">&gt;</button>
       </div>
     </form>
     <br>
@@ -123,6 +125,14 @@
 
     $('#next').on('click', function() {
       sendCommand('next');
+    });
+
+    $('#prev-more').on('click', function() {
+      sendCommand('prev:10');
+    });
+
+    $('#next-more').on('click', function() {
+      sendCommand('next:10');
     });
   })();
 
