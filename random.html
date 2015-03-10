@@ -67,11 +67,10 @@
   var timer, meta, loading;
   var canvas = $('canvas')[0];
   var canvasCtx = canvas.getContext('2d');
-  var width, height;
 
   window.onresize = function() {
-    width = canvas.width = document.body.clientWidth;
-    height = canvas.height = document.body.clientHeight;
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
     if (nextImg.width) renderPhoto();
   };
   onresize();
@@ -166,17 +165,17 @@
   }
 
   function renderPhoto() {
-    var scaledHeight = height;
-    var scaledWidth = nextImg.width / nextImg.height * height;
-    var offsetX = -width/2 + (width - scaledWidth)/2, offsetY = -height/2;
+    var scaledHeight = canvas.height;
+    var scaledWidth = nextImg.width / nextImg.height * canvas.height;
+    var offsetX = -canvas.width/2 + (canvas.width - scaledWidth)/2, offsetY = -canvas.height/2;
 
     canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
-    canvasCtx.clearRect(0, 0, width, height);
-    canvasCtx.translate(width/2, height/2);
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    canvasCtx.translate(canvas.width/2, canvas.height/2);
 
     function vertical() {
       canvasCtx.scale(0.7, 0.7);
-      offsetX = -height*0.72; offsetY = -width/4;
+      offsetX = -canvas.height*0.72; offsetY = -canvas.width/4;
     }
 
     switch (meta.orientation) {
