@@ -165,15 +165,17 @@
   }
 
   function renderPhoto() {
+    var canvasRatio = canvas.width/canvas.height;
+    var imgRatio = nextImg.width/nextImg.height;
     var scaledWidth, scaledHeight;
 
-    if (canvas.width/canvas.height > nextImg.width/nextImg.height) {
+    if (canvasRatio > imgRatio) {
       scaledHeight = canvas.height;
-      scaledWidth = nextImg.width / nextImg.height * canvas.height;
+      scaledWidth = imgRatio * scaledHeight;
     }
     else {
       scaledWidth = canvas.width;
-      scaledHeight = nextImg.height / nextImg.width * canvas.width;
+      scaledHeight = scaledWidth / imgRatio;
     }
 
     var offsetX = -canvas.width/2 + (canvas.width - scaledWidth)/2;
@@ -184,8 +186,8 @@
     canvasCtx.translate(canvas.width/2, canvas.height/2);
 
     function vertical() {
-      canvasCtx.scale(0.7, 0.7);
-      offsetX = -canvas.height*0.72; offsetY = -canvas.width/4;
+      var scale = canvasRatio > imgRatio ? 1/imgRatio : imgRatio;
+      canvasCtx.scale(scale, scale);
     }
 
     switch (meta.orientation) {
