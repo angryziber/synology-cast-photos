@@ -165,9 +165,19 @@
   }
 
   function renderPhoto() {
-    var scaledHeight = canvas.height;
-    var scaledWidth = nextImg.width / nextImg.height * canvas.height;
-    var offsetX = -canvas.width/2 + (canvas.width - scaledWidth)/2, offsetY = -canvas.height/2;
+    var scaledWidth, scaledHeight;
+
+    if (canvas.width/canvas.height > nextImg.width/nextImg.height) {
+      scaledHeight = canvas.height;
+      scaledWidth = nextImg.width / nextImg.height * canvas.height;
+    }
+    else {
+      scaledWidth = canvas.width;
+      scaledHeight = nextImg.height / nextImg.width * canvas.width;
+    }
+
+    var offsetX = -canvas.width/2 + (canvas.width - scaledWidth)/2;
+    var offsetY = -canvas.height/2 + (canvas.height - scaledHeight)/2;
 
     canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
