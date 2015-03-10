@@ -45,7 +45,7 @@
 </head>
 
 <body>
-  <canvas id="img"></canvas>
+  <canvas></canvas>
   <div id="meta"></div>
   <div id="title">Waiting for commands</div>
   <div id="status"></div>
@@ -61,17 +61,17 @@
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
   var timeout = 10000;
-  var $img = $('#img');
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
   var timer, meta, loading;
-  var canvas = $img[0].getContext('2d');
+  var canvas = $('canvas')[0];
+  var canvasCtx = canvas.getContext('2d');
   var width, height;
 
   window.onresize = function() {
-    width = $img[0].width = document.body.clientWidth;
-    height = $img[0].height = document.body.clientHeight;
+    width = canvas.width = document.body.clientWidth;
+    height = canvas.height = document.body.clientHeight;
     if (nextImg.width) renderPhoto();
   };
   onresize();
@@ -170,33 +170,33 @@
     var scaledWidth = nextImg.width / nextImg.height * height;
     var offsetX = -width/2 + (width - scaledWidth)/2, offsetY = -height/2;
 
-    canvas.setTransform(1, 0, 0, 1, 0, 0);
-    canvas.clearRect(0, 0, width, height);
-    canvas.translate(width/2, height/2);
+    canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
+    canvasCtx.clearRect(0, 0, width, height);
+    canvasCtx.translate(width/2, height/2);
 
     function vertical() {
-      canvas.scale(0.7, 0.7);
+      canvasCtx.scale(0.7, 0.7);
       offsetX = -height*0.72; offsetY = -width/4;
     }
 
     switch (meta.orientation) {
       case '3':
-        canvas.rotate(Math.PI);
+        canvasCtx.rotate(Math.PI);
         break;
       case '6':
         vertical();
-        canvas.rotate(Math.PI/2);
+        canvasCtx.rotate(Math.PI/2);
         break;
       case '8':
         vertical();
-        canvas.rotate(-Math.PI/2);
+        canvasCtx.rotate(-Math.PI/2);
         break;
       default:
-        canvas.rotate(0);
+        canvasCtx.rotate(0);
         break;
     }
 
-    canvas.drawImage(nextImg, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
+    canvasCtx.drawImage(nextImg, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
   }
 
   function updateStatus(url) {
