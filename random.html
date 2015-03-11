@@ -93,6 +93,11 @@
     };
     onhashchange();
 
+    function commandPrompt() {
+      var command = prompt('Photo dir/command', location.hash ? location.hash.substring(1) : '');
+      if (command) location.hash = '#' + command;
+    }
+
     window.onkeydown = function(e) {
       switch (e.which) {
         case 37:
@@ -110,10 +115,18 @@
           onCommand('next:10');
           break;
         case 27:
-          var command = prompt('Photo dir/command', location.hash ? location.hash.substring(1) : '');
-          if (command) location.hash = '#' + command;
+          commandPrompt();
       }
     };
+
+    window.onHammerLoaded = function() {
+      var hammer = new Hammer($('body')[0]);
+      hammer.on('swiperight', function() { onCommand('prev');});
+      hammer.on('swipeleft', function() { onCommand('next');});
+      hammer.on('press', function() { commandPrompt();});
+    };
+
+    document.write('<script src="hammer.min.js" onload="onHammerLoaded()"></scr'+'ipt>');
   }
 
   function broadcast(message) {
