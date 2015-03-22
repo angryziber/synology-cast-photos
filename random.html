@@ -172,7 +172,7 @@
 
   function photoLoaded() {
     var url = this.src;
-    $status.text('Loaded ' + index + '/' + photos.length);
+    $status.text('Rendering ' + index + '/' + photos.length);
 
     setTimeout(function() {
       renderPhoto();
@@ -212,15 +212,13 @@
         canvasCtx.scale(verticalScale, verticalScale);
         canvasCtx.rotate(Math.PI/2);
         break;
+      case '8':
+        canvasCtx.scale(verticalScale, verticalScale);
+        canvasCtx.rotate(-Math.PI/2);
+        break;
+    }
 
-    $(player).on('ended', self.next);
-    case '8':
-    canvasCtx.scale(verticalScale, verticalScale);
-    canvasCtx.rotate(-Math.PI/2);
-    break;
-  }
-
-  canvasCtx.drawImage(nextImg, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
+    canvasCtx.drawImage(nextImg, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
   }
 
   function updateStatus(url) {
@@ -333,6 +331,8 @@
       if (++playlistIndex >= playlist.length) playlistIndex = 0;
       self.play();
     };
+
+    $(player).on('ended', self.next);
   })();
 </script>
 </html>
