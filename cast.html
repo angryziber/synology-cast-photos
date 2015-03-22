@@ -21,7 +21,7 @@
       border: 2px solid #b8b8b8;
     }
 
-    #last-cmd {
+    #status {
       margin-top: 20px;
       color: red;
     }
@@ -61,7 +61,7 @@
       </div>
     </form>
     <br>
-    <div id="last-cmd"></div>
+    <div id="status"></div>
   </div>
 </div>
 </body>
@@ -94,7 +94,7 @@
     };
 
     function messageListener(ns, text) {
-      console.log(text);
+      $('#status').text(text).show().fadeOut(2000);
     }
 
     function onerror(e) {
@@ -124,7 +124,7 @@
 
     function sendCommand(cmd) {
       chromecast.message(cmd);
-      $('#last-cmd').text(cmd).show().fadeOut(2000);
+      $('#status').text(cmd).show().fadeOut(2000);
     }
 
     self.sendPhotoDir = function() {
