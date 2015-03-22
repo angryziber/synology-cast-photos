@@ -5,10 +5,44 @@
   <title>Cast NAS photos</title>
   <meta charset="utf-8">
   <style type="text/css">
-    @import 'http://twitter.github.io/typeahead.js/css/examples.css';
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    input[type=text], .tt-dropdown-menu {
+      font-family: sans-serif;
+      font-size: 24px;
+      border: 2px solid lightgray;
+      border-radius: 5px;
+      width: 500px;
+      outline: none;
+      padding: 10px 20px;
+      box-sizing: border-box;
+    }
+
     .tt-dropdown-menu {
+      margin-top: 12px;
+      padding: 0;
+      background: white;
+      text-align: left;
+      box-shadow: 0 5px 10px rgba(0,0,0,.2);
       max-height: 300px;
       overflow-y: auto;
+    }
+
+    .tt-suggestion {
+      padding: 5px 20px;
+      margin: 0;
+    }
+
+    .tt-suggestion p {
+      margin: 0;
+    }
+
+    .tt-suggestion.tt-cursor {
+      color: #fff;
+      background-color: #0097cf;
     }
 
     button {
@@ -31,39 +65,34 @@
   <script type="text/javascript" src="//twitter.github.io/typeahead.js/releases/0.10.2/typeahead.jquery.js"></script>
 </head>
 <body>
-<div class="container">
-  <div class="demo">
-    Send photos from NAS to Chromecast!<br><br>
+  <h1>Send photos from NAS to Chromecast!</h1>
 
-    <form>
-      <input class="typeahead" type="text" name="prefix" value="" placeholder="2014" autofocus>
+  <form>
+    <input class="typeahead" type="text" name="prefix" value="" placeholder="2014" autofocus>
+
+    <div style="margin-top: 20px">
+      <label><input type="checkbox" name="random" checked> Random</label>
+    </div>
+
+    <div style="margin-top: 20px">
+      Timeout: <input type="number" name="timeout" value="10" min="0" style="width: 50px"> s
+    </div>
+
+    <button type="button" id="prev-more">&lt;&lt;</button>
+    <button type="button" id="prev">&lt;</button>
+    <button type="button" id="next">&gt;</button>
+    <button type="button" id="next-more">&gt;&gt;</button>
+
+    <div style="margin-top: 100px">
+      <input type="text" class="typeahead" name="audio" placeholder="Search VK Music">
       <br>
-
-      <div style="margin-top: 20px">
-        <label><input type="checkbox" name="random" checked> Random</label>
-      </div>
-
-      <div style="margin-top: 20px">
-        Timeout: <input type="number" name="timeout" value="10" min="0" style="width: 50px"> s
-      </div>
-
-      <button type="button" id="prev-more">&lt;&lt;</button>
-      <button type="button" id="prev">&lt;</button>
-      <button type="button" id="next">&gt;</button>
-      <button type="button" id="next-more">&gt;&gt;</button>
-
-      <div style="margin-top: 100px">
-        <input type="text" class="typeahead" name="audio" placeholder="Search VK Music">
-        <br>
-        <button type="button" id="audio-prev">&lt;</button>
-        <button type="button" id="audio-stop">Stop</button>
-        <button type="button" id="audio-next">&gt;</button>
-      </div>
-    </form>
-    <br>
-    <div id="status"></div>
-  </div>
-</div>
+      <button type="button" id="audio-prev">&lt;</button>
+      <button type="button" id="audio-stop">Stop</button>
+      <button type="button" id="audio-next">&gt;</button>
+    </div>
+  </form>
+  <br>
+  <div id="status"></div>
 </body>
 <script type="text/javascript">
   var chromecast = new (function() {
