@@ -164,6 +164,25 @@
     $('#next-more').on('click', function() {
       sendCommand('next:10');
     });
+
+    $(window).on('keydown', function(e) {
+      switch (e.which) {
+        case 37:
+        case 38:
+          sendCommand('prev');
+          break;
+        case 33:
+          sendCommand('prev:10');
+          break;
+        case 39:
+        case 40:
+          sendCommand('next');
+          break;
+        case 34:
+          sendCommand('next:10');
+          break;
+      }
+    });
   })();
 
   var vk = new (function() {
