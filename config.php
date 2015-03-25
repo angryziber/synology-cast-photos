@@ -10,6 +10,17 @@ $photos_list_dir = '/volume1/Photos';
 $exiv2 = '/usr/syno/bin/exiv2';
 
 
+# Helper functions
+
+function ensure_safe($path) {
+    global $photos_dir, $photos_list_dir;
+    $canonical = realpath($path);
+    if (strpos($canonical, $photos_dir) !== 0 &&
+        strpos($canonical, $photos_list_dir) !== 0)
+        forbidden();
+    return $canonical;
+}
+
 function forbidden() {
     header("HTTP/1.0 403 Forbidden");
     echo "Forbidden";
