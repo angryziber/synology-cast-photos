@@ -60,6 +60,11 @@
       margin-top: 20px;
     }
 
+    input[name=interval] {
+      width: 50px;
+      text-align: right;
+    }
+
     .vk {
       margin-top: 100px;
     }
@@ -84,7 +89,7 @@
     </div>
 
     <div>
-      Timeout: <input type="number" name="timeout" value="10" min="0" style="width: 50px"> s
+      Interval: <input type="number" name="interval" value="10" min="0"> s
     </div>
 
     <button type="button" id="prev-more">&lt;&lt;</button>
@@ -146,7 +151,7 @@
     var dirsSuggestUrl = '/photos_dirs.php';
     var input = $('[name=prefix]');
     var random = $('[name=random]');
-    var timeout = $('[name=timeout]');
+    var interval = $('[name=interval]');
 
     var accessToken = localStorage['accessToken'];
     if (!accessToken) {
@@ -190,8 +195,8 @@
       if (input.val()) self.sendPhotoDir();
     });
 
-    timeout.on('change', function() {
-      sendCommand('timeout:' + timeout.val());
+    interval.on('change', function() {
+      sendCommand('interval:' + interval.val());
     });
 
     $('#prev').on('click', function() {

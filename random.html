@@ -61,7 +61,7 @@
   var photoListUrl = '/photos_list.php';
   var photoUrlPrefix = '/photo.php?file=';
   var metaUrlPrefix = '/photo_meta.php?file=';
-  var timeout = 10000;
+  var interval = 10000;
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
@@ -177,7 +177,7 @@
     setTimeout(function() {
       renderPhoto();
       updateStatus(url);
-      loadNextPhotoAfter(timeout);
+      loadNextPhotoAfter(interval);
     }, 0);
   }
 
@@ -230,7 +230,7 @@
 
   function photoLoadingFailed() {
     $status.text(index + '/' + photos.length + ': failed');
-    loadNextPhotoAfter(timeout/4);
+    loadNextPhotoAfter(interval/4);
   }
 
   function loadNextPhotoAfter(timeout) {
@@ -271,9 +271,9 @@
     else if (cmd == 'seq') {
       loadPhotos(arg, false);
     }
-    else if (cmd == 'timeout') {
-      timeout = parseInt(arg)*1000;
-      title = 'Timeout: ' + arg + 's';
+    else if (cmd == 'interval') {
+      interval = parseInt(arg)*1000;
+      title = 'Interval: ' + arg + 's';
     }
     else if (cmd == 'prev') {
       index -= parseInt(arg || 1); if (index <= 0) index = photos.length;
