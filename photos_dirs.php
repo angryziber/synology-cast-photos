@@ -9,7 +9,6 @@ header('Content-type: text/plain; charset=utf8');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($photos_list_dir)).' GMT');
 
 chdir($photos_list_dir);
-
 if (strpos(realpath(dirname($dir)), $photos_list_dir) !== 0) forbidden();
 $dir = escapeshellarg($dir);
 

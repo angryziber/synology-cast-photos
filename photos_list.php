@@ -1,13 +1,13 @@
 <?
-$prefix = '/volume1/Photos';
+include 'config.php';
 
 $dir = $_GET['dir'];
-header('Content-type: text/plain; charset=utf8');
-header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($prefix.'/'.$dir)).' GMT');
-
-chdir($prefix);
-if (strpos(realpath($dir), $prefix) !== 0) return;
+chdir($photos_list_dir);
+if (strpos(realpath($dir), $photos_list_dir) !== 0) forbidden();
 $dir = escapeshellarg($dir);
+
+header('Content-type: text/plain; charset=utf8');
+header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($photos_list_dir.'/'.$dir)).' GMT');
 
 exec("find $dir* -type f", $files);
 foreach ($files as $file) {
