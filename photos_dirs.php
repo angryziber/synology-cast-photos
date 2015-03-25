@@ -1,8 +1,6 @@
 <?
 include 'config.php';
-
-$accessToken = trim(file($photos_list_dir.'/php-access-token.txt')[0]);
-if ($_GET['accessToken'] != $accessToken) forbidden();
+check_access();
 
 $dir = $_GET['dir'];
 chdir($photos_list_dir);
