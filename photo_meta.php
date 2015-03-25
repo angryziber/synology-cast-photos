@@ -1,19 +1,18 @@
 <?
-$prefix = '/volume1/Photos/';
-$exiv2 = '/usr/syno/bin/exiv2';
+include 'config.php';
 
 $file = $_GET['file'];
-$path = $prefix.$file;
+$path = "$photos_list_dir/$file";
 
-if (preg_match("/\.(CR2|cr2)\.jpg$/", $path)) {
-  $path = preg_replace("/\.jpg$/", "", $path);
+if (preg_match("/\\.(CR2|cr2)\\.jpg$/", $path)) {
+  $path = preg_replace("/\\.jpg$/", "", $path);
 }
 
 $path = realpath($path);
-if (strpos($path, $prefix) !== 0) return;
+if (strpos($path, $photos_list_dir) !== 0) forbidden();
 
 function exif_value($line) {
-  return preg_split("/\s+/", $line)[5];
+  return preg_split("/\\s+/", $line)[5];
 }
 
 if (file_exists($path)) {
