@@ -25,8 +25,9 @@ Small set of scripts to cast photos stored on a Synology NAS directly to Google 
 - Specify registered app ID in *cast.html*
 - Open **http://your-nas-ip/cast.html** in your browser, start casting!
 
-Note: these php scripts here take advantage of [rawfs](http://github.com/angryziber/rawfs) running on the NAS so you can cast
-raw photos directly.
+Note: these php scripts here take advantage of [rawfs](http://github.com/angryziber/rawfs) running on the NAS making it 
+possible to cast raw photos directly, without converting them to jpeg first. This is optional if your photos are already 
+in jpeg format.
 
 There is also an [Android app for controlling the casted photos](https://github.com/angryziber/synology-cast-photos-android) instead of *cast.html*.
 
