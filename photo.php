@@ -2,8 +2,8 @@
 include 'config.php';
 
 $file=$_GET['file'];
-$path = realpath($photos_dir.$file);
-if (strpos($path, $photos_dir) !== 0) return;
+$path = realpath("$photos_dir/$file");
+if (strpos($path, $photos_dir) !== 0) forbidden();
 
 if (file_exists($path)) {
   header("Content-type: image/jpeg");
