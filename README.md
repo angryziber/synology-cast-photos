@@ -3,11 +3,18 @@ Cast photos from NAS directly to TV
 
 Small set of scripts to cast photos stored on a Synology NAS directly to Google Chromecast.
 
-To use this stuff, you will need some hardware:
+##Required hardware
+
 - *Synology NAS* device (or any other server containing photos and running php)
 - *Google Chromecast* dongle for your TV
 
-To install:
+## Legend
+
+* cast.html - *Chromecast sender*, use it to start and control the show from Google Chrome with Google Cast extension installed
+* random.html - *Chromecast receiver* - this file will run on Chromecast dongle
+* \*.php - scripts for serving the actual photos from NAS, or any other php-enabled server 
+
+## Installing
 
 - Enable *Web Station* on your Synology NAS
 - In PHP settings (in a tab), add your photos directory to PHP open_basedir - otherwise photos won't be accessible to PHP
