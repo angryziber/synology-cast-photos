@@ -109,7 +109,7 @@
   <div id="status"></div>
 </body>
 <script type="text/javascript">
-  var chromecast = new (function() {
+  var chromecast = new (function Chromecast() {
     var self = this;
     self.appId = location.host.indexOf('192.168.') >= 0 || location.host.indexOf('.local') >= 0 ? '40FA4E04' : '87673D37';
     self.namespace = 'urn:x-cast:message';
@@ -143,9 +143,9 @@
     function onerror(e) {
       console.log(e);
     }
-  })();
+  });
 
-  var tv = new (function() {
+  var tv = new (function TV() {
     var self = this;
 
     var dirsSuggestUrl = '/photos_dirs.php';
@@ -233,9 +233,9 @@
           break;
       }
     });
-  })();
+  });
 
-  var vk = new (function() {
+  var vk = new (function VK() {
     var self = this;
 
     var vkToken = localStorage['vkToken'];
@@ -298,7 +298,7 @@
     $('#audio-next').on('click', function() {
       tv.sendAudio('next');
     });
-  })();
+  });
 </script>
 </html>
 

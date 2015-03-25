@@ -301,7 +301,7 @@
     broadcast(title);
   }
 
-  var audio = new (function() {
+  var audio = new (function Audio() {
     var self = this;
     var player = $('audio')[0];
     var playlist = [];
@@ -333,7 +333,7 @@
     };
 
     $(player).on('ended', self.next);
-  })();
+  });
 </script>
 </html>
 
