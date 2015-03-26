@@ -109,10 +109,11 @@
   <div id="status"></div>
 </body>
 <script type="text/javascript">
-  var chromecast = new (function Chromecast() {
-    var self = this;
-    self.appId = location.host.indexOf('192.168.') >= 0 || location.host.indexOf('.local') >= 0 ? '40FA4E04' : '87673D37';
-    self.namespace = 'urn:x-cast:message';
+  var chromecast = (function() {
+    var self = {
+      appId: location.host.indexOf('192.168.') >= 0 || location.host.indexOf('.local') >= 0 ? '40FA4E04' : '87673D37',
+      namespace: 'urn:x-cast:message'
+    };
 
     window['__onGCastApiAvailable'] = function(loaded, error) {
       if (loaded) {
@@ -129,7 +130,8 @@
     }
 
     function receiverListener(e) {
-      if (e === chrome.cast.ReceiverAvailability.AVAILABLE) chrome.cast.requestSession(sessionListener)
+      if (e === chrome.cast.ReceiverAvailability.AVAILABLE)
+        chrome.cast.requestSession(sessionListener)
     }
 
     self.message = function(message, callback) {
@@ -143,10 +145,12 @@
     function onerror(e) {
       console.log(e);
     }
-  });
 
-  var tv = new (function TV() {
-    var self = this;
+    return self;
+  })();
+
+  var tv = (function() {
+    var self = {};
 
     var dirsSuggestUrl = '/photos_dirs.php';
     var input = $('[name=prefix]');
@@ -233,10 +237,12 @@
           break;
       }
     });
-  });
 
-  var vk = new (function VK() {
-    var self = this;
+    return self;
+  })();
+
+  var vk = (function() {
+    var self = {};
 
     var vkToken = localStorage['vkToken'];
     var input = $('[name=audio]');
@@ -298,7 +304,9 @@
     $('#audio-next').on('click', function() {
       tv.sendAudio('next');
     });
-  });
+
+    return self;
+  })();
 </script>
 </html>
 
