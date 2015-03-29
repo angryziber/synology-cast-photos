@@ -1,4 +1,4 @@
-var audio = (function Audio() {
+var audio = (function() {
   var self = {};
   var player = $('audio')[0];
   var playlist = [];
