@@ -250,4 +250,6 @@ var photos = (function(self) {
     $title.text(title);
     broadcast(title);
   }
+
+  return self;
 }(photos || {}));
