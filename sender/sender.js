@@ -2,6 +2,7 @@ var sender = (function(self) {
   var input = $('[name=prefix]');
   var random = $('[name=random]');
   var interval = $('[name=interval]');
+  var status = $('#status');
 
   var accessToken = self.accessToken || localStorage['accessToken'];
   if (!accessToken) {
@@ -22,9 +23,13 @@ var sender = (function(self) {
     }
   });
 
+  chromecast.onMessage = function(ns, text) {
+    status.text(text).show().fadeOut(2000);
+  };
+
   function sendCommand(cmd) {
     chromecast.message(cmd);
-    $('#status').text(cmd).show().fadeOut(2000);
+    status.text(cmd).show().fadeOut(1000);
   }
 
   self.sendPhotoDir = function() {

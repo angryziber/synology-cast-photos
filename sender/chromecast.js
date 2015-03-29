@@ -1,8 +1,10 @@
 // Chromecast sender API wrapper
 
 var chromecast = (function(self) {
-  // required self.appId
-  self.namespace = 'urn:x-cast:message';
+  self.appId = self.appId || undefined;
+  self.namespace = self.namespace || 'urn:x-cast:message';
+  self.onMessage = self.onMessage || $.noop;
+  self.onError = self.onError || function(e) {console.log(e)};
 
   window['__onGCastApiAvailable'] = function(loaded, error) {
     if (loaded) {
@@ -15,7 +17,7 @@ var chromecast = (function(self) {
 
   function sessionListener(session) {
     self.session = session;
-    self.session.addMessageListener(self.namespace, messageListener);
+    self.session.addMessageListener(self.namespace, self.onMessage);
   }
 
   function receiverListener(e) {
@@ -26,14 +28,6 @@ var chromecast = (function(self) {
   self.message = function(message, callback) {
     self.session.sendMessage(self.namespace, message, callback || $.noop, onerror);
   };
-
-  function messageListener(ns, text) {
-    $('#status').text(text).show().fadeOut(2000);
-  }
-
-  function onerror(e) {
-    console.log(e);
-  }
 
   return self;
 })(chromecast || {});
