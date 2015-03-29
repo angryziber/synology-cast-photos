@@ -22,14 +22,14 @@ var photos = (function(self) {
   function initAsReceiver() {
     var receiverManager = cast.receiver.CastReceiverManager.getInstance();
 
-    var config = new cast.receiver.CastReceiverManager.Config();
-    config.maxInactivity = 60000;
-    receiverManager.start(config);
-
     self.messageBus = receiverManager.getCastMessageBus(self.namespace);
     self.messageBus.onMessage = function(e) {
       onCommand(e.data);
     };
+
+    var config = new cast.receiver.CastReceiverManager.Config();
+    config.maxInactivity = 60000;
+    receiverManager.start(config);
   }
 
   function initAsStandalone() {
