@@ -10,8 +10,8 @@ Small set of scripts to cast photos stored on a Synology NAS directly to Google 
 
 ## Legend
 
-* cast.html - *Chromecast sender*, use it to start and control the show from Google Chrome with Google Cast extension installed
-* random.html - *Chromecast receiver* - this file will run on Chromecast dongle
+* sender/index.html - *Chromecast sender*, use it to start and control the show from Google Chrome with Google Cast extension installed
+* receiver/index.html - *Chromecast receiver* - this file will run on Chromecast dongle, or as stand-alone
 * \*.php - scripts for serving the actual photos from NAS, or any other php-enabled server
 * config.php - here you can define paths of photos on your server
 
@@ -20,16 +20,16 @@ Small set of scripts to cast photos stored on a Synology NAS directly to Google 
 - Enable *Web Station* on your Synology NAS
 - In PHP settings (in a tab), add your photos directory to PHP open_basedir - otherwise photos won't be accessible to PHP
 - Copy/clone these files to the *'web'* directory on your NAS
-- [Register a Chromecast receiver app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/random.html**
+- [Register a Chromecast receiver app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/receiver**
   (Note: you need to pay Google $5 and also register your Chromecast device for testing in order to be able to use http urls)
-- Specify registered app ID in *cast.html*
-- Open **http://your-nas-ip/cast.html** in your browser, start casting!
+- Specify registered app ID in *sender/index.html*
+- Open **http://your-nas-ip/sender** in your browser, start casting!
 
 Note: these php scripts here take advantage of [rawfs](http://github.com/angryziber/rawfs) running on the NAS making it 
 possible to cast raw photos directly, without converting them to jpeg first. This is optional if your photos are already 
 in jpeg format.
 
-There is also an [Android app for controlling the casted photos](https://github.com/angryziber/synology-cast-photos-android) instead of *cast.html*.
+There is also an [Android sender app](https://github.com/angryziber/synology-cast-photos-android) for controlling the casted photos instead of *html sender*.
 
 Photos are streamed as they are (without any resizing, etc on the NAS) because CPU of Chromecast is faster than Synology's.
 
