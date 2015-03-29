@@ -1,5 +1,5 @@
 var vk = (function(self) {
-  var vkToken = localStorage['vkToken'];
+  var vkToken = self.vkToken || localStorage['vkToken'];
   var input = $('[name=audio]');
 
   self.tokenCallback = function(token) {
@@ -45,19 +45,19 @@ var vk = (function(self) {
   });
 
   input.on('typeahead:selected', function(e, item) {
-    photos.sendAudio(item.url, item.name);
+    sender.sendAudio(item.url, item.name);
   });
 
   $('#audio-stop').on('click', function() {
-    photos.sendAudio('stop');
+    sender.sendAudio('stop');
   });
 
   $('#audio-prev').on('click', function() {
-    photos.sendAudio('prev');
+    sender.sendAudio('prev');
   });
 
   $('#audio-next').on('click', function() {
-    photos.sendAudio('next');
+    sender.sendAudio('next');
   });
 
   return self;

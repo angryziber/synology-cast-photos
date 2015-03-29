@@ -1,4 +1,4 @@
-var photos = (function(self) {
+var sender = (function(self) {
   var input = $('[name=prefix]');
   var random = $('[name=random]');
   var interval = $('[name=interval]');
@@ -85,4 +85,4 @@ var photos = (function(self) {
   });
 
   return self;
-})(photos || {});
+})(sender || {});
