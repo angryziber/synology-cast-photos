@@ -6,13 +6,6 @@ var photos = (function(self) {
   var $meta = $('#meta');
   var timer, meta, loading;
   var canvas = $('canvas')[0];
-  var canvasCtx = canvas.getContext('2d');
-
-  $(window).on('resize', function () {
-    canvas.width = document.body.clientWidth;
-    canvas.height = document.body.clientHeight;
-    if (nextImg.width) renderPhoto(nextImg);
-  }).trigger('resize');
 
   if (navigator.userAgent.indexOf('CrKey') >= 0)
     initAsReceiver(); // running under Chromecast - receive commands from Chromecast senders
@@ -37,6 +30,11 @@ var photos = (function(self) {
       if (location.hash) onCommand(location.hash.substring(1));
     };
     onhashchange();
+
+    window.onresize = function() {
+      resetCanvas(canvas);
+      if (nextImg.width) renderPhoto(nextImg);
+    };
 
     function commandPrompt() {
       var command = prompt('Photo dir/command', location.hash ? location.hash.substring(1) : '');
@@ -152,7 +150,14 @@ var photos = (function(self) {
     }, 0);
   }
 
+  function resetCanvas(canvas) {
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
+  }
+
   function renderPhoto(img) {
+    resetCanvas(canvas);
+
     var canvasRatio = canvas.width / canvas.height;
     var imgRatio = img.width / img.height;
     var scaledWidth, scaledHeight, verticalScale;
@@ -171,8 +176,7 @@ var photos = (function(self) {
     var offsetX = -canvas.width / 2 + (canvas.width - scaledWidth) / 2;
     var offsetY = -canvas.height / 2 + (canvas.height - scaledHeight) / 2;
 
-    canvasCtx.setTransform(1, 0, 0, 1, 0, 0);
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    var canvasCtx = canvas.getContext('2d');
     canvasCtx.translate(canvas.width / 2, canvas.height / 2);
 
     switch (meta.orientation) {
