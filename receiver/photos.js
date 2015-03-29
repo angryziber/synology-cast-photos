@@ -8,12 +8,11 @@ var photos = (function(self) {
   var canvas = $('canvas')[0];
   var canvasCtx = canvas.getContext('2d');
 
-  window.onresize = function () {
+  $(window).on('resize', function () {
     canvas.width = document.body.clientWidth;
     canvas.height = document.body.clientHeight;
-    if (nextImg.width) renderPhoto();
-  };
-  onresize();
+    if (nextImg.width) renderPhoto(nextImg);
+  }).trigger('resize');
 
   if (navigator.userAgent.indexOf('CrKey') >= 0) {
     // Running under Chromecast - receive commands from Chromecast senders
@@ -72,7 +71,7 @@ var photos = (function(self) {
       });
     };
 
-    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js" onload="onHammerLoaded()"></scr' + 'ipt>');
+    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js"></script>');
   }
 
   function broadcast(message) {
