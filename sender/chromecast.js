@@ -8,6 +8,7 @@ var chromecast = (function(self) {
     onError: function(e) {console.log(e)}
   }, self);
 
+  $('<script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js" async></script>').appendTo('body');
   window['__onGCastApiAvailable'] = function(loaded, error) {
     if (loaded) {
       var sessionRequest = new chrome.cast.SessionRequest(self.appId);
