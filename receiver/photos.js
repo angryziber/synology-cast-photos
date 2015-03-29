@@ -72,7 +72,7 @@ var photos = (function(self) {
       });
     };
 
-    document.write('<script src="hammer.min.js" onload="onHammerLoaded()"></scr' + 'ipt>');
+    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js" onload="onHammerLoaded()"></scr' + 'ipt>');
   }
 
   function broadcast(message) {
