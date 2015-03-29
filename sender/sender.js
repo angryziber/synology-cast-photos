@@ -69,7 +69,8 @@ var sender = (function(self) {
     sendCommand('next:10');
   });
 
-  $(window).on('keydown', function(e) {
+  $('body').on('keydown', function(e) {
+    if ($(e.target).is('input')) return;
     switch (e.which) {
       case 37:
       case 38:
