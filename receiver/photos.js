@@ -14,20 +14,26 @@ var photos = (function(self) {
     if (nextImg.width) renderPhoto(nextImg);
   }).trigger('resize');
 
-  if (navigator.userAgent.indexOf('CrKey') >= 0) {
-    // Running under Chromecast - receive commands from Chromecast senders
-    var castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
-    var castReceiverConfig = new cast.receiver.CastReceiverManager.Config();
-    castReceiverConfig.maxInactivity = 60000;
-    var messageBus = castReceiverManager.getCastMessageBus('urn:x-cast:message');
-    messageBus.onMessage = function (e) {
+  if (navigator.userAgent.indexOf('CrKey') >= 0)
+    initAsReceiver(); // running under Chromecast - receive commands from Chromecast senders
+  else
+    initAsStandalone(); // running as standalone web page - take commands from location hash
+
+  function initAsReceiver() {
+    var receiverManager = cast.receiver.CastReceiverManager.getInstance();
+
+    var config = new cast.receiver.CastReceiverManager.Config();
+    config.maxInactivity = 60000;
+    receiverManager.start(config);
+
+    self.messageBus = receiverManager.getCastMessageBus(self.namespace);
+    self.messageBus.onMessage = function(e) {
       onCommand(e.data);
     };
-    castReceiverManager.start(castReceiverConfig);
   }
-  else {
-    // Running as standalone web page - take commands from location hash
-    window.onhashchange = function () {
+
+  function initAsStandalone() {
+    window.onhashchange = function() {
       if (location.hash) onCommand(location.hash.substring(1));
     };
     onhashchange();
@@ -71,11 +77,11 @@ var photos = (function(self) {
       });
     };
 
-    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js"></script>');
+    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js" onload="onHammerLoaded()"></script>');
   }
 
   function broadcast(message) {
-    if (messageBus) messageBus.broadcast(message);
+    if (self.messageBus) self.messageBus.broadcast(message);
   }
 
   function random(max) {
