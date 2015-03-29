@@ -103,11 +103,11 @@ var photos = (function(self) {
       function (data) {
         urls = data.trim().split('\n');
         if (random) shuffle(urls); else urls.sort();
-        index = 0;
         $title.text((random ? 'Random: ' : 'Sequential: ') + dir);
         broadcast($title.text());
         $status.text(urls.length);
-        loadNext();
+        index = 1;
+        loadCurrent();
       },
       function (xhr, status, text) {
         $title.text('Error: ' + text);
