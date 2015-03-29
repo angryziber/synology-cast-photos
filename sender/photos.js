@@ -1,12 +1,9 @@
-var tv = (function() {
-  var self = {};
-
-  var dirsSuggestUrl = '/photos_dirs.php';
+var photos = (function(self) {
   var input = $('[name=prefix]');
   var random = $('[name=random]');
   var interval = $('[name=interval]');
 
-  var accessToken = localStorage['accessToken'];
+  var accessToken = self.accessToken || localStorage['accessToken'];
   if (!accessToken) {
     accessToken = prompt('Access Token');
     if (accessToken) localStorage['accessToken'] = accessToken;
@@ -16,7 +13,7 @@ var tv = (function() {
     name: 'photo-dirs',
     displayKey: 'dir',
     source: function (dir, cb) {
-      $.get(dirsSuggestUrl, {dir:dir, accessToken:accessToken}, function(data) {
+      $.get(self.dirsSuggestUrl, {dir:dir, accessToken:accessToken}, function(data) {
         var values = data.trim().split('\n');
         cb($.map(values, function (value) {
           return {dir: value};
@@ -88,4 +85,4 @@ var tv = (function() {
   });
 
   return self;
-})();
+})(photos || {});

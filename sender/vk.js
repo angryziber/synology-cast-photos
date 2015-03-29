@@ -1,8 +1,4 @@
-var vk = (function() {
-  var self = {
-    cliendId: 4774342
-  };
-
+var vk = (function(self) {
   var vkToken = localStorage['vkToken'];
   var input = $('[name=audio]');
 
@@ -49,20 +45,21 @@ var vk = (function() {
   });
 
   input.on('typeahead:selected', function(e, item) {
-    tv.sendAudio(item.url, item.name);
+    photos.sendAudio(item.url, item.name);
   });
 
   $('#audio-stop').on('click', function() {
-    tv.sendAudio('stop');
+    photos.sendAudio('stop');
   });
 
   $('#audio-prev').on('click', function() {
-    tv.sendAudio('prev');
+    photos.sendAudio('prev');
   });
 
   $('#audio-next').on('click', function() {
-    tv.sendAudio('next');
+    photos.sendAudio('next');
   });
 
   return self;
-})();
+})(vk || {}
+);
