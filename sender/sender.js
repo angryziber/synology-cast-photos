@@ -41,9 +41,8 @@ var sender = (function(self) {
   };
 
   input.on('typeahead:selected', self.sendPhotoDir);
-  input.closest('form').on('submit', function() {
-    self.sendPhotoDir();
-    return false;
+  input.on('keydown', function(e) {
+    if (e.which == 13) self.sendPhotoDir();
   });
 
   random.on('click', function() {
