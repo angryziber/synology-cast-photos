@@ -9,5 +9,5 @@ var vk = {
 };
 
 var photos = {
-  dirsSuggestUrl: '/photos_dirs.php'
+  dirsSuggestUrl: '/backend/photos_dirs.php'
 };

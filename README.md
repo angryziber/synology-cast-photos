@@ -8,12 +8,12 @@ Small set of scripts to cast photos stored on a Synology NAS directly to Google 
 - *Synology NAS* device (or any other server containing photos and running php)
 - *Google Chromecast* dongle for your TV or *Android TV device*
 
-## Legend
+## Components
 
-* sender/index.html - *Chromecast sender*, use it to start and control the show from Google Chrome with Google Cast extension installed
-* receiver/index.html - *Chromecast receiver* - this file will run on Chromecast dongle, or as stand-alone
-* \*.php - scripts for serving the actual photos from NAS, or any other php-enabled server
-* config.php - here you can define paths of photos on your server
+* sender/ - *Chromecast sender*, use it to start and control the show from Google Chrome with Google Cast extension installed
+* receiver/ - *Chromecast receiver* - this file will run on Chromecast dongle, or use it stand-alone to view photos
+* backend/ - php scripts for serving the actual photos from NAS, or any other php-enabled server
+* config.php/js - each directory has a config file, where you can define paths of photos on your server and other parameters
 
 ## Installing
 
