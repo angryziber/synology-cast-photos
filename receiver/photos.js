@@ -104,7 +104,7 @@ var photos = (function(self) {
     var url = photos[index - 1];
 
     var nextImgPromise = $.Deferred();
-    nextImg.onload = nextImgPromise.resolve;
+    nextImg.onload = function() {nextImgPromise.resolve(this)};
     nextImg.onerror = nextImgPromise.reject;
     nextImg.src = self.photoUrlPrefix + url;
     meta = null;
@@ -121,16 +121,16 @@ var photos = (function(self) {
   function photoLoaded(img) {
     $status.text('Rendering ' + index + '/' + photos.length);
 
-    setTimeout(function () {
+    setTimeout(function() {
       renderPhoto(img);
       updateStatus(img.src);
       loadNextPhotoAfter(self.interval);
     }, 0);
   }
 
-  function renderPhoto() {
+  function renderPhoto(img) {
     var canvasRatio = canvas.width / canvas.height;
-    var imgRatio = nextImg.width / nextImg.height;
+    var imgRatio = img.width / img.height;
     var scaledWidth, scaledHeight, verticalScale;
 
     if (canvasRatio > imgRatio) {
@@ -165,7 +165,7 @@ var photos = (function(self) {
         break;
     }
 
-    canvasCtx.drawImage(nextImg, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
+    canvasCtx.drawImage(img, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
   }
 
   function updateStatus(url) {
