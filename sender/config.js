@@ -5,7 +5,7 @@ var chromecast = {
 
 var vk = {
   // VK client id in order to get access to audio search there
-  cliendId: 4774342
+  clientId: 4774342
 };
 
 var photos = {
