@@ -14,7 +14,7 @@ var chromecast = (function(self) {
       var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
       chrome.cast.initialize(apiConfig, $.noop, onerror);
     }
-    else onerror(error);
+    else self.onError(error);
   };
 
   function sessionListener(session) {
@@ -28,7 +28,7 @@ var chromecast = (function(self) {
   }
 
   self.message = function(message, callback) {
-    self.session.sendMessage(self.namespace, message, callback || $.noop, onerror);
+    self.session.sendMessage(self.namespace, message, callback || $.noop, self.onError);
   };
 
   return self;
