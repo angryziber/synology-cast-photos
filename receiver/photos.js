@@ -1,9 +1,6 @@
+var self = photos || {};
 var photos = [], index = 0;
 var nextImg = new Image();
-var photoListUrl = '/photos_list.php';
-var photoUrlPrefix = '/photo.php?file=';
-var metaUrlPrefix = '/photo_meta.php?file=';
-var interval = 10000;
 var $title = $('#title');
 var $status = $('#status');
 var $meta = $('#meta');
@@ -103,10 +100,10 @@ function loadCurrent() {
   var nextImgPromise = $.Deferred();
   nextImg.onload = nextImgPromise.resolve;
   nextImg.onerror = nextImgPromise.reject;
-  nextImg.src = photoUrlPrefix + url;
+  nextImg.src = self.photoUrlPrefix + url;
   meta = null;
 
-  var metaPromise = $.get(metaUrlPrefix + url, function(data) {
+  var metaPromise = $.get(self.metaUrlPrefix + url, function(data) {
     meta = data;
   });
   loading = true;
@@ -121,7 +118,7 @@ function photoLoaded(img) {
   setTimeout(function() {
     renderPhoto(img);
     updateStatus(img.src);
-    loadNextPhotoAfter(interval);
+    loadNextPhotoAfter(self.interval);
   }, 0);
 }
 
@@ -174,7 +171,7 @@ function updateStatus(url) {
 
 function photoLoadingFailed() {
   $status.text(index + '/' + photos.length + ': failed');
-  loadNextPhotoAfter(interval/4);
+  loadNextPhotoAfter(self.interval/4);
 }
 
 function loadNextPhotoAfter(timeout) {
@@ -186,7 +183,7 @@ function loadNextPhotoAfter(timeout) {
 function loadPhotos(dir, random) {
   $title.text('Loading photos from ' + dir);
 
-  $.ajax({url:photoListUrl, data:{dir: dir},
+  $.ajax({url:self.photoListUrl, data:{dir: dir},
     success: function(data) {
       photos = data.trim().split('\n');
       if (random) shuffle(photos); else photos.sort();
@@ -216,7 +213,7 @@ function onCommand(command) {
     loadPhotos(arg, false);
   }
   else if (cmd == 'interval') {
-    interval = parseInt(arg)*1000;
+    self.interval = parseInt(arg)*1000;
     title = 'Interval: ' + arg + 's';
   }
   else if (cmd == 'prev') {
