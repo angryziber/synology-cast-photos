@@ -98,6 +98,25 @@ var photos = (function(self) {
     return o;
   }
 
+  function loadPhotoUrls(dir, random) {
+    $title.text('Loading photos from ' + dir);
+
+    $.get(self.photoListUrl, {dir: dir}).then(
+      function (data) {
+        urls = data.trim().split('\n');
+        if (random) shuffle(urls); else urls.sort();
+        index = 0;
+        $title.text((random ? 'Random: ' : 'Sequential: ') + dir);
+        broadcast($title.text());
+        $status.text(urls.length);
+        loadNext();
+      },
+      function (xhr, status, text) {
+        $title.text('Error: ' + text);
+      }
+    );
+  }
+
   function loadNext() {
     if (loading || !urls.length) return;
     if (index == urls.length) index = 0;
@@ -191,26 +210,6 @@ var photos = (function(self) {
     timer = setTimeout(loadNext, timeout);
   }
 
-  function loadPhotos(dir, random) {
-    $title.text('Loading photos from ' + dir);
-
-    $.ajax({
-      url: self.photoListUrl, data: {dir: dir},
-      success: function (data) {
-        urls = data.trim().split('\n');
-        if (random) shuffle(urls); else urls.sort();
-        index = 0;
-        $title.text((random ? 'Random: ' : 'Sequential: ') + dir);
-        broadcast($title.text());
-        $status.text(urls.length);
-        loadNext();
-      },
-      error: function () {
-        $title.text('Error: ' + arguments);
-      }
-    });
-  }
-
   function onCommand(command) {
     var separatorPos = command.indexOf(':');
     if (separatorPos == -1) separatorPos = command.length;
@@ -219,10 +218,10 @@ var photos = (function(self) {
     var title = command;
 
     if (cmd == 'rnd') {
-      loadPhotos(arg, true);
+      loadPhotoUrls(arg, true);
     }
     else if (cmd == 'seq') {
-      loadPhotos(arg, false);
+      loadPhotoUrls(arg, false);
     }
     else if (cmd == 'interval') {
       self.interval = parseInt(arg) * 1000;
@@ -249,7 +248,7 @@ var photos = (function(self) {
       }
     }
     else {
-      loadPhotos(cmd, true);
+      loadPhotoUrls(cmd, true);
     }
 
     $title.text(title);
