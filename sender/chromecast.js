@@ -24,7 +24,7 @@ var chromecast = (function(self) {
   }
 
   function receiverListener(e) {
-    if (e === chrome.cast.ReceiverAvailability.AVAILABLE)
+    if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !self.session)
       chrome.cast.requestSession(sessionListener)
   }
 
