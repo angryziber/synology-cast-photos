@@ -1,5 +1,5 @@
 var photos = (function(self) {
-  var photos = [], index = 0;
+  var urls = [], index = 0;
   var nextImg = new Image();
   var $title = $('#title');
   var $status = $('#status');
@@ -99,14 +99,14 @@ var photos = (function(self) {
   }
 
   function loadNext() {
-    if (loading || !photos.length) return;
-    if (index == photos.length) index = 0;
+    if (loading || !urls.length) return;
+    if (index == urls.length) index = 0;
     index++;
     loadCurrent();
   }
 
   function loadCurrent() {
-    var url = photos[index - 1];
+    var url = urls[index - 1];
 
     var nextImgPromise = $.Deferred();
     nextImg.onload = function() {nextImgPromise.resolve(this)};
@@ -118,13 +118,13 @@ var photos = (function(self) {
       meta = data;
     });
     loading = true;
-    $status.text('Loading ' + index + '/' + photos.length);
+    $status.text('Loading ' + index + '/' + urls.length);
 
     $.when(nextImgPromise, metaPromise).then(photoLoaded, photoLoadingFailed);
   }
 
   function photoLoaded(img) {
-    $status.text('Rendering ' + index + '/' + photos.length);
+    $status.text('Rendering ' + index + '/' + urls.length);
 
     setTimeout(function() {
       renderPhoto(img);
@@ -175,13 +175,13 @@ var photos = (function(self) {
 
   function updateStatus(url) {
     $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
-    $status.text(index + '/' + photos.length);
+    $status.text(index + '/' + urls.length);
     broadcast($title.text());
     $meta.html((meta.date || '') + '<br>' + (meta.exposure || '') + (meta.fnumber ? ', F' + eval(meta.fnumber) : ''));
   }
 
   function photoLoadingFailed() {
-    $status.text(index + '/' + photos.length + ': failed');
+    $status.text(index + '/' + urls.length + ': failed');
     loadNextPhotoAfter(self.interval / 4);
   }
 
@@ -197,12 +197,12 @@ var photos = (function(self) {
     $.ajax({
       url: self.photoListUrl, data: {dir: dir},
       success: function (data) {
-        photos = data.trim().split('\n');
-        if (random) shuffle(photos); else photos.sort();
+        urls = data.trim().split('\n');
+        if (random) shuffle(urls); else urls.sort();
         index = 0;
         $title.text((random ? 'Random: ' : 'Sequential: ') + dir);
         broadcast($title.text());
-        $status.text(photos.length);
+        $status.text(urls.length);
         loadNext();
       },
       error: function () {
@@ -230,12 +230,12 @@ var photos = (function(self) {
     }
     else if (cmd == 'prev') {
       index -= parseInt(arg || 1);
-      if (index <= 0) index = photos.length;
+      if (index <= 0) index = urls.length;
       setTimeout(loadCurrent, 0);
     }
     else if (cmd == 'next') {
       index += parseInt(arg || 1);
-      if (index > photos.length) index = 1;
+      if (index > urls.length) index = 1;
       setTimeout(loadCurrent, 0);
     }
     else if (cmd == 'audio') {
