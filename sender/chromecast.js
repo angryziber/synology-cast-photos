@@ -1,10 +1,8 @@
 // Chromecast sender API wrapper
 
-var chromecast = (function() {
-  var self = {
-    appId: location.host.indexOf('192.168.') >= 0 || location.host.indexOf('.local') >= 0 ? '40FA4E04' : '87673D37',
-    namespace: 'urn:x-cast:message'
-  };
+var chromecast = (function(self) {
+  // required self.appId
+  self.namespace = 'urn:x-cast:message';
 
   window['__onGCastApiAvailable'] = function(loaded, error) {
     if (loaded) {
@@ -38,4 +36,4 @@ var chromecast = (function() {
   }
 
   return self;
-})();
+})(chromecast || {});

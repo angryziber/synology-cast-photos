@@ -22,7 +22,7 @@ Small set of scripts to cast photos stored on a Synology NAS directly to Google 
 - Copy/clone these files to the *'web'* directory on your NAS
 - [Register a Chromecast receiver app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/receiver**
   (Note: you need to pay Google $5 and also register your Chromecast device for testing in order to be able to use http urls)
-- Specify registered app ID in *sender/index.html*
+- Specify registered app ID in *sender/config.js*
 - Open **http://your-nas-ip/sender** in your browser, start casting!
 
 Note: these php scripts here take advantage of [rawfs](http://github.com/angryziber/rawfs) running on the NAS making it 
