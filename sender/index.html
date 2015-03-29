@@ -253,7 +253,7 @@
 
     function newToken(callback) {
       window.open('https://oauth.vk.com/authorize?client_id=4774342&scope=audio&redirect_uri=' +
-                  location.href.replace('/cast.html', '/vk-callback.html') + '&display=popup&v=5.28&response_type=token', 'width=640,height=480');
+                  encodeURI(location.href + '/vk-callback.html') + '&display=popup&v=5.28&response_type=token', 'width=640,height=480');
     }
 
     function handleError(e) {
