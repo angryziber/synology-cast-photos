@@ -14,7 +14,7 @@ var sender = (function(self) {
     name: 'photo-dirs',
     displayKey: 'dir',
     source: function (dir, cb) {
-      $.get(self.dirsSuggestUrl, {dir:dir, accessToken:accessToken}, function(data) {
+      $.get(self.photoDirsSuggestUrl, {dir:dir, accessToken:accessToken}, function(data) {
         var values = data.trim().split('\n');
         cb($.map(values, function (value) {
           return {dir: value};

@@ -8,6 +8,6 @@ var vk = {
   clientId: 4774342
 };
 
-var photos = {
-  dirsSuggestUrl: '/backend/photos_dirs.php'
+var sender = {
+  photoDirsSuggestUrl: '/backend/photos_dirs.php'
 };
