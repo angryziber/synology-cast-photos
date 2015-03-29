@@ -1,5 +1,4 @@
-var audio = (function() {
-  var self = {};
+var audio = (function(self) {
   var player = $('audio')[0];
   var playlist = [];
   var playlistIndex = 0;
@@ -31,4 +30,4 @@ var audio = (function() {
 
   $(player).on('ended', self.next);
   return self;
-})();
+})(audio || {});
