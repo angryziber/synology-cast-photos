@@ -200,7 +200,7 @@ var photos = (function(self) {
     $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
     $status.text(index + '/' + urls.length);
     broadcast($title.text());
-    $meta.html((meta.date || '') + '<br>' + (meta.exposure || '') + (meta.fnumber ? ', F' + eval(meta.fnumber) : ''));
+    $meta.html((meta.date || '') + '<br>' + (meta.exposure || '') + (meta.fnumber ? ', ' + meta.fnumber : '') + '<br>' + (meta.lens || ''));
   }
 
   function photoLoadingFailed() {
