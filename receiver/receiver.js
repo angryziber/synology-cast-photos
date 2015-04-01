@@ -1,6 +1,4 @@
 var receiver = (function(self) {
-  var $title = $('#title');
-
   if (navigator.userAgent.indexOf('CrKey') >= 0)
     initAsReceiver(); // running under Chromecast - receive commands from Chromecast senders
   else
@@ -113,7 +111,7 @@ var receiver = (function(self) {
       photos.loadPhotoUrls(cmd, true);
     }
 
-    $title.text(title);
+    photos.title(title);
     self.broadcast(title);
   }
 

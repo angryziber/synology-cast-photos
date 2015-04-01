@@ -8,20 +8,19 @@ var photos = (function(self) {
   var canvas = $('canvas')[0];
 
   self.loadPhotoUrls = function(dir, random) {
-    $title.text('Loading photos from ' + dir);
+    self.title('Loading photos from ' + dir);
 
     $.get(self.photoListUrl, {dir: dir}).then(
       function (data) {
         urls = data.trim().split('\n');
         if (random) shuffle(urls); else urls.sort();
-        $title.text((random ? 'Random: ' : 'Sequential: ') + dir);
-        receiver.broadcast($title.text());
+        self.title((random ? 'Random: ' : 'Sequential: ') + dir);
         $status.text(urls.length);
         index = 1;
         loadCurrent();
       },
       function (xhr, status, text) {
-        $title.text('Error: ' + text);
+        self.title('Error: ' + text);
       }
     );
   };
@@ -36,6 +35,11 @@ var photos = (function(self) {
     index += parseInt(by || 1);
     if (index > urls.length) index = 1;
     setTimeout(loadCurrent, 0);
+  };
+
+  self.title = function(title) {
+    $title.text(title);
+    receiver.broadcast(title);
   };
 
   function loadCurrent() {
@@ -113,9 +117,8 @@ var photos = (function(self) {
   }
 
   function updateStatus(url) {
-    $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
+    self.title(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
     $status.text(index + '/' + urls.length);
-    receiver.broadcast($title.text());
     $meta.html((meta.date || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : ''));
   }
