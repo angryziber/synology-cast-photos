@@ -82,20 +82,6 @@ var photos = (function(self) {
     if (self.messageBus) self.messageBus.broadcast(message);
   }
 
-  function random(max) {
-    if (window.crypto) {
-      var array = new Uint32Array(1);
-      crypto.getRandomValues(array);
-      return array[0] % max;
-    }
-    else return Math.floor(Math.random() * max);
-  }
-
-  function shuffle(o) {
-    for (var j, x, i = o.length; i; j = random(i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
-  }
-
   function loadPhotoUrls(dir, random) {
     $title.text('Loading photos from ' + dir);
 
@@ -258,6 +244,20 @@ var photos = (function(self) {
 
     $title.text(title);
     broadcast(title);
+  }
+
+  function random(max) {
+    if (window.crypto) {
+      var array = new Uint32Array(1);
+      crypto.getRandomValues(array);
+      return array[0] % max;
+    }
+    else return Math.floor(Math.random() * max);
+  }
+
+  function shuffle(o) {
+    for (var j, x, i = o.length; i; j = random(i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
   }
 
   return self;
