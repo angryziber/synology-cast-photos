@@ -7,82 +7,7 @@ var photos = (function(self) {
   var timer, meta, loading;
   var canvas = $('canvas')[0];
 
-  if (navigator.userAgent.indexOf('CrKey') >= 0)
-    initAsReceiver(); // running under Chromecast - receive commands from Chromecast senders
-  else
-    initAsStandalone(); // running as standalone web page - take commands from location hash
-
-  function initAsReceiver() {
-    var receiverManager = cast.receiver.CastReceiverManager.getInstance();
-
-    self.messageBus = receiverManager.getCastMessageBus(self.namespace);
-    self.messageBus.onMessage = function(e) {
-      onCommand(e.data);
-    };
-
-    var config = new cast.receiver.CastReceiverManager.Config();
-    config.maxInactivity = 60000;
-    receiverManager.start(config);
-  }
-
-  function initAsStandalone() {
-    window.onhashchange = function() {
-      if (location.hash) onCommand(location.hash.substring(1));
-    };
-    onhashchange();
-
-    window.onresize = function() {
-      resetCanvas(canvas);
-      if (nextImg.width) renderPhoto(nextImg);
-    };
-
-    function commandPrompt() {
-      var command = prompt('Photo dir/command', location.hash ? location.hash.substring(1) : '');
-      if (command) location.hash = '#' + command;
-    }
-
-    window.onkeydown = function (e) {
-      switch (e.which) {
-        case 37:
-        case 38:
-          onCommand('prev');
-          break;
-        case 33:
-          onCommand('prev:10');
-          break;
-        case 39:
-        case 40:
-          onCommand('next');
-          break;
-        case 34:
-          onCommand('next:10');
-          break;
-        case 27:
-          commandPrompt();
-      }
-    };
-
-    window.onHammerLoaded = function () {
-      var hammer = new Hammer($('body')[0]);
-      hammer.on('swiperight', function () {
-        onCommand('prev');
-      });
-      hammer.on('swipeleft', function () {
-        onCommand('next');
-      });
-      hammer.on('press', function () {
-        commandPrompt();
-      });
-    };
-
-    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js" onload="onHammerLoaded()"></script>');
-  }
-
-  function broadcast(message) {
-    if (self.messageBus) self.messageBus.broadcast(message);
-  }
-
-  function loadPhotoUrls(dir, random) {
+  self.loadPhotoUrls = function(dir, random) {
     $title.text('Loading photos from ' + dir);
 
     $.get(self.photoListUrl, {dir: dir}).then(
@@ -90,7 +15,7 @@ var photos = (function(self) {
         urls = data.trim().split('\n');
         if (random) shuffle(urls); else urls.sort();
         $title.text((random ? 'Random: ' : 'Sequential: ') + dir);
-        broadcast($title.text());
+        receiver.broadcast($title.text());
         $status.text(urls.length);
         index = 1;
         loadCurrent();
@@ -99,14 +24,19 @@ var photos = (function(self) {
         $title.text('Error: ' + text);
       }
     );
-  }
+  };
 
-  function loadNext() {
-    if (loading || !urls.length) return;
-    if (index == urls.length) index = 0;
-    index++;
-    loadCurrent();
-  }
+  self.prev = function(by) {
+    index -= parseInt(by || 1);
+    if (index <= 0) index = urls.length;
+    setTimeout(loadCurrent, 0);
+  };
+
+  self.next = function(by) {
+    index += parseInt(by || 1);
+    if (index > urls.length) index = 1;
+    setTimeout(loadCurrent, 0);
+  };
 
   function loadCurrent() {
     var url = urls[index - 1];
@@ -185,7 +115,7 @@ var photos = (function(self) {
   function updateStatus(url) {
     $title.text(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
     $status.text(index + '/' + urls.length);
-    broadcast($title.text());
+    receiver.broadcast($title.text());
     $meta.html((meta.date || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : ''));
   }
@@ -198,52 +128,7 @@ var photos = (function(self) {
   function loadNextPhotoAfter(timeout) {
     loading = false;
     if (timer) clearTimeout(timer);
-    timer = setTimeout(loadNext, timeout);
-  }
-
-  function onCommand(command) {
-    var separatorPos = command.indexOf(':');
-    if (separatorPos == -1) separatorPos = command.length;
-    var cmd = command.substring(0, separatorPos);
-    var arg = command.substring(separatorPos + 1);
-    var title = command;
-
-    if (cmd == 'rnd') {
-      loadPhotoUrls(arg, true);
-    }
-    else if (cmd == 'seq') {
-      loadPhotoUrls(arg, false);
-    }
-    else if (cmd == 'interval') {
-      self.interval = parseInt(arg) * 1000;
-      title = 'Interval: ' + arg + 's';
-    }
-    else if (cmd == 'prev') {
-      index -= parseInt(arg || 1);
-      if (index <= 0) index = urls.length;
-      setTimeout(loadCurrent, 0);
-    }
-    else if (cmd == 'next') {
-      index += parseInt(arg || 1);
-      if (index > urls.length) index = 1;
-      setTimeout(loadCurrent, 0);
-    }
-    else if (cmd == 'audio') {
-      if (arg == 'prev') audio.prev();
-      else if (arg == 'next') audio.next();
-      else if (arg == 'stop') audio.stop();
-      else {
-        arg = arg.split('#');
-        audio.addToPlaylist(arg[0], arg[1]);
-        title = 'Added: ' + arg[1];
-      }
-    }
-    else {
-      loadPhotoUrls(cmd, true);
-    }
-
-    $title.text(title);
-    broadcast(title);
+    timer = setTimeout(self.next, timeout);
   }
 
   function random(max) {
