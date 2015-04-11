@@ -27,11 +27,6 @@ var receiver = (function(self) {
     };
     setTimeout(onhashchange, 0);
 
-    window.onresize = function() {
-      resetCanvas(canvas);
-      if (nextImg.width) renderPhoto(nextImg);
-    };
-
     function commandPrompt() {
       var command = prompt('Photo dir/command', location.hash ? location.hash.substring(1) : '');
       if (command) location.hash = '#' + command;

@@ -42,6 +42,11 @@ var photos = (function(self) {
     receiver.broadcast(title);
   };
 
+  window.onresize = function() {
+    resetCanvas(canvas);
+    if (nextImg.width) renderPhoto(nextImg);
+  };
+
   function loadCurrent() {
     var url = urls[index - 1];
 
