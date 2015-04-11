@@ -8,7 +8,7 @@ var vk = (function(self) {
 
   function newToken(callback) {
     window.open('https://oauth.vk.com/authorize?client_id=' + self.clientId + '&scope=audio&redirect_uri=' +
-      encodeURI(location.href + '/vk-callback.html') + '&display=popup&v=5.28&response_type=token', 'width=640,height=480');
+      encodeURI(location.origin + '/sender/vk-callback.html') + '&display=popup&v=5.28&response_type=token', 'width=640,height=480');
   }
 
   function handleError(e) {
@@ -61,5 +61,4 @@ var vk = (function(self) {
   });
 
   return self;
-})(vk || {}
-);
+})(vk || {});
