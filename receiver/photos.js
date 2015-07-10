@@ -37,6 +37,18 @@ var photos = (function(self) {
     setTimeout(loadCurrent, 0);
   };
 
+  self.mark = function(how) {
+    var url = urls[index - 1];
+    $.post(self.markPhotoUrl, {file: url, how: how}).then(
+      function(text) {
+        self.title(text);
+      },
+      function() {
+        self.title('Failed to mark: ' + text);
+      }
+    );
+  };
+
   self.title = function(title) {
     $title.text(title);
     receiver.broadcast(title);

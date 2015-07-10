@@ -48,6 +48,15 @@ var receiver = (function(self) {
         case 34:
           onCommand('next:10');
           break;
+        case 112: // F1
+          onCommand('mark:red');
+          break;
+        case 113: // F2
+          onCommand('mark:blue');
+          break;
+        case 46: // Del
+          onCommand('mark:delete');
+          break;
         case 27:
           commandPrompt();
       }
@@ -91,6 +100,9 @@ var receiver = (function(self) {
     }
     else if (cmd == 'next') {
       photos.next(arg);
+    }
+    else if (cmd == 'mark') {
+      photos.mark(arg);
     }
     else if (cmd == 'audio') {
       if (arg == 'prev') audio.prev();
