@@ -49,10 +49,38 @@ var receiver = (function(self) {
           onCommand('next:10');
           break;
         case 112: // F1
+          e.preventDefault();
           onCommand('mark:red');
           break;
         case 113: // F2
+          e.preventDefault();
+          onCommand('mark:yellow');
+          break;
+        case 114: // F3
+          e.preventDefault();
+          onCommand('mark:green');
+          break;
+        case 115: // F4
+          e.preventDefault();
           onCommand('mark:blue');
+          break;
+        case 48:
+          onCommand('mark:0');
+          break;
+        case 49:
+          onCommand('mark:1');
+          break;
+        case 50:
+          onCommand('mark:2');
+          break;
+        case 51:
+          onCommand('mark:3');
+          break;
+        case 52:
+          onCommand('mark:4');
+          break;
+        case 53:
+          onCommand('mark:5');
           break;
         case 46: // Del
           onCommand('mark:delete');
