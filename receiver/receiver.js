@@ -33,60 +33,15 @@ var receiver = (function(self) {
     }
 
     window.onkeydown = function (e) {
-      switch (e.which) {
-        case 37:
-        case 38:
-          onCommand('prev');
-          break;
-        case 33:
-          onCommand('prev:10');
-          break;
-        case 39:
-        case 40:
-          onCommand('next');
-          break;
-        case 34:
-          onCommand('next:10');
-          break;
-        case 112: // F1
-          e.preventDefault();
-          onCommand('mark:red');
-          break;
-        case 113: // F2
-          e.preventDefault();
-          onCommand('mark:yellow');
-          break;
-        case 114: // F3
-          e.preventDefault();
-          onCommand('mark:green');
-          break;
-        case 115: // F4
-          e.preventDefault();
-          onCommand('mark:blue');
-          break;
-        case 48:
-          onCommand('mark:0');
-          break;
-        case 49:
-          onCommand('mark:1');
-          break;
-        case 50:
-          onCommand('mark:2');
-          break;
-        case 51:
-          onCommand('mark:3');
-          break;
-        case 52:
-          onCommand('mark:4');
-          break;
-        case 53:
-          onCommand('mark:5');
-          break;
-        case 46: // Del
-          onCommand('mark:delete');
-          break;
-        case 27:
-          commandPrompt();
+      if (e.which == 27) {
+        commandPrompt();
+        return;
+      }
+
+      var command = keyboard.toCommand(e.which);
+      if (command) {
+        e.preventDefault();
+        onCommand(command);
       }
     };
 
