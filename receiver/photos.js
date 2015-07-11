@@ -124,7 +124,7 @@ var photos = (function(self) {
   function updateStatus(url) {
     self.title(decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/'))));
     $status.text(index + '/' + urls.length);
-    $meta.html((meta.date || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
+    $meta.html((meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : ''));
   }
 
