@@ -86,6 +86,15 @@ var sender = (function(self) {
       case 34:
         sendCommand('next:10');
         break;
+      case 112: // F1
+        sendCommand('mark:red');
+        break;
+      case 113: // F2
+        sendCommand('mark:blue');
+        break;
+      case 46: // Del
+        sendCommand('mark:delete');
+        break;
     }
   });
 
