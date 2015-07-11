@@ -71,30 +71,11 @@ var sender = (function(self) {
 
   $('body').on('keydown', function(e) {
     if ($(e.target).is('input')) return;
-    switch (e.which) {
-      case 37:
-      case 38:
-        sendCommand('prev');
-        break;
-      case 33:
-        sendCommand('prev:10');
-        break;
-      case 39:
-      case 40:
-        sendCommand('next');
-        break;
-      case 34:
-        sendCommand('next:10');
-        break;
-      case 112: // F1
-        sendCommand('mark:red');
-        break;
-      case 113: // F2
-        sendCommand('mark:blue');
-        break;
-      case 46: // Del
-        sendCommand('mark:delete');
-        break;
+
+    var command = keyboard.toCommand(e.which);
+    if (command) {
+      e.preventDefault();
+      sendCommand(command);
     }
   });
 
