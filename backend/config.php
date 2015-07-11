@@ -12,6 +12,9 @@ $exiv2 = "/usr/syno/bin/exiv2";
 # If defined, some php scripts will require specifying an access token
 $access_token = trim(file("$photos_list_dir/php-access-token.txt")[0]);
 
+# The file where red/green/blue marks are written for later processing when user pressed F1-F3
+# This file must be writable by web server
+$marks_file = "$photos_list_dir/marks.txt";
 
 # Helper functions
 
