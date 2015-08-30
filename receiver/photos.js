@@ -1,6 +1,7 @@
 var photos = (function(self) {
   var random = true;
   var urls = [], index = 0;
+  var urlsRandom, urlsSequential;
   var nextImg = new Image();
   var $title = $('#title');
   var $status = $('#status');
@@ -30,12 +31,12 @@ var photos = (function(self) {
   }
 
   self.random = function() {
-    updateIndex(currentUrl(), shuffle(urls));
+    updateIndex(currentUrl(), urlsRandom || (urlsRandom = shuffle(urls.slice())));
     random = true;
   };
 
   self.sequential = function() {
-    updateIndex(currentUrl(), urls.sort());
+    updateIndex(currentUrl(), urlsSequential || (urlsSequential = urls.slice().sort()));
     random = false;
   };
 
