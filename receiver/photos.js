@@ -1,4 +1,5 @@
 var photos = (function(self) {
+  var random = true;
   var urls = [], index = 0;
   var nextImg = new Image();
   var $title = $('#title');
@@ -13,7 +14,7 @@ var photos = (function(self) {
     $.get(self.photoListUrl, {dir: dir}).then(
       function (data) {
         urls = data.trim().split('\n');
-        if (random) shuffle(urls); else urls.sort();
+        if (random) self.random(); else self.sequential();
         self.title((random ? 'Random: ' : 'Sequential: ') + dir);
         $status.text(urls.length);
         index = 1;
@@ -24,6 +25,26 @@ var photos = (function(self) {
       }
     );
   };
+
+  function currentUrl() {
+    return urls[index - 1];
+  }
+
+  self.random = function() {
+    updateIndex(currentUrl(), shuffle(urls));
+    random = true;
+  };
+
+  self.sequential = function() {
+    updateIndex(currentUrl(), urls.sort());
+    random = false;
+  };
+
+  function updateIndex(currentUrl, newUrls) {
+    if (currentUrl) index = newUrls.indexOf(currentUrl) + 1;
+    urls = newUrls;
+    $status.text(index + '/' + urls.length);
+  }
 
   self.prev = function(by) {
     index -= parseInt(by || 1);
@@ -38,8 +59,7 @@ var photos = (function(self) {
   };
 
   self.mark = function(how) {
-    var url = urls[index - 1];
-    $.post(self.markPhotoUrl, {file: url, how: how}).then(
+    $.post(self.markPhotoUrl, {file: currentUrl(), how: how}).then(
       function(text) {
         self.title(text);
       },
@@ -60,7 +80,7 @@ var photos = (function(self) {
   };
 
   function loadCurrent() {
-    var url = urls[index - 1];
+    var url = currentUrl();
 
     var nextImgPromise = $.Deferred();
     nextImg.onload = function() {nextImgPromise.resolve(this)};
@@ -152,7 +172,7 @@ var photos = (function(self) {
     timer = setTimeout(self.next, timeout);
   }
 
-  function random(max) {
+  function randomInt(max) {
     if (window.crypto) {
       var array = new Uint32Array(1);
       crypto.getRandomValues(array);
@@ -162,7 +182,7 @@ var photos = (function(self) {
   }
 
   function shuffle(o) {
-    for (var j, x, i = o.length; i; j = random(i), x = o[--i], o[i] = o[j], o[j] = x);
+    for (var j, x, i = o.length; i; j = randomInt(i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
   }
 
