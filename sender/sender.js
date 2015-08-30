@@ -46,7 +46,7 @@ var sender = (function(self) {
   });
 
   random.on('click', function() {
-    if (input.val()) self.sendPhotoDir();
+    sendCommand(random.is(':checked') ? 'rnd' : 'seq');
   });
 
   interval.on('change', function() {
