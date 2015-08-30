@@ -16,7 +16,6 @@ var photos = (function(self) {
         urls = data.trim().split('\n');
         if (random) self.random(); else self.sequential();
         self.title((random ? 'Random: ' : 'Sequential: ') + dir);
-        $status.text(urls.length);
         index = 1;
         loadCurrent();
       },

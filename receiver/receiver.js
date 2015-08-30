@@ -69,10 +69,12 @@ var receiver = (function(self) {
     var title = command;
 
     if (cmd == 'rnd') {
-      photos.loadPhotoUrls(arg, true);
+      if (arg) photos.loadPhotoUrls(arg, true);
+      else photos.random();
     }
     else if (cmd == 'seq') {
-      photos.loadPhotoUrls(arg, false);
+      if (arg) photos.loadPhotoUrls(arg, false);
+      else photos.sequential();
     }
     else if (cmd == 'interval') {
       photos.interval = parseInt(arg) * 1000;
