@@ -15,6 +15,7 @@ var photos = (function(self) {
     $.get(self.photoListUrl, {dir: dir}).then(
       function (data) {
         urls = data.trim().split('\n');
+        urlsRandom = urlsSequential = null;
         if (random) self.random(); else self.sequential();
         self.title((random ? 'Random: ' : 'Sequential: ') + dir);
         index = 1;
