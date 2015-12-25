@@ -6,7 +6,7 @@ var photos = (function(self) {
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
-  var timer, meta, loading;
+  var timer, loading;
   var canvas = $('canvas')[0];
 
   self.loadPhotoUrls = function(dir, random) {
@@ -89,8 +89,8 @@ var photos = (function(self) {
     nextImg.src = self.photoUrlPrefix + url;
     meta = null;
 
-    var metaPromise = $.get(self.metaUrlPrefix + url, function (data) {
-      meta = data;
+    var metaPromise = $.get(self.metaUrlPrefix + url).then(function(meta) {
+      return meta;
     });
     loading = true;
     $status.text('Loading ' + index + '/' + urls.length);
@@ -98,12 +98,12 @@ var photos = (function(self) {
     $.when(nextImgPromise, metaPromise).then(photoLoaded, photoLoadingFailed);
   }
 
-  function photoLoaded(img) {
+  function photoLoaded(img, meta) {
     $status.text('Rendering ' + index + '/' + urls.length);
 
     setTimeout(function() {
-      renderPhoto(img);
-      updateStatus(img.src);
+      renderPhoto(img, meta);
+      updateStatus(meta);
       loadNextPhotoAfter(self.interval);
     }, 0);
   }
@@ -113,7 +113,7 @@ var photos = (function(self) {
     canvas.height = document.body.clientHeight;
   }
 
-  function renderPhoto(img) {
+  function renderPhoto(img, meta) {
     resetCanvas(canvas);
 
     var canvasRatio = canvas.width / canvas.height;
@@ -154,8 +154,8 @@ var photos = (function(self) {
     canvasCtx.drawImage(img, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
   }
 
-  function updateStatus(url) {
-    var title = decodeURI(url.substring(url.indexOf('=') + 1, url.lastIndexOf('/')));
+  function updateStatus(meta) {
+    var title = meta.file.substring(0, meta.file.lastIndexOf('/'));
     self.title(title.replace(/\//g, ' / '));
     $status.text(index + '/' + urls.length);
     $meta.html((meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
