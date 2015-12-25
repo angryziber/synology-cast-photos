@@ -6,7 +6,7 @@ var photos = (function(self) {
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
-  var timer, loading;
+  var timer, loading, displayedUrl;
   var canvas = $('canvas')[0];
 
   self.loadPhotoUrls = function(dir, random) {
@@ -60,7 +60,7 @@ var photos = (function(self) {
   };
 
   self.mark = function(how) {
-    $.post(self.markPhotoUrl, {file: currentUrl(), how: how}).then(
+    $.post(self.markPhotoUrl, {file: displayedUrl, how: how}).then(
       function(text) {
         self.title(text);
       },
@@ -155,7 +155,8 @@ var photos = (function(self) {
   }
 
   function updateStatus(meta) {
-    var title = meta.file.substring(0, meta.file.lastIndexOf('/'));
+    displayedUrl = meta.file;
+    var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/'));
     self.title(title.replace(/\//g, ' / '));
     $status.text(index + '/' + urls.length);
     $meta.html((meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
