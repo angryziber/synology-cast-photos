@@ -114,18 +114,7 @@ var photos = (function(self) {
 
   function renderPhoto(img, meta) {
     resetCanvas(canvas);
-
-    var resizeSteps = Math.ceil(Math.log(img.width / canvas.width) / Math.log(2));
-    var src = img, srcW = img.width, srcH = img.height;
-    if (resizeSteps > 1) {
-      var oc = document.createElement('canvas'), octx = oc.getContext('2d');
-      oc.width = srcW / 2;
-      oc.height = srcH / 2;
-      for (var step = 1; step < resizeSteps; step++) {
-        octx.drawImage(src, 0, 0, srcW /= 2, srcH /= 2);
-        src = oc;
-      }
-    }
+    var src = downscaleByFactorsOf2(img);
 
     var canvasRatio = canvas.width / canvas.height;
     var imgRatio = img.width / img.height;
@@ -145,7 +134,22 @@ var photos = (function(self) {
     var canvasCtx = canvas.getContext('2d');
     translateAndRotate(canvasCtx, meta && meta.orientation, verticalScale);
 
-    canvasCtx.drawImage(src, 0, 0, srcW, srcH, -scaledWidth/2, -scaledHeight/2, scaledWidth, scaledHeight);
+    canvasCtx.drawImage(src.img, 0, 0, src.width, src.height, -scaledWidth/2, -scaledHeight/2, scaledWidth, scaledHeight);
+  }
+
+  function downscaleByFactorsOf2(img) {
+    var src = {img: img, width: img.width, height: img.height};
+    var steps = Math.ceil(Math.log(img.width / canvas.width) / Math.log(2));
+    if (steps > 1) {
+      var oc = document.createElement('canvas'), octx = oc.getContext('2d');
+      oc.width = src.width / 2;
+      oc.height = src.height / 2;
+      for (var step = 1; step < steps; step++) {
+        octx.drawImage(src.img, 0, 0, src.width /= 2, src.height /= 2);
+        src.img = oc;
+      }
+    }
+    return src;
   }
 
   function translateAndRotate(canvasCtx, orientation, verticalScale) {
