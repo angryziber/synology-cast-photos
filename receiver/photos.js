@@ -145,10 +145,7 @@ var photos = (function(self) {
     var canvasCtx = canvas.getContext('2d');
     translateAndRotate(canvasCtx, meta && meta.orientation, verticalScale);
 
-    var offsetX = -canvas.width / 2 + (canvas.width - scaledWidth) / 2;
-    var offsetY = -canvas.height / 2 + (canvas.height - scaledHeight) / 2;
-
-    canvasCtx.drawImage(src, 0, 0, srcW, srcH, offsetX, offsetY, scaledWidth, scaledHeight);
+    canvasCtx.drawImage(src, 0, 0, srcW, srcH, -scaledWidth/2, -scaledHeight/2, scaledWidth, scaledHeight);
   }
 
   function translateAndRotate(canvasCtx, orientation, verticalScale) {
