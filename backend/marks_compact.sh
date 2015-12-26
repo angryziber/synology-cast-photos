@@ -13,6 +13,8 @@ for line in `cat marks.txt`; do
 done
 
 mv marks.txt marks.txt~
+touch marks.txt
+chmod 777 marks.txt
 
 for line in "${!lines[@]}"
 do
