@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# This script removes umarked lines from marks.txt (starting with -)
+# This script removes unmarked lines from marks.txt (starting with '-')
 
 declare -A lines
 

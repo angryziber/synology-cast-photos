@@ -1,7 +1,7 @@
 #!/bin/bash -e
 # This script deletes files marked as so in marks.txt by photo_mark.php
 
-./marks_compact.sh
+marks_compact.sh
 
 IFS=$'\n'
 for line in `grep ' delete$' marks.txt`; do
