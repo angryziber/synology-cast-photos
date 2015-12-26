@@ -6,7 +6,7 @@ var photos = (function(self) {
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
-  var timer, loading, displayedUrl;
+  var timer, meta, loading, displayedUrl;
   var canvas = $('canvas')[0];
 
   self.loadPhotoUrls = function(dir, random) {
@@ -76,8 +76,7 @@ var photos = (function(self) {
   };
 
   window.onresize = function() {
-    resetCanvas(canvas);
-    if (nextImg.width) renderPhoto(nextImg);
+    if (nextImg.width) renderPhoto(nextImg, meta);
   };
 
   function loadCurrent() {
@@ -89,8 +88,8 @@ var photos = (function(self) {
     nextImg.src = self.photoUrlPrefix + url;
     meta = null;
 
-    var metaPromise = $.get(self.metaUrlPrefix + url).then(function(meta) {
-      return meta;
+    var metaPromise = $.get(self.metaUrlPrefix + url).then(function(data) {
+      return meta = data;
     });
     loading = true;
     $status.text('Loading ' + index + '/' + urls.length);
