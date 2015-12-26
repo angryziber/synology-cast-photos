@@ -115,6 +115,12 @@ var photos = (function(self) {
   function renderPhoto(img, meta) {
     resetCanvas(canvas);
 
+    var oc = document.createElement('canvas'), octx = oc.getContext('2d');
+    oc.width = img.width * 0.5;
+    oc.height = img.height * 0.5;
+    octx.drawImage(img, 0,0, oc.width,oc.height);
+    octx.drawImage(oc,0,0,oc.width * 0.5,oc.height * 0.5);
+
     var canvasRatio = canvas.width / canvas.height;
     var imgRatio = img.width / img.height;
     var scaledWidth, scaledHeight, verticalScale;
@@ -150,7 +156,7 @@ var photos = (function(self) {
         break;
     }
 
-    canvasCtx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
+    canvasCtx.drawImage(oc, 0, 0, oc.width/2, oc.height/2, offsetX, offsetY, scaledWidth, scaledHeight);
   }
 
   function updateStatus(meta) {
