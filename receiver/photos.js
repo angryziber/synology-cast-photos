@@ -150,7 +150,7 @@ var photos = (function(self) {
         break;
     }
 
-    canvasCtx.drawImage(img, Math.round(offsetX), Math.round(offsetY), Math.round(scaledWidth), Math.round(scaledHeight));
+    canvasCtx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
   }
 
   function updateStatus(meta) {
