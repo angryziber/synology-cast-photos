@@ -142,13 +142,19 @@ var photos = (function(self) {
       verticalScale = imgRatio;
     }
 
+    var canvasCtx = canvas.getContext('2d');
+    translateAndRotate(canvasCtx, meta && meta.orientation, verticalScale);
+
     var offsetX = -canvas.width / 2 + (canvas.width - scaledWidth) / 2;
     var offsetY = -canvas.height / 2 + (canvas.height - scaledHeight) / 2;
 
-    var canvasCtx = canvas.getContext('2d');
+    canvasCtx.drawImage(src, 0, 0, srcW, srcH, offsetX, offsetY, scaledWidth, scaledHeight);
+  }
+
+  function translateAndRotate(canvasCtx, orientation, verticalScale) {
     canvasCtx.translate(canvas.width / 2, canvas.height / 2);
 
-    switch (meta && meta.orientation) {
+    switch (orientation) {
       case '3':
         canvasCtx.rotate(Math.PI);
         break;
@@ -161,8 +167,6 @@ var photos = (function(self) {
         canvasCtx.rotate(-Math.PI / 2);
         break;
     }
-
-    canvasCtx.drawImage(src, 0, 0, srcW, srcH, offsetX, offsetY, scaledWidth, scaledHeight);
   }
 
   function updateStatus(meta) {
