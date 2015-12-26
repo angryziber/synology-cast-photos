@@ -136,7 +136,7 @@ var photos = (function(self) {
     var canvasCtx = canvas.getContext('2d');
     canvasCtx.translate(canvas.width / 2, canvas.height / 2);
 
-    switch (meta.orientation) {
+    switch (meta && meta.orientation) {
       case '3':
         canvasCtx.rotate(Math.PI);
         break;
