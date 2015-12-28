@@ -135,6 +135,7 @@ var photos = (function(self) {
     translateAndRotate(canvasCtx, meta && meta.orientation, verticalScale);
 
     canvasCtx.drawImage(src.img, 0, 0, src.width, src.height, -scaledWidth/2, -scaledHeight/2, scaledWidth, scaledHeight);
+    if (src.img.getContext) src.img.width = src.img.height = 0;
   }
 
   function downscaleByFactorsOf2(img) {
