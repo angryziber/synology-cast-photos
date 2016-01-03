@@ -7,7 +7,7 @@ var photos = (function(self) {
   var $status = $('#status');
   var $meta = $('#meta');
   var timer, meta, loading, displayedUrl;
-  var canvas = $('canvas')[0];
+  var photo = $('#photo')[0];
 
   self.loadPhotoUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
@@ -75,10 +75,6 @@ var photos = (function(self) {
     receiver.broadcast(title);
   };
 
-  window.onresize = function() {
-    if (nextImg.width) renderPhoto(nextImg, meta);
-  };
-
   function loadCurrent() {
     var url = currentUrl();
 
@@ -107,67 +103,25 @@ var photos = (function(self) {
     }, 0);
   }
 
-  function resetCanvas(canvas) {
-    canvas.width = document.body.clientWidth;
-    canvas.height = document.body.clientHeight;
-  }
-
   function renderPhoto(img, meta) {
-    resetCanvas(canvas);
-    var src = downscaleByFactorsOf2(img);
-
-    var canvasRatio = canvas.width / canvas.height;
     var imgRatio = img.width / img.height;
-    var scaledWidth, scaledHeight, verticalScale;
-
-    if (canvasRatio > imgRatio) {
-      scaledHeight = canvas.height;
-      scaledWidth = imgRatio * scaledHeight;
-      verticalScale = 1 / imgRatio;
-    }
-    else {
-      scaledWidth = canvas.width;
-      scaledHeight = scaledWidth / imgRatio;
-      verticalScale = imgRatio;
-    }
-
-    var canvasCtx = canvas.getContext('2d');
-    translateAndRotate(canvasCtx, meta && meta.orientation, verticalScale);
-
-    canvasCtx.drawImage(src.img, 0, 0, src.width, src.height, -scaledWidth/2, -scaledHeight/2, scaledWidth, scaledHeight);
-    if (src.img.getContext) src.img.width = src.img.height = 0;
+    handleOrientation(photo, meta && meta.orientation, 1/imgRatio);
+    photo.style.backgroundImage = 'url(' + img.src + ')';
   }
 
-  function downscaleByFactorsOf2(img) {
-    var src = {img: img, width: img.width, height: img.height};
-    var steps = Math.ceil(Math.log(img.width / canvas.width) / Math.log(2));
-    if (steps > 1) {
-      var oc = document.createElement('canvas'), octx = oc.getContext('2d');
-      oc.width = src.width / 2;
-      oc.height = src.height / 2;
-      for (var step = 1; step < steps; step++) {
-        octx.drawImage(src.img, 0, 0, src.width /= 2, src.height /= 2);
-        src.img = oc;
-      }
-    }
-    return src;
-  }
-
-  function translateAndRotate(canvasCtx, orientation, verticalScale) {
-    canvasCtx.translate(canvas.width / 2, canvas.height / 2);
-
+  function handleOrientation(photo, orientation, verticalScale) {
     switch (orientation) {
       case '3':
-        canvasCtx.rotate(Math.PI);
+        photo.style.transform = 'rotate(180deg)';
         break;
       case '6':
-        canvasCtx.scale(verticalScale, verticalScale);
-        canvasCtx.rotate(Math.PI / 2);
+        photo.style.transform = 'scale(' + verticalScale + ') rotate(90deg)';
         break;
       case '8':
-        canvasCtx.scale(verticalScale, verticalScale);
-        canvasCtx.rotate(-Math.PI / 2);
+        photo.style.transform = 'scale(' + verticalScale + ') rotate(-90deg)';
         break;
+      default:
+        photo.style.transform = 'none';
     }
   }
 
