@@ -36,16 +36,27 @@ var vk = (function(self) {
           return;
         }
 
+        function cleanAudioURL(url) {
+          return url.replace(/\?extra.*/, '');
+        }
+
+        function extractNameAndUrl(item) {
+          return {name: item.artist + ' - ' + item.title, url: cleanAudioURL(item.url)};
+        }
+
         data.response.shift();
-        cb($.map(data.response, function (item) {
-          return {name: item.artist + ' - ' + item.title, url: item.url.replace(/\?extra.*/, '')}
-        }));
+        var result = $.map(data.response, extractNameAndUrl);
+        result.unshift({name: 'Play all "' + q + '"', items: result.slice()});
+        cb(result);
       });
     }
   });
 
   input.on('typeahead:selected', function(e, item) {
-    sender.sendAudio(item.url, item.name);
+    var items = item.items || [item];
+    $.each(items, function(i, item) {
+      sender.sendAudio(item.url, item.name);
+    });
   });
 
   $('#audio-stop').on('click', function() {
