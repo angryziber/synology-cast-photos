@@ -99,15 +99,17 @@ var receiver = (function(self) {
       else {
         arg = arg.split('#');
         audio.addToPlaylist(arg[0], arg[1]);
-        title = 'Added: ' + arg[1];
       }
+      title = null;
     }
     else {
       photos.loadPhotoUrls(cmd, true);
     }
 
-    photos.title(title);
-    self.broadcast(title);
+    if (title) {
+      photos.title(title);
+      self.broadcast(title);
+    }
   }
 
   return self;
