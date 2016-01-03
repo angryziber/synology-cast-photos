@@ -80,6 +80,9 @@ var receiver = (function(self) {
       photos.interval = parseInt(arg) * 1000;
       title = 'Interval: ' + arg + 's';
     }
+    else if (cmd == 'style') {
+      photos.style(arg);
+    }
     else if (cmd == 'prev') {
       photos.prev(arg);
     }

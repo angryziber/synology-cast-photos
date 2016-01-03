@@ -41,6 +41,10 @@ var photos = (function(self) {
     random = false;
   };
 
+  self.style = function(backgroundSize) {
+    photo.style.backgroundSize = backgroundSize;
+  };
+
   function updateIndex(currentUrl, newUrls) {
     if (currentUrl) index = newUrls.indexOf(currentUrl) + 1;
     urls = newUrls;

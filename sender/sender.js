@@ -1,6 +1,7 @@
 var sender = (function(self) {
   var input = $('[name=prefix]');
   var random = $('[name=random]');
+  var cover = $('[name=cover]');
   var interval = $('[name=interval]');
   var status = $('#status');
 
@@ -47,6 +48,10 @@ var sender = (function(self) {
 
   random.on('click', function() {
     sendCommand(random.is(':checked') ? 'rnd' : 'seq');
+  });
+
+  cover.on('click', function() {
+    sendCommand(cover.is(':checked') ? 'style:cover' : 'style:contain');
   });
 
   interval.on('change', function() {
