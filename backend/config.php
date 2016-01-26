@@ -7,7 +7,7 @@ $photos_dir = "/volume1/photo";
 $photos_list_dir = "/volume1/Photos";
 
 # Location of exiv2 tool for getting of photo metadata
-$exiv2 = "/usr/syno/bin/exiv2";
+$exiv2 = "exiv2";
 
 # If defined, some php scripts will require specifying an access token
 $access_token = trim(file("$photos_list_dir/php-access-token.txt")[0]);
