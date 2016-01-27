@@ -8,6 +8,7 @@ var photos = (function(self) {
   var $meta = $('#meta');
   var timer, meta, loading, displayedUrl;
   var photo = $('#photo')[0];
+  var backgroundSize = 'contain';
 
   self.loadPhotoUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
@@ -41,8 +42,10 @@ var photos = (function(self) {
     random = false;
   };
 
-  self.style = function(backgroundSize) {
-    photo.style.backgroundSize = backgroundSize;
+  self.style = function(style) {
+    backgroundSize = style;
+    photo.style.backgroundSize = backgroundSize == 'contain' ? backgroundSize : '100% 110%';
+    photo.style.transform = photo.style.transform.replace(/scale(.*?)/, '');
   };
 
   function updateIndex(currentUrl, newUrls) {
@@ -117,20 +120,24 @@ var photos = (function(self) {
 
   function renderPhoto(img, meta) {
     var imgRatio = img.width / img.height;
-    handleOrientation(photo, meta && meta.orientation, 1/imgRatio);
+    handleOrientation(photo, meta && meta.orientation, imgRatio);
     photo.style.backgroundImage = 'url(' + img.src + ')';
   }
 
-  function handleOrientation(photo, orientation, verticalScale) {
+  function handleOrientation(photo, orientation, imgRatio) {
+    if (backgroundSize == 'cover') {
+      photo.style.backgroundSize = '100% ' + (100*innerWidth/innerHeight/imgRatio*0.85) + '%';
+    }
+
     switch (orientation) {
       case '3':
         photo.style.transform = 'rotate(180deg)';
         break;
       case '6':
-        photo.style.transform = 'scale(' + verticalScale + ') rotate(90deg)';
+        photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)';
         break;
       case '8':
-        photo.style.transform = 'scale(' + verticalScale + ') rotate(-90deg)';
+        photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)';
         break;
       default:
         photo.style.transform = 'none';
