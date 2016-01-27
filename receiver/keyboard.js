@@ -11,6 +11,8 @@ var keyboard = {
         return 'next';
       case 34:
         return 'next:10';
+      case 32:
+        return 'pause';
       case 112: // F1
         return 'mark:red';
       case 113: // F2

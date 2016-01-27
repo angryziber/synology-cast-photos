@@ -89,6 +89,9 @@ var receiver = (function(self) {
     else if (cmd == 'next') {
       photos.next(arg);
     }
+    else if (cmd == 'pause') {
+      photos.pause();
+    }
     else if (cmd == 'mark') {
       photos.mark(arg);
     }

@@ -63,6 +63,14 @@ var photos = (function(self) {
     setTimeout(loadCurrent, 0);
   };
 
+  self.pause = function() {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    else loadNextPhotoAfter(0);
+  };
+
   self.mark = function(how) {
     $.post(self.markPhotoUrl, {file: displayedUrl, how: how}).then(
       function(text) {
@@ -145,7 +153,7 @@ var photos = (function(self) {
 
   function loadNextPhotoAfter(timeout) {
     loading = false;
-    if (timer) clearTimeout(timer);
+    clearTimeout(timer);
     timer = setTimeout(self.next, timeout);
   }
 
