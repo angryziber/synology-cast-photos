@@ -74,6 +74,10 @@ var sender = (function(self) {
     sendCommand('next:10');
   });
 
+  $('#pause').on('click', function() {
+    sendCommand('pause');
+  });
+
   $('body').on('keydown', function(e) {
     if ($(e.target).is('input')) return;
 
