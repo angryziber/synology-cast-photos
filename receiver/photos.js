@@ -44,8 +44,7 @@ var photos = (function(self) {
 
   self.style = function(style) {
     backgroundSize = style;
-    photo.style.backgroundSize = backgroundSize == 'contain' ? backgroundSize : '100% 110%';
-    photo.style.transform = photo.style.transform.replace(/scale(.*?)/, '');
+    renderPhoto(nextImg, meta);
   };
 
   function updateIndex(currentUrl, newUrls) {
