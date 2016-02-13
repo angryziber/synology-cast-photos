@@ -142,9 +142,12 @@ var photos = (function(self) {
         photo.style.transform = 'none';
     }
 
-    photo.style.backgroundSize = backgroundSize == 'cover' && horizontal?
-        '100% ' + (100*innerWidth/innerHeight/imgRatio*0.85) + '%' : backgroundSize;
-
+    var screenRatio = innerWidth/innerHeight;
+    if (backgroundSize == 'cover' && horizontal) {
+      var verticalScale = 100 * screenRatio / imgRatio * 0.9;
+      photo.style.backgroundSize = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
+    }
+    else photo.style.backgroundSize = 'contain';
   }
 
   function updateStatus(meta) {
