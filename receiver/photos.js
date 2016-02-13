@@ -125,9 +125,7 @@ var photos = (function(self) {
   }
 
   function handleOrientation(photo, orientation, imgRatio) {
-    if (backgroundSize == 'cover') {
-      photo.style.backgroundSize = '100% ' + (100*innerWidth/innerHeight/imgRatio*0.85) + '%';
-    }
+    var horizontal = imgRatio >= 1.33; // 4:3
 
     switch (orientation) {
       case '3':
@@ -135,13 +133,19 @@ var photos = (function(self) {
         break;
       case '6':
         photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)';
+        horizontal = false;
         break;
       case '8':
         photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)';
+        horizontal = false;
         break;
       default:
         photo.style.transform = 'none';
     }
+
+    photo.style.backgroundSize = backgroundSize == 'cover' && horizontal?
+        '100% ' + (100*innerWidth/innerHeight/imgRatio*0.85) + '%' : backgroundSize;
+
   }
 
   function updateStatus(meta) {
