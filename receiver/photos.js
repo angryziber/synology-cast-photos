@@ -153,7 +153,7 @@ var photos = (function(self) {
     displayedUrl = meta.file;
     var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ');
     self.title(title);
-    receiver.broadcast(title + '|' + img.src);
+    receiver.broadcast(index + ': ' + title + '|' + img.src);
     $status.text(index + '/' + urls.length);
     $meta.html((meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : ''));
