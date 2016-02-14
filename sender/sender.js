@@ -25,12 +25,14 @@ var sender = (function(self) {
   });
 
   chromecast.onMessage = function(ns, text) {
-    status.text(text).show().fadeOut(2000);
+    var parts = text.split('|');
+    if (parts.length == 1) status.text(text);
+    else status.html('<a href="' + parts[1] + '">' + parts[0] + '</a>');
   };
 
   function sendCommand(cmd) {
     chromecast.message(cmd);
-    status.text(cmd).show().fadeOut(1000);
+    status.text(cmd);
   }
 
   self.sendPhotoDir = function() {
