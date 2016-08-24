@@ -86,7 +86,6 @@ var photos = (function(self) {
 
   self.title = function(title) {
     $title.text(title);
-    receiver.broadcast(title);
   };
 
   function loadCurrent() {
@@ -112,7 +111,7 @@ var photos = (function(self) {
 
     setTimeout(function() {
       renderPhoto(img, meta);
-      updateStatus(meta);
+      updateStatus(img, meta);
       loadNextPhotoAfter(self.interval);
     }, 0);
   }
@@ -150,10 +149,11 @@ var photos = (function(self) {
     else photo.style.backgroundSize = 'contain';
   }
 
-  function updateStatus(meta) {
+  function updateStatus(img, meta) {
     displayedUrl = meta.file;
-    var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/'));
-    self.title(title.replace(/\//g, ' / '));
+    var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ');
+    self.title(title);
+    receiver.broadcast(index + ': ' + title + '|' + img.src);
     $status.text(index + '/' + urls.length);
     $meta.html((meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : ''));
