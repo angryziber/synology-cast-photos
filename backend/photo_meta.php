@@ -10,7 +10,7 @@ $path = ensure_safe("$photos_list_dir/$file");
 
 function exif_value($key, $lines, $n) {
   $lines = preg_grep("/^$key/", $lines);
-  return count($lines) > 0 ? preg_split("/\\s{2,}/", array_pop($lines), 3)[$n] : null;
+  return count($lines) > 0 ? preg_split("/\\s{2,}/", current($lines), 3)[$n] : null;
 }
 
 header("Content-type: application/json");
