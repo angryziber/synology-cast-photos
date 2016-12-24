@@ -30,7 +30,10 @@ var chromecast = (function(self) {
   }
 
   self.start = function(callback) {
-    chrome.cast.requestSession(callback, self.onError);
+    chrome.cast.requestSession(function(session) {
+      sessionListener(session);
+      if (callback) callback();
+    }, self.onError);
   };
 
   self.message = function(message, callback) {
