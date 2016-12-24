@@ -24,12 +24,22 @@ var chromecast = (function(self) {
   }
 
   function receiverListener(e) {
-    if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !self.session)
-      chrome.cast.requestSession(sessionListener)
+    if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !self.session) {
+      $('body').one('click', self.start);
+    }
   }
 
+  self.start = function(callback) {
+    chrome.cast.requestSession(callback, self.onError);
+  };
+
   self.message = function(message, callback) {
-    self.session.sendMessage(self.namespace, message, callback || $.noop, self.onError);
+    function sendMessage() {
+      self.session.sendMessage(self.namespace, message, callback || $.noop, self.onError);
+    }
+
+    if (self.session) sendMessage();
+    else self.start(sendMessage);
   };
 
   return self;
