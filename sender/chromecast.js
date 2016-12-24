@@ -30,7 +30,7 @@ var chromecast = (function(self) {
 
   function receiverListener(e) {
     if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !self.session) {
-      $('body').one('click', self.start);
+      $('body').one('click', () => self.start());
     }
   }
 
