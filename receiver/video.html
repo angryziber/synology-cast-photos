@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Videos from NAS</title>
+  <meta charset="utf-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="stylesheet" href="style.css" type="text/css">
+  <style>
+    body {
+      text-align: center;
+    }
+    video {
+      height: 100%;
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+  <video controls></video>
+  <div id="meta"></div>
+  <div id="title">Waiting for commands</div>
+  <div id="status"></div>
+</body>
+
+<script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+<script src="config.js"></script>
+<script>
+  var urls, index = 0;
+  var title = $('#title');
+  $.get(videos.videoListUrl, function(result) {
+    urls = shuffle(result.split('\n'));
+    var video = $('video');
+    video.on('canplaythrough', function() {
+      video[0].play();
+    });
+    video.on('ended', function() {
+      var url = urls[index++];
+      video.attr('src', videos.videoUrlPrefix + url);
+      video[0].pause();
+      title.text(url);
+    }).trigger('ended');
+  });
+</script>
+</html>

@@ -6,6 +6,9 @@ $photos_dir = "/volume1/photo";
 # Can be the same as $photos_dir if you don't use rawfs
 $photos_list_dir = "/volume1/Photos";
 
+# Listing and serving of videos
+$videos_dir = "/volume1/video";
+
 # Location of exiv2 tool for getting of photo metadata
 $exiv2 = "exiv2";
 
@@ -19,10 +22,11 @@ $marks_file = "$photos_list_dir/marks.txt";
 # Helper functions
 
 function ensure_safe($path) {
-    global $photos_dir, $photos_list_dir;
+    global $photos_dir, $photos_list_dir, $videos_dir;
     $canonical = realpath($path);
     if (strpos($canonical, $photos_dir) !== 0 &&
-        strpos($canonical, $photos_list_dir) !== 0)
+        strpos($canonical, $photos_list_dir) !== 0 &&
+        strpos($canonical, $videos_dir) !== 0)
         forbidden();
     return $canonical;
 }
