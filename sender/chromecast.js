@@ -20,7 +20,12 @@ var chromecast = (function(self) {
 
   function sessionListener(session) {
     self.session = session;
-    self.session.addMessageListener(self.namespace, self.onMessage);
+    session.addMessageListener(self.namespace, self.onMessage);
+    session.addUpdateListener(function() {
+      if (session.status != chrome.cast.SessionStatus.CONNECTED) {
+        self.session = null;
+      }
+    });
   }
 
   function receiverListener(e) {
