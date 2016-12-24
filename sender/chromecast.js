@@ -1,12 +1,12 @@
 // Chromecast sender API wrapper
 
 var chromecast = (function(self) {
-  self = $.extend({
+  self = Object.assign(self, {
     appId: undefined,
     namespace: 'urn:x-cast:message',
     onMessage: $.noop,
-    onError: function(e) {console.log(e)}
-  }, self);
+    onError: (e) => console.log(e)
+  });
 
   $('<script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js" async></script>').appendTo('body');
   window['__onGCastApiAvailable'] = function(loaded, error) {
