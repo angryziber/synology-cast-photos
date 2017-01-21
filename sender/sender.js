@@ -7,7 +7,7 @@ var sender = (function(self) {
 
   var accessToken = self.accessToken || localStorage['accessToken'];
   if (!accessToken) {
-    accessToken = prompt('Access Token');
+    accessToken = prompt('Access Token (defined in backend config)');
     if (accessToken) localStorage['accessToken'] = accessToken;
   }
 
