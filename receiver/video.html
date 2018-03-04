@@ -25,24 +25,30 @@
   <div id="status"></div>
 </body>
 
-<script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
 <script src="config.js"></script>
 <script>
   var urls, index = 0;
-  var title = $('#title');
-  $.get(videos.videoListUrl, function(result) {
+  var title = document.getElementById('title');
+
+  var video = document.getElementsByTagName('video')[0];
+
+  video.addEventListener('canplaythrough', function() {
+    video.play();
+  });
+
+  function loadNextVideo() {
+    var url = urls[index++];
+    video.setAttribute('src', videos.videoUrlPrefix + url);
+    video.pause();
+    title.textContent = url;
+  }
+
+  video.addEventListener('ended', loadNextVideo);
+
+  fetch(videos.videoListUrl).then(res => res.ok ? res.text() : alert(res.status)).then(result => {
     urls = shuffle(result.split('\n'));
-    var video = $('video');
-    video.on('canplaythrough', function() {
-      video[0].play();
-    });
-    video.on('ended', function() {
-      var url = urls[index++];
-      video.attr('src', videos.videoUrlPrefix + url);
-      video[0].pause();
-      title.text(url);
-    }).trigger('ended');
+    loadNextVideo();
   });
 </script>
 </html>
