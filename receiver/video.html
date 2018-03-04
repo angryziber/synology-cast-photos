@@ -19,7 +19,7 @@
 </head>
 
 <body>
-  <video controls></video>
+  <video></video>
   <div id="meta"></div>
   <div id="title">Waiting for commands</div>
   <div id="status"></div>
@@ -45,7 +45,7 @@
       var url = urls[index++];
       video.setAttribute('src', videos.videoUrlPrefix + url);
       video.pause();
-      title.textContent = url;
+      title.textContent = url.substring(0, url.lastIndexOf('/'));
     }
 
     video.addEventListener('ended', loadNextVideo);
