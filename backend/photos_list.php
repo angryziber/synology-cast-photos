@@ -1,7 +1,10 @@
 <?
 include 'config.php';
+if (!preg_match('/receiver\/$/', $_SERVER['HTTP_REFERER'])) forbidden();
 
 $dir = $_GET['dir'];
+if (!$dir) forbidden();
+
 chdir($photos_list_dir);
 
 $dirs = explode('+', $dir);
