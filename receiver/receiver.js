@@ -11,7 +11,7 @@ function Receiver(config, content, keyboard) {
 
     self.messageBus = receiverManager.getCastMessageBus(self.namespace);
     self.messageBus.onMessage = function(e) {
-      onCommand(e.data);
+      self.onCommand(e.data);
     };
 
     var config = new cast.receiver.CastReceiverManager.Config();
@@ -25,45 +25,14 @@ function Receiver(config, content, keyboard) {
 
   function initAsStandalone() {
     window.onhashchange = function() {
-      if (location.hash) onCommand(location.hash.substring(1));
+      if (location.hash) self.onCommand(location.hash.substring(1));
     };
     setTimeout(onhashchange, 0);
 
-    function commandPrompt() {
-      var command = prompt('Photo dir/command', location.hash ? location.hash.substring(1) : '');
-      if (command) location.hash = '#' + command;
-    }
-
-    window.onkeydown = function (e) {
-      if (e.which == 27) {
-        commandPrompt();
-        return;
-      }
-
-      var command = keyboard.toCommand(e.which);
-      if (command) {
-        e.preventDefault();
-        onCommand(command);
-      }
-    };
-
-    window.onHammerLoaded = function () {
-      var hammer = new Hammer(document.body);
-      hammer.on('swiperight', function () {
-        onCommand('prev');
-      });
-      hammer.on('swipeleft', function () {
-        onCommand('next');
-      });
-      hammer.on('press', function () {
-        commandPrompt();
-      });
-    };
-
-    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js" onload="onHammerLoaded()"></script>');
+    if (keyboard) keyboard.init();
   }
 
-  function onCommand(command) {
+  self.onCommand = function(command) {
     var separatorPos = command.indexOf(':');
     if (separatorPos == -1) separatorPos = command.length;
     var cmd = command.substring(0, separatorPos);

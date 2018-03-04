@@ -36,5 +36,40 @@ var keyboard = {
       case 46: // Del
         return 'mark:delete';
     }
+  },
+
+  commandPrompt: function() {
+    var command = prompt('Photo dir/command', location.hash ? location.hash.substring(1) : '');
+    if (command) location.hash = '#' + command;
+  },
+
+  onHammerLoaded: function () {
+    var hammer = new Hammer(document.body);
+    hammer.on('swiperight', function () {
+      receiver.onCommand('prev');
+    });
+    hammer.on('swipeleft', function () {
+      receiver.onCommand('next');
+    });
+    hammer.on('press', function () {
+      keyboard.commandPrompt();
+    });
+  },
+
+  init: function() {
+    window.onkeydown = function (e) {
+      if (e.which == 27) {
+        keyboard.commandPrompt();
+        return;
+      }
+
+      var command = keyboard.toCommand(e.which);
+      if (command) {
+        e.preventDefault();
+        receiver.onCommand(command);
+      }
+    };
+
+    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js" onload="keyboard.onHammerLoaded()"></script>');
   }
 };
