@@ -19,6 +19,13 @@ $access_token = trim(file("$photos_list_dir/php-access-token.txt")[0]);
 # This file must be writable by web server
 $marks_file = "$photos_list_dir/marks.txt";
 
+# If defined, requests will be allowed only from this host
+$allowed_host = '';
+
+if ($allowed_host && $allowed_host != $_SERVER['HTTP_HOST']) {
+    forbidden();
+}
+
 # Helper functions
 
 function ensure_safe($path) {
