@@ -1,4 +1,4 @@
-function Receiver(config, photos, keyboard) {
+function Receiver(config, content, keyboard) {
   var self = Object.assign(this, config);
 
   if (navigator.userAgent.indexOf('CrKey') >= 0)
@@ -71,31 +71,31 @@ function Receiver(config, photos, keyboard) {
     var title = command;
 
     if (cmd == 'rnd') {
-      if (arg) photos.loadPhotoUrls(arg, true);
-      else photos.random();
+      if (arg) content.loadUrls(arg, true);
+      else content.random();
     }
     else if (cmd == 'seq') {
-      if (arg) photos.loadPhotoUrls(arg, false);
-      else photos.sequential();
+      if (arg) content.loadUrls(arg, false);
+      else content.sequential();
     }
     else if (cmd == 'interval') {
-      photos.interval = parseInt(arg) * 1000;
+      content.interval = parseInt(arg) * 1000;
       title = 'Interval: ' + arg + 's';
     }
     else if (cmd == 'style') {
-      photos.style(arg);
+      content.style(arg);
     }
     else if (cmd == 'prev') {
-      photos.prev(arg);
+      content.prev(arg);
     }
     else if (cmd == 'next') {
-      photos.next(arg);
+      content.next(arg);
     }
     else if (cmd == 'pause') {
-      photos.pause();
+      content.pause();
     }
     else if (cmd == 'mark') {
-      photos.mark(arg);
+      content.mark(arg);
     }
     else if (cmd == 'video') {
       location.href += 'video.html#' + arg;
@@ -111,11 +111,11 @@ function Receiver(config, photos, keyboard) {
       title = null;
     }
     else {
-      photos.loadPhotoUrls(cmd, true);
+      content.loadUrls(cmd, true);
     }
 
     if (title) {
-      photos.title(title);
+      content.title(title);
       self.broadcast(title);
     }
   }

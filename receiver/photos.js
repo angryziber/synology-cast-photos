@@ -10,7 +10,7 @@ var photos = (function(self) {
   var photo = $('#photo')[0];
   var backgroundSize = 'contain';
 
-  self.loadPhotoUrls = function(dir, random) {
+  self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
 
     $.get(self.photoListUrl, {dir: dir}).then(
