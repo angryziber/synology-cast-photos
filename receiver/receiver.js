@@ -95,6 +95,9 @@ var receiver = (function(self) {
     else if (cmd == 'mark') {
       photos.mark(arg);
     }
+    else if (cmd == 'video') {
+      location.href += 'video.html#' + arg;
+    }
     else if (cmd == 'audio') {
       if (arg == 'prev') audio.prev();
       else if (arg == 'next') audio.next();

@@ -80,6 +80,10 @@ var sender = (function(self) {
     sendCommand('pause');
   });
 
+  $('#videos').on('click', function() {
+    sendCommand('video:' + input.val());
+  });
+
   $('body').on('keydown', function(e) {
     if ($(e.target).is('input')) return;
 
