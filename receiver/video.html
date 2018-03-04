@@ -27,8 +27,12 @@
 
 <script src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
 <script src="config.js"></script>
+<script src="keyboard.js"></script>
+<script src="receiver.js"></script>
 <script>
-  (function() {
+  function Videos(config) {
+    var self = Object.assign(this, config);
+
     var dir = location.hash.substring(1);
     if (!dir) return;
 
@@ -43,17 +47,25 @@
 
     function loadNextVideo() {
       var url = urls[index++];
-      video.setAttribute('src', videos.videoUrlPrefix + url);
+      video.setAttribute('src', config.videoUrlPrefix + url);
       video.pause();
-      title.textContent = url.substring(0, url.lastIndexOf('/'));
+      self.title(url.substring(0, url.lastIndexOf('/')).replace('/', ' / '));
     }
 
     video.addEventListener('ended', loadNextVideo);
 
-    fetch(videos.videoListUrl + '?dir=' + dir).then(res => res.ok ? res.text() : alert(res.status)).then(result => {
-      urls = shuffle(result.split('\n'));
-      loadNextVideo();
-    });
-  })();
+    self.title = function(text) {
+      title.textContent = text;
+    };
+
+    self.loadUrls = function(dir, random) {
+      fetch(config.videoListUrl + '?dir=' + dir).then(res => res.ok ? res.text() : alert(res.status)).then(result => {
+        urls = shuffle(result.split('\n'));
+        loadNextVideo();
+      });
+    };
+  };
+
+  new Receiver(receiver, new Videos(videos), keyboard)
 </script>
 </html>
