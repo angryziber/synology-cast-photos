@@ -46,7 +46,7 @@ var receiver = (function(self) {
     };
 
     window.onHammerLoaded = function () {
-      var hammer = new Hammer($('body')[0]);
+      var hammer = new Hammer(document.body);
       hammer.on('swiperight', function () {
         onCommand('prev');
       });
