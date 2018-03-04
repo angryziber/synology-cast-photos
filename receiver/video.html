@@ -28,27 +28,32 @@
 <script src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
 <script src="config.js"></script>
 <script>
-  var urls, index = 0;
-  var title = document.getElementById('title');
+  (function() {
+    var dir = location.hash.substring(1);
+    if (!dir) return;
 
-  var video = document.getElementsByTagName('video')[0];
+    var urls, index = 0;
+    var title = document.getElementById('title');
 
-  video.addEventListener('canplaythrough', function() {
-    video.play();
-  });
+    var video = document.getElementsByTagName('video')[0];
 
-  function loadNextVideo() {
-    var url = urls[index++];
-    video.setAttribute('src', videos.videoUrlPrefix + url);
-    video.pause();
-    title.textContent = url;
-  }
+    video.addEventListener('canplaythrough', function () {
+      video.play();
+    });
 
-  video.addEventListener('ended', loadNextVideo);
+    function loadNextVideo() {
+      var url = urls[index++];
+      video.setAttribute('src', videos.videoUrlPrefix + url);
+      video.pause();
+      title.textContent = url;
+    }
 
-  fetch(videos.videoListUrl).then(res => res.ok ? res.text() : alert(res.status)).then(result => {
-    urls = shuffle(result.split('\n'));
-    loadNextVideo();
-  });
+    video.addEventListener('ended', loadNextVideo);
+
+    fetch(videos.videoListUrl + '?dir=' + dir).then(res => res.ok ? res.text() : alert(res.status)).then(result => {
+      urls = shuffle(result.split('\n'));
+      loadNextVideo();
+    });
+  })();
 </script>
 </html>
