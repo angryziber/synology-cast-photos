@@ -1,4 +1,6 @@
-var receiver = (function(self) {
+function Receiver(config, photos, keyboard) {
+  var self = Object.assign(this, config);
+
   if (navigator.userAgent.indexOf('CrKey') >= 0)
     initAsReceiver(); // running under Chromecast - receive commands from Chromecast senders
   else
@@ -117,6 +119,4 @@ var receiver = (function(self) {
       self.broadcast(title);
     }
   }
-
-  return self;
-}(receiver || {}));
+}
