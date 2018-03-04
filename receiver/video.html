@@ -21,7 +21,7 @@
 <body>
   <video></video>
   <div id="meta"></div>
-  <div id="title">Waiting for commands</div>
+  <div id="title">Waiting for video commands</div>
   <div id="status"></div>
 </body>
 
@@ -64,8 +64,10 @@
         loadNextVideo();
       });
     };
-  };
 
-  new Receiver(receiver, new Videos(videos), keyboard)
+    if (dir) self.loadUrls(dir, true);
+  }
+
+  var receiver = new Receiver(receiver, new Videos(videos), keyboard);
 </script>
 </html>
