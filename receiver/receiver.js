@@ -66,8 +66,11 @@ function Receiver(config, content, keyboard) {
     else if (cmd == 'mark') {
       content.mark(arg);
     }
-    else if (cmd == 'video') {
-      location.href += 'video.html#' + arg;
+    else if (cmd == 'photos') {
+      location.href = location.origin + '/receiver/#' + arg;
+    }
+    else if (cmd == 'videos') {
+      location.href = location.origin + '/receiver/video.html#' + arg;
     }
     else if (cmd == 'audio') {
       if (arg == 'prev') audio.prev();

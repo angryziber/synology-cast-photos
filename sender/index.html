@@ -9,7 +9,7 @@
   <script src="//twitter.github.io/typeahead.js/releases/0.10.2/typeahead.jquery.js"></script>
 </head>
 <body>
-  <h1>Send photos from NAS to Chromecast!</h1>
+  <h1>Send <a id="photos" href="">photos</a>/<a id="videos" href="">videos</a> from NAS to Chromecast!</h1>
 
   <form>
     <input class="typeahead" type="text" name="prefix" value="" placeholder="2015" autofocus>
@@ -32,8 +32,6 @@
 
     <br><br>
     <div id="status"></div>
-
-    <button type="button" id="videos">Video</button>
 
     <div class="vk">
       <input type="text" class="typeahead" name="audio" placeholder="Search VK Music">

@@ -80,8 +80,14 @@ var sender = (function(self) {
     sendCommand('pause');
   });
 
+  $('#photos').on('click', function() {
+    sendCommand('photos:' + input.val());
+    return false;
+  });
+
   $('#videos').on('click', function() {
-    sendCommand('video:' + input.val());
+    sendCommand('videos:' + input.val());
+    return false;
   });
 
   $('body').on('keydown', function(e) {
