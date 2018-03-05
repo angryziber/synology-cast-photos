@@ -5,6 +5,7 @@ function Videos(config) {
   var title = document.getElementById('title');
   var video = document.getElementsByTagName('video')[0];
 
+  video.addEventListener('ended', self.next);
   video.addEventListener('canplaythrough', function () {
     video.play();
   });
@@ -15,8 +16,6 @@ function Videos(config) {
     video.pause();
     self.title(url.substring(0, url.lastIndexOf('/')).replace('/', ' / '));
   };
-
-  video.addEventListener('ended', self.next);
 
   self.title = function(text) {
     title.textContent = text;
