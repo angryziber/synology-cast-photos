@@ -9,29 +9,17 @@ function Videos(config) {
     video.play();
   });
 
-  function loadVideo() {
+  self.loadCurrent = function() {
     var url = self.currentUrl();
     video.setAttribute('src', config.videoUrlPrefix + url);
     video.pause();
     self.title(url.substring(0, url.lastIndexOf('/')).replace('/', ' / '));
-  }
+  };
 
   video.addEventListener('ended', self.next);
 
   self.title = function(text) {
     title.textContent = text;
-  };
-
-  self.prev = function(by) {
-    self.index -= parseInt(by || 1);
-    if (self.index <= 0) self.index = self.urls.length;
-    loadVideo();
-  };
-
-  self.next = function(by) {
-    self.index += parseInt(by || 1);
-    if (self.index > self.urls.length) self.index = 1;
-    loadVideo();
   };
 
   self.pause = function() {
@@ -50,7 +38,7 @@ function Videos(config) {
       self.urlsRandom = self.urlsSequential = null;
       if (random) self.random(); else self.sequential();
       self.index = 1;
-      loadVideo();
+      self.loadCurrent();
     });
   };
 }

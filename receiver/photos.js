@@ -19,7 +19,7 @@ var photos = (function(self) {
         if (random) self.random(); else self.sequential();
         self.title((random ? 'Random: ' : 'Sequential: ') + dir);
         self.index = 1;
-        loadCurrent();
+        self.loadCurrent();
       },
       function (xhr, status, text) {
         self.title('Error: ' + text);
@@ -30,18 +30,6 @@ var photos = (function(self) {
   self.style = function(style) {
     backgroundSize = style;
     renderPhoto(nextImg, meta);
-  };
-
-  self.prev = function(by) {
-    self.index -= parseInt(by || 1);
-    if (self.index <= 0) self.index = self.urls.length;
-    setTimeout(loadCurrent, 0);
-  };
-
-  self.next = function(by) {
-    self.index += parseInt(by || 1);
-    if (self.index > self.urls.length) self.index = 1;
-    setTimeout(loadCurrent, 0);
   };
 
   self.pause = function() {
@@ -67,7 +55,7 @@ var photos = (function(self) {
     $title.text(title);
   };
 
-  function loadCurrent() {
+  self.loadCurrent = function() {
     var url = self.currentUrl();
 
     var nextImgPromise = $.Deferred();
@@ -83,7 +71,7 @@ var photos = (function(self) {
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
     $.when(nextImgPromise, metaPromise).then(photoLoaded, photoLoadingFailed);
-  }
+  };
 
   function photoLoaded(img, meta) {
     $status.text('Rendering ' + self.index + '/' + self.urls.length);
