@@ -33,9 +33,6 @@
   function Videos(config) {
     var self = Object.assign(this, config);
 
-    var dir = location.hash.substring(1);
-    if (!dir) return;
-
     var urls, index = 0;
     var title = document.getElementById('title');
 
@@ -59,13 +56,14 @@
     };
 
     self.loadUrls = function(dir, random) {
-      fetch(config.videoListUrl + '?dir=' + dir).then(res => res.ok ? res.text() : alert(res.status)).then(result => {
+      fetch(config.videoListUrl + '?dir=' + dir).then(res => {
+        if (res.ok) return res.text();
+        else throw new Error(res.status);
+      }).then(result => {
         urls = shuffle(result.split('\n'));
         loadNextVideo();
       });
     };
-
-    if (dir) self.loadUrls(dir, true);
   }
 
   var receiver = new Receiver(receiver, new Videos(videos), keyboard);

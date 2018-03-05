@@ -6,6 +6,11 @@ function Receiver(config, content, keyboard) {
   else
     initAsStandalone(); // running as standalone web page - take commands from location hash
 
+  window.onhashchange = function() {
+    if (location.hash) self.onCommand(location.hash.substring(1));
+  };
+  setTimeout(onhashchange, 0);
+
   function initAsReceiver() {
     var receiverManager = cast.receiver.CastReceiverManager.getInstance();
 
@@ -19,18 +24,13 @@ function Receiver(config, content, keyboard) {
     receiverManager.start(config);
   }
 
+  function initAsStandalone() {
+    if (keyboard) keyboard.init();
+  }
+
   self.broadcast = function(message) {
     if (self.messageBus) self.messageBus.broadcast(message);
   };
-
-  function initAsStandalone() {
-    window.onhashchange = function() {
-      if (location.hash) self.onCommand(location.hash.substring(1));
-    };
-    setTimeout(onhashchange, 0);
-
-    if (keyboard) keyboard.init();
-  }
 
   self.onCommand = function(command) {
     var separatorPos = command.indexOf(':');
