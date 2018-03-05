@@ -60,7 +60,8 @@
         if (res.ok) return res.text();
         else throw new Error(res.status);
       }).then(result => {
-        urls = shuffle(result.split('\n'));
+        urls = result.split('\n');
+        if (random) shuffle(urls);
         loadNextVideo();
       });
     };
