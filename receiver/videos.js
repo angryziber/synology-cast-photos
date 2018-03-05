@@ -1,9 +1,8 @@
 function Videos(config) {
+  BaseContent(this);
   var self = Object.assign(this, config);
 
-  var urls, index = 0;
   var title = document.getElementById('title');
-
   var video = document.getElementsByTagName('video')[0];
 
   video.addEventListener('canplaythrough', function () {
@@ -11,7 +10,7 @@ function Videos(config) {
   });
 
   function loadVideo() {
-    var url = urls[index];
+    var url = self.currentUrl();
     video.setAttribute('src', config.videoUrlPrefix + url);
     video.pause();
     self.title(url.substring(0, url.lastIndexOf('/')).replace('/', ' / '));
@@ -24,14 +23,14 @@ function Videos(config) {
   };
 
   self.prev = function(by) {
-    index -= parseInt(by || 1);
-    if (index <= 0) index = urls.length;
+    self.index -= parseInt(by || 1);
+    if (self.index <= 0) self.index = self.urls.length;
     loadVideo();
   };
 
   self.next = function(by) {
-    index += parseInt(by || 1);
-    if (index > urls.length) index = 1;
+    self.index += parseInt(by || 1);
+    if (self.index > self.urls.length) self.index = 1;
     loadVideo();
   };
 
@@ -47,8 +46,10 @@ function Videos(config) {
       if (res.ok) return res.text();
       else throw new Error(res.status);
     }).then(result => {
-      urls = result.split('\n');
-      if (random) shuffle(urls);
+      self.urls = result.split('\n');
+      self.urlsRandom = self.urlsSequential = null;
+      if (random) self.random(); else self.sequential();
+      self.index = 1;
       loadVideo();
     });
   };

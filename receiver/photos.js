@@ -1,7 +1,6 @@
 var photos = (function(self) {
-  var random = true;
-  var urls = [], index = 0;
-  var urlsRandom, urlsSequential;
+  BaseContent(self);
+
   var nextImg = new Image();
   var $title = $('#title');
   var $status = $('#status');
@@ -15,11 +14,11 @@ var photos = (function(self) {
 
     $.get(self.photoListUrl, {dir: dir}).then(
       function (data) {
-        urls = data.trim().split('\n');
-        urlsRandom = urlsSequential = null;
+        self.urls = data.trim().split('\n');
+        self.urlsRandom = self.urlsSequential = null;
         if (random) self.random(); else self.sequential();
         self.title((random ? 'Random: ' : 'Sequential: ') + dir);
-        index = 1;
+        self.index = 1;
         loadCurrent();
       },
       function (xhr, status, text) {
@@ -28,40 +27,20 @@ var photos = (function(self) {
     );
   };
 
-  function currentUrl() {
-    return urls[index - 1];
-  }
-
-  self.random = function() {
-    updateIndex(currentUrl(), urlsRandom || (urlsRandom = shuffle(urls.slice())));
-    random = true;
-  };
-
-  self.sequential = function() {
-    updateIndex(currentUrl(), urlsSequential || (urlsSequential = urls.slice().sort()));
-    random = false;
-  };
-
   self.style = function(style) {
     backgroundSize = style;
     renderPhoto(nextImg, meta);
   };
 
-  function updateIndex(currentUrl, newUrls) {
-    if (currentUrl) index = newUrls.indexOf(currentUrl) + 1;
-    urls = newUrls;
-    $status.text(index + '/' + urls.length);
-  }
-
   self.prev = function(by) {
-    index -= parseInt(by || 1);
-    if (index <= 0) index = urls.length;
+    self.index -= parseInt(by || 1);
+    if (self.index <= 0) self.index = self.urls.length;
     setTimeout(loadCurrent, 0);
   };
 
   self.next = function(by) {
-    index += parseInt(by || 1);
-    if (index > urls.length) index = 1;
+    self.index += parseInt(by || 1);
+    if (self.index > self.urls.length) self.index = 1;
     setTimeout(loadCurrent, 0);
   };
 
@@ -89,7 +68,7 @@ var photos = (function(self) {
   };
 
   function loadCurrent() {
-    var url = currentUrl();
+    var url = self.currentUrl();
 
     var nextImgPromise = $.Deferred();
     nextImg.onload = function() {nextImgPromise.resolve(this)};
@@ -101,13 +80,13 @@ var photos = (function(self) {
       return meta = data;
     });
     loading = true;
-    $status.text('Loading ' + index + '/' + urls.length);
+    $status.text('Loading ' + self.index + '/' + self.urls.length);
 
     $.when(nextImgPromise, metaPromise).then(photoLoaded, photoLoadingFailed);
   }
 
   function photoLoaded(img, meta) {
-    $status.text('Rendering ' + index + '/' + urls.length);
+    $status.text('Rendering ' + self.index + '/' + self.urls.length);
 
     setTimeout(function() {
       renderPhoto(img, meta);
@@ -153,14 +132,14 @@ var photos = (function(self) {
     displayedUrl = meta.file;
     var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ');
     self.title(title);
-    receiver.broadcast(index + ': ' + title + '|' + img.src);
-    $status.text(index + '/' + urls.length);
+    receiver.broadcast(self.index + ': ' + title + '|' + img.src);
+    $status.text(self.index + '/' + self.urls.length);
     $meta.html((meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : ''));
   }
 
   function photoLoadingFailed() {
-    $status.text(index + '/' + urls.length + ': failed');
+    $status.text(self.index + '/' + self.urls.length + ': failed');
     loadNextPhotoAfter(self.interval / 4);
   }
 
