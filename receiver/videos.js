@@ -5,7 +5,9 @@ function Videos(config) {
   var title = document.getElementById('title');
   var video = document.getElementsByTagName('video')[0];
 
-  video.addEventListener('ended', self.next);
+  video.addEventListener('ended', function() {
+    self.next();
+  });
   video.addEventListener('canplaythrough', function () {
     video.play();
   });
