@@ -6,10 +6,9 @@ function Videos(config) {
   var status = document.getElementById('status');
   var video = document.getElementsByTagName('video')[0];
 
-  video.addEventListener('ended', function() {
-    self.next();
-  });
-  video.addEventListener('canplaythrough', function () {
+  video.addEventListener('ended', () => self.next());
+  video.addEventListener('error', () => self.next());
+  video.addEventListener('canplaythrough', () => {
     status.textContent = self.index + '/' + self.urls.length;
     video.play();
   });
