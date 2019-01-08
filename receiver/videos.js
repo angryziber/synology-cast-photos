@@ -7,7 +7,10 @@ function Videos(config) {
   var video = document.getElementsByTagName('video')[0];
 
   video.addEventListener('ended', () => self.next());
-  video.addEventListener('error', () => self.next());
+  video.addEventListener('error', () => {
+    console.error(video.error);
+    self.next();
+  });
   video.addEventListener('canplaythrough', () => {
     status.textContent = self.index + '/' + self.urls.length;
     video.play();
