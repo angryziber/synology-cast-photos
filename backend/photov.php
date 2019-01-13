@@ -13,8 +13,9 @@ $w = 3840;
 $h = 2160;
 #$scale = "-vf scale=w=$w:h=$h:force_original_aspect_ratio=decrease,pad=$w:$h:'(ow-iw)/2':'(oh-ih)/2'";
 $scale = "-filter_complex '[0]scale=$w:$h,setsar=1,boxblur=20:20[b];[0]scale=-1:${h}[v];[b][v]overlay=(W-w)/2'";
+$codec = "-vcodec libx264 -profile high -tune stillimage -preset superfast";
 
-exec("/bin/ffmpeg -hide_banner -i '$path' -pix_fmt yuv420p -profile high -tune stillimage -preset superfast $scale -r 1 '$outfile'");
+exec("/bin/ffmpeg -hide_banner -i '$path' $codec -pix_fmt yuv420p $scale -r 1 '$outfile'");
 header('Content-Length: ' . filesize($outfile));
 header('Accept-Ranges: none');
 
