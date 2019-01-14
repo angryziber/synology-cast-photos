@@ -11,7 +11,7 @@ if (!$exists) {
   $w = 3840;
   $h = 2160;
 
-  $exif_orientation = exec("exiv2 -g Exif.Image.Orientation -Pv $path");
+  $exif_orientation = exec("exiv2 -g Exif.Image.Orientation -Pv '$path'");
   $transpose = "";
   if ($exif_orientation == 6) $transpose = "transpose=1,";
   else if ($exif_orientation == 8) $transpose = "transpose=2,";
