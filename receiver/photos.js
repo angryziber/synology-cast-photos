@@ -6,7 +6,7 @@ var photos = (function(self) {
   var $status = $('#status');
   var $meta = $('#meta');
   var timer, meta, loading, displayedUrl;
-  var backgroundSize = 'contain';
+  var style = 'contain';
 
   var photo = $('#photo')[0];
   photo.onplay = () => loadNextPhotoAfter(self.interval);
@@ -30,8 +30,8 @@ var photos = (function(self) {
     );
   };
 
-  self.style = function(style) {
-    backgroundSize = style;
+  self.style = function(s) {
+    photo.style.objectFit = style = s;
   };
 
   self.pause = function() {
@@ -71,7 +71,7 @@ var photos = (function(self) {
     renderPhoto(self.photoUrlPrefix + url);
 
     setTimeout(function() {
-      nextImg.href = self.photoUrlPrefix + self.nextUrl() + '&preload=true';
+      nextImg.href = self.photoUrlPrefix + self.nextUrl() + `&style=${style}&preload=true`;
     }, self.interval/2);
   };
 
