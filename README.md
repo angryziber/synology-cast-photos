@@ -1,7 +1,7 @@
 Cast photos from NAS directly to TV
 ===================================
 
-Small set of scripts to cast photos stored on a Synology NAS directly to Google Chromecast.
+Cast photos stored on a Synology NAS directly to Google Chromecast or Android TV.
 
 ## Required hardware
 
@@ -10,10 +10,18 @@ Small set of scripts to cast photos stored on a Synology NAS directly to Google 
 
 ## Components
 
-* sender/ - *Chromecast sender*, use it to start and control the show from Google Chrome with Google Cast extension installed
+* sender/ - *Chromecast sender*, use it to start and control the show from Google Chrome
 * receiver/ - *Chromecast receiver* - this file will run on Chromecast dongle, or use it stand-alone to view photos
-* backend/ - php scripts for serving the actual photos from NAS, or any other php-enabled server
+* backend/ - php scripts for listing and serving the actual photos from NAS, or any other php-enabled server
 * config.php/js - each directory has a config file, where you can define paths of photos on your server and other parameters
+
+## UHD/4K TVs and Chromecast Ultra
+
+Android TVs and Chromecast Ultra still cannot display any non-video content above FullHD 1080p.
+2160p resolution is only used for compatible videos, any other elements of receiver are downscaled, including images.
+
+In order to display images at full TV resolution, they are converted to 1-frame mp4 videos using `ffmpeg`, see (photov.php)[backend/photov.php]
+Use `jpeg` branch if you are fine with 1080p resolution.
 
 ## Installing
 
@@ -25,13 +33,17 @@ Small set of scripts to cast photos stored on a Synology NAS directly to Google 
 - Specify registered app ID in *sender/config.js*
 - Open **http://your-nas-ip/sender** in your browser, start casting!
 
-Note: these php scripts here take advantage of [rawfs](http://github.com/angryziber/rawfs) running on the NAS making it 
+Note: these php scripts here can take advantage of [rawfs](http://github.com/angryziber/rawfs) running on the NAS making it 
 possible to cast raw photos directly, without converting them to jpeg first. This is optional if your photos are already 
 in jpeg format.
 
 There is also an [Android sender app](https://github.com/angryziber/synology-cast-photos-android) for controlling the casted photos instead of *html sender*.
 
-Photos are streamed as they are (without any resizing, etc on the NAS) because CPU of Chromecast is faster than Synology's.
+### Older Synologies
 
-On my DS212j resizing a photo from Canon 5D mk2 takes about a minute with imagemagick, while Chromecast downloads 2.5Mb
+If you own an older Synology with simple CPU that cannot resize/convert photos, you can use the `jpeg` branch. 
+
+E.g. on DS212j resizing a photo from Canon 5D mk2 takes about a minute with imagemagick, while Chromecast downloads 2.5Mb
 over local Wifi and fits the same image to the screen in just a couple of seconds.
+
+Note, in the Releases there is an ARMv5 binary of ffmpeg that supports H264 encoding. It's slow, but works.
