@@ -7,6 +7,10 @@ function BaseContent(self) {
     return self.urls[self.index - 1];
   };
 
+  self.nextUrl = function() {
+    return self.urls[self.index];
+  };
+
   self.random = function() {
     updateIndex(self.currentUrl(), self.urlsRandom || (self.urlsRandom = shuffle(self.urls.slice())));
   };

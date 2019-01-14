@@ -1,7 +1,7 @@
 var photos = {
   interval: 10000,  // ms
   photoListUrl: '/backend/photos_list.php',
-  photoUrlPrefix: '/backend/photo.php?file=',
+  photoUrlPrefix: '/backend/photov.php?file=',
   metaUrlPrefix: '/backend/photo_meta.php?file=',
   markPhotoUrl: '/backend/photo_mark.php'
 };

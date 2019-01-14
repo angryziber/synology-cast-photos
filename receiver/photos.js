@@ -1,13 +1,16 @@
 var photos = (function(self) {
   BaseContent(self);
 
-  var nextImg = new Image();
+  var nextImg = $('link[rel=preload]')[0];
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
   var timer, meta, loading, displayedUrl;
-  var photo = $('#photo')[0];
   var backgroundSize = 'contain';
+
+  var photo = $('#photo')[0];
+  photo.onplay = () => loadNextPhotoAfter(self.interval);
+  photo.onerror = photoLoadingFailed;
 
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
@@ -29,7 +32,6 @@ var photos = (function(self) {
 
   self.style = function(style) {
     backgroundSize = style;
-    renderPhoto(nextImg, meta);
   };
 
   self.pause = function() {
@@ -57,70 +59,31 @@ var photos = (function(self) {
 
   self.loadCurrent = function() {
     var url = self.currentUrl();
-
-    var nextImgPromise = $.Deferred();
-    nextImg.onload = function() {nextImgPromise.resolve(this)};
-    nextImg.onerror = nextImgPromise.reject;
-    nextImg.src = self.photoUrlPrefix + url;
     meta = null;
-
-    var metaPromise = $.get(self.metaUrlPrefix + url).then(function(data) {
-      return meta = data;
+    $.get(self.metaUrlPrefix + url).then(function(data) {
+      meta = data;
+      updateStatus(meta);
     });
+
     loading = true;
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
-    $.when(nextImgPromise, metaPromise).then(photoLoaded, photoLoadingFailed);
-  };
-
-  function photoLoaded(img, meta) {
-    $status.text('Rendering ' + self.index + '/' + self.urls.length);
+    renderPhoto(self.photoUrlPrefix + url);
 
     setTimeout(function() {
-      renderPhoto(img, meta);
-      updateStatus(img, meta);
-      loadNextPhotoAfter(self.interval);
-    }, 0);
+      nextImg.href = self.photoUrlPrefix + self.nextUrl() + '&preload=true';
+    }, self.interval/2);
+  };
+
+  function renderPhoto(url) {
+    photo.src = url;
   }
 
-  function renderPhoto(img, meta) {
-    var imgRatio = img.width / img.height;
-    handleOrientation(photo, meta && meta.orientation, imgRatio);
-    photo.style.backgroundImage = 'url(' + img.src + ')';
-  }
-
-  function handleOrientation(photo, orientation, imgRatio) {
-    var horizontal = imgRatio >= 1.33; // 4:3
-
-    switch (orientation) {
-      case '3':
-        photo.style.transform = 'rotate(180deg)';
-        break;
-      case '6':
-        photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)';
-        horizontal = false;
-        break;
-      case '8':
-        photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)';
-        horizontal = false;
-        break;
-      default:
-        photo.style.transform = 'none';
-    }
-
-    var screenRatio = innerWidth/innerHeight;
-    if (backgroundSize == 'cover' && horizontal) {
-      var verticalScale = 100 * screenRatio / imgRatio * 0.9;
-      photo.style.backgroundSize = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
-    }
-    else photo.style.backgroundSize = 'contain';
-  }
-
-  function updateStatus(img, meta) {
+  function updateStatus(meta) {
     displayedUrl = meta.file;
     var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ');
     self.title(title);
-    receiver.broadcast(self.index + ': ' + title + '|' + img.src);
+    receiver.broadcast(self.index + ': ' + title + '|' + displayedUrl);
     $status.text(self.index + '/' + self.urls.length);
     $meta.html((meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : ''));
