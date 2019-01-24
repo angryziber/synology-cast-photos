@@ -8,7 +8,7 @@ var photos = {
 
 var videos = {
   videoListUrl: '/backend/videos_list.php',
-  videoUrlPrefix: 'http://192.168.0.2/video/'
+  videoUrlPrefix: '/video/'
 };
 
 var receiver = {
