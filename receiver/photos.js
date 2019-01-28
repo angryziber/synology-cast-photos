@@ -11,6 +11,7 @@ var photos = (function(self) {
   var photo = $('#photo')[0];
   photo.onplay = () => loadNextPhotoAfter(self.interval);
   photo.onerror = photoLoadingFailed;
+  photo.addEventListener('click', () => document.documentElement.requestFullscreen());
 
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
