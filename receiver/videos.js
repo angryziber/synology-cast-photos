@@ -31,7 +31,7 @@ function Videos(config) {
     status.textContent = 'Loading ' + self.index + '/' + self.urls.length;
     video.setAttribute('src', config.videoUrlPrefix + url);
     video.pause();
-    self.title(url.substring(0, url.lastIndexOf('/')).replace('/', ' / '));
+    self.title(url.substring(0, url.lastIndexOf('/')).replace(/\//g, ' / '));
   };
 
   self.title = function(text) {

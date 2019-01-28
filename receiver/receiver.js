@@ -7,7 +7,7 @@ function Receiver(config, content, keyboard) {
     initAsStandalone(); // running as standalone web page - take commands from location hash
 
   window.onhashchange = function() {
-    if (location.hash) self.onCommand(location.hash.substring(1));
+    if (location.hash) self.onCommand(decodeURIComponent(location.hash.substring(1)));
   };
   setTimeout(onhashchange, 0);
 

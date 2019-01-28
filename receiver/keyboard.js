@@ -39,7 +39,7 @@ var keyboard = {
   },
 
   commandPrompt: function() {
-    var command = prompt('Photo dir/command', location.hash ? location.hash.substring(1) : '');
+    var command = prompt('Photo dir/command', location.hash ? decodeURIComponent(location.hash.substring(1)) : '');
     if (command) location.hash = '#' + command;
   },
 
