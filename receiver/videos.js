@@ -13,7 +13,7 @@ function Videos(config) {
   });
   video.addEventListener('canplaythrough', () => {
     status.textContent = self.index + '/' + self.urls.length;
-    video.play();
+    play();
   });
 
   self.loadCurrent = function() {
@@ -30,7 +30,7 @@ function Videos(config) {
 
   self.pause = function() {
     if (video.paused)
-      video.play();
+      play();
     else
       video.pause();
   };
@@ -47,4 +47,15 @@ function Videos(config) {
       self.loadCurrent();
     });
   };
+
+  function play() {
+    var promise = video.play();
+    if (promise) promise.catch((e) => {
+      console.error(e);
+      if (!video.muted) {
+        video.muted = true;
+        play();
+      }
+    });
+  }
 }
