@@ -16,6 +16,16 @@ function Videos(config) {
     play();
   });
 
+  video.addEventListener('mouseenter', () => {
+    if (!video.controls) video.controls = true;
+  });
+  video.addEventListener('click', () => {
+    if (video.muted) video.muted = false;
+    if (!video.controls) video.controls = true;
+    video.requestFullscreen();
+    if (!video.paused) play();
+  });
+
   self.loadCurrent = function() {
     var url = self.currentUrl();
     status.textContent = 'Loading ' + self.index + '/' + self.urls.length;
@@ -54,6 +64,7 @@ function Videos(config) {
       console.error(e);
       if (!video.muted) {
         video.muted = true;
+        video.controls = true;
         play();
       }
     });
