@@ -13,6 +13,9 @@ var photos = (function(self) {
   photo.onerror = photoLoadingFailed;
   photo.addEventListener('click', () => document.documentElement.requestFullscreen());
 
+  var photoUrlPrefix = self.lanBaseUrl + self.photoUrlPrefix;
+  var somePhotosLoaded = false;
+
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
 
@@ -69,7 +72,7 @@ var photos = (function(self) {
     loading = true;
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
-    renderPhoto(self.photoUrlPrefix + url);
+    renderPhoto(url);
 
     setTimeout(function() {
       nextImg.href = self.photoUrlPrefix + self.nextUrl() + `&style=${style}&preload=true`;
@@ -77,7 +80,7 @@ var photos = (function(self) {
   };
 
   function renderPhoto(url) {
-    photo.src = url;
+    photo.src = photoUrlPrefix + url;
   }
 
   function updateStatus(meta) {
@@ -91,12 +94,18 @@ var photos = (function(self) {
   }
 
   function photoLoadingFailed() {
+    if (!somePhotosLoaded) {
+      photoUrlPrefix = self.photoUrlPrefix;
+      renderPhoto(self.currentUrl());
+      return;
+    }
     $status.text(self.index + '/' + self.urls.length + ': failed');
     loadNextPhotoAfter(self.interval / 4);
   }
 
   function loadNextPhotoAfter(timeout) {
     loading = false;
+    somePhotosLoaded = true;
     clearTimeout(timer);
     timer = setTimeout(self.next, timeout);
   }
