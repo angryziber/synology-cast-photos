@@ -20,9 +20,9 @@ $access_token = trim(file("$photos_list_dir/php-access-token.txt")[0]);
 $marks_file = "$photos_list_dir/marks.txt";
 
 # If defined, requests will be allowed only from this host
-$allowed_host = '';
+$allowed_hosts = '';
 
-if ($allowed_host && $allowed_host != $_SERVER['HTTP_HOST']) {
+if ($allowed_hosts && strpos($allowed_hosts, $_SERVER['HTTP_HOST']) === false) {
     forbidden();
 }
 
