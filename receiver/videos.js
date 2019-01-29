@@ -6,13 +6,19 @@ function Videos(config) {
   var status = document.getElementById('status');
   var video = document.getElementsByTagName('video')[0];
 
+  var videoUrlPrefix = config.localVideoUrlPrefix;
+  var someVideosPlayed = false;
+
   video.addEventListener('ended', () => self.next());
   video.addEventListener('error', () => {
     console.error(video.error);
+    status.textContent = video.error.message;
+    if (!someVideosPlayed) videoUrlPrefix = config.videoUrlPrefix;
     self.next();
   });
   video.addEventListener('canplaythrough', () => {
     status.textContent = self.index + '/' + self.urls.length;
+    someVideosPlayed = true;
     play();
   });
 
@@ -29,7 +35,7 @@ function Videos(config) {
   self.loadCurrent = function() {
     var url = self.currentUrl();
     status.textContent = 'Loading ' + self.index + '/' + self.urls.length;
-    video.setAttribute('src', config.videoUrlPrefix + url);
+    video.setAttribute('src', videoUrlPrefix + url);
     video.pause();
     self.title(url.substring(0, url.lastIndexOf('/')).replace(/\//g, ' / '));
   };
