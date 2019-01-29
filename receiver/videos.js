@@ -6,7 +6,7 @@ function Videos(config) {
   var status = document.getElementById('status');
   var video = document.getElementsByTagName('video')[0];
 
-  var videoUrlPrefix = config.localVideoUrlPrefix;
+  var videoUrlPrefix = config.lanBaseUrl + config.videoUrlPrefix;
   var someVideosPlayed = false;
 
   video.addEventListener('ended', () => self.next());

@@ -1,19 +1,22 @@
+var lanBaseUrl = 'http://192.168.0.2'; // for faster downloads when in LAN
+
 var photos = {
   interval: 10000,  // ms
   photoListUrl: '/backend/photos_list.php',
   photoUrlPrefix: '/backend/photov.php?file=',
   metaUrlPrefix: '/backend/photo_meta.php?file=',
-  markPhotoUrl: '/backend/photo_mark.php'
+  markPhotoUrl: '/backend/photo_mark.php',
+  lanBaseUrl: lanBaseUrl
 };
 
 var videos = {
   videoListUrl: '/backend/videos_list.php',
-  localVideoUrlPrefix: 'http://192.168.0.2/video/',
-  videoUrlPrefix: '/video/'
+  videoUrlPrefix: '/video/',
+  lanBaseUrl: lanBaseUrl
 };
 
 var receiver = {
-  namespace: 'urn:x-cast:message'
+  namespace: 'urn:x-cast:message',
 };
 
 // helper functions
