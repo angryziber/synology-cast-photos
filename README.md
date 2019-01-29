@@ -26,12 +26,13 @@ Use `jpeg` branch if you are fine with 1080p resolution.
 ## Installing
 
 - Enable *Web Station* on your Synology NAS
-- In PHP settings (in a tab), add your photos directory to PHP open_basedir - otherwise photos won't be accessible to PHP
-- Copy/clone these files to the *'web'* directory on your NAS
+- In PHP settings (in a tab), add your photos and videos directories to PHP open_basedir - otherwise they won't be accessible to PHP
+- Copy/clone this repository to the *'web'* directory on your NAS
 - [Register a Chromecast receiver app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/receiver**
   (Note: you need to pay Google $5 and also register your Chromecast device for testing in order to be able to use http urls)
 - Specify registered app ID in *sender/config.js*
 - Open **http://your-nas-ip/sender** in your browser, start casting!
+- Or open **http://your-nas-ip/receiver** to watch photos locally (Use Esc key to specify directory to watch)
 
 Note: these php scripts here can take advantage of [rawfs](http://github.com/angryziber/rawfs) running on the NAS making it 
 possible to cast raw photos directly, without converting them to jpeg first. This is optional if your photos are already 
