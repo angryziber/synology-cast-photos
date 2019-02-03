@@ -4,7 +4,7 @@ $photos_dir = "/volume1/photo";
 
 # This is where photo listings are taken from (in my case, it is the real location of raw CR2 files)
 # Can be the same as $photos_dir if you don't use rawfs
-$photos_list_dir = "/volume1/Photos";
+$photos_list_dir = $photos_dir;
 
 # Listing and serving of videos
 $videos_dir = "/volume1/video";
