@@ -61,7 +61,7 @@ function Videos(config) {
       if (random) self.random(); else self.sequential();
       self.index = 1;
       self.loadCurrent();
-    });
+    }, e => self.title('Error: ' + e));
   };
 
   function play() {
