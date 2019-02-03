@@ -6,7 +6,7 @@ var photos = (function(self) {
   var $status = $('#status');
   var $meta = $('#meta');
   var timer, meta, loading, displayedUrl;
-  var style = 'contain';
+  var style = innerWidth/innerHeight == 16/9 ? 'contain' : 'cover';
 
   var photo = $('#photo')[0];
   photo.onplay = () => loadNextPhotoAfter(self.interval);
