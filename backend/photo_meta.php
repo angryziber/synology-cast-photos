@@ -2,11 +2,13 @@
 include 'config.php';
 
 $file = $_GET['file'];
-if (preg_match("/\\.(CR2|cr2)\\.jpg$/", $file)) {
-    $file = preg_replace("/\\.jpg$/", "", $file);
+$path = "$photos_list_dir/$file";
+
+if (preg_match("/\\.(CR2|cr2)\\.jpg$/", $path) && !file_exists($path)) {
+    $path = preg_replace("/\\.jpg$/", "", $path);
 }
 
-$path = ensure_safe("$photos_list_dir/$file");
+$path = ensure_safe($path);
 
 function exif_value($key, $lines, $n) {
   $lines = preg_grep("/^$key/", $lines);
