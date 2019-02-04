@@ -8,7 +8,6 @@ var photos = (function(self) {
   var timer, meta, loading, displayedUrl;
   var somePhotosLoaded = false;
   var style = 'contain';
-
   var photo;
 
   var modes = {
@@ -33,7 +32,8 @@ var photos = (function(self) {
         photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url;
       },
       preloadNext: function() {
-        nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + `&style=${style}&preload=true`;
+        var sendStyle = innerWidth/innerHeight == 16/9;
+        nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + '&preload=true' + (sendStyle ? `&style=${style}` : '');
       }
     }
   };
@@ -66,7 +66,6 @@ var photos = (function(self) {
     style = s;
     photo.style.objectFit = s;
   };
-  self.style(style);
 
   self.pause = function() {
     if (timer) {
