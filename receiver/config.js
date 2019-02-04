@@ -7,6 +7,7 @@ var photos = {
   photoVideoUrlPrefix: '/backend/photov.php?file=',
   metaUrlPrefix: '/backend/photo_meta.php?file=',
   markPhotoUrl: '/backend/photo_mark.php',
+  mode: 'video', // 'video' supports 4k/UHD resolution on Google Cast, while 'img' doesn't do server-side processing
   lanBaseUrl: lanBaseUrl
 };
 

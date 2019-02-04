@@ -55,7 +55,7 @@ var photos = (function(self) {
     }
   };
 
-  var mode = modes.img;
+  var mode = modes[self.mode];
   mode.init();
 
   photo.onerror = photoLoadingFailed;
