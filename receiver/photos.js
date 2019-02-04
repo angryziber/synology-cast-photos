@@ -7,7 +7,7 @@ var photos = (function(self) {
   var $meta = $('#meta');
   var timer, meta, loading, displayedUrl;
   var somePhotosLoaded = false;
-  var style = innerWidth/innerHeight == 16/9 ? 'contain' : 'cover';
+  var style = 'contain';
 
   var photo;
 
