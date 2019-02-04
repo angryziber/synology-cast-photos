@@ -23,13 +23,20 @@ var photos = (function(self) {
         nextImg.href = self.lanBaseUrl + self.photoUrlPrefix + self.nextUrl();
       },
       metaLoaded: function(meta) {
-        var imgRatio = 1.3333;
+        var imgRatio = photo.width/photo.height;
+        var horizontal = imgRatio >= 1.33;
         switch (meta.orientation) {
           case '3': photo.style.transform = 'rotate(180deg)'; break;
-          case '6': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; break;
-          case '8': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; break;
+          case '6': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; horizontal = false; break;
+          case '8': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; horizontal = false; break;
           default:  photo.style.transform = 'none';
         }
+        var screenRatio = innerWidth/innerHeight;
+        if (style === 'cover' && horizontal) {
+          var verticalScale = 100 * screenRatio / imgRatio * 0.9;
+          photo.style.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
+        }
+        else photo.style.objectFit = 'contain';
       }
     },
     video: {
