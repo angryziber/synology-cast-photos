@@ -45,12 +45,12 @@ var photos = (function(self) {
         photo.onplay = () => loadNextPhotoAfter(self.interval);
       },
       renderPhoto: function(url) {
-        photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url;
+        photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url + this.videoStyle();
       },
       preloadNext: function() {
-        var sendStyle = innerWidth/innerHeight == 16/9;
-        nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + '&preload=true' + (sendStyle ? `&style=${style}` : '');
+        nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + this.videoStyle() + '&preload=true';
       },
+      videoStyle: () => innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : '',
       metaLoaded: () => {}
     }
   };
