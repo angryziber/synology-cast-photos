@@ -22,9 +22,6 @@ var photos = (function(self) {
       },
       preloadNext: function() {
         nextImg.href = self.photoUrlPrefix + self.nextUrl();
-      },
-      changeStyle: function(s) {
-        photo.style.objectFit = s;
       }
     },
     video: {
@@ -37,16 +34,12 @@ var photos = (function(self) {
       },
       preloadNext: function() {
         nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + `&style=${style}&preload=true`;
-      },
-      changeStyle: function(s) {
-        photo.style.objectFit = s;
       }
     }
   };
 
   var mode = modes.photo;
   mode.init();
-  mode.changeStyle(style);
 
   photo.onerror = photoLoadingFailed;
   photo.addEventListener('click', () => document.documentElement.requestFullscreen());
@@ -71,8 +64,9 @@ var photos = (function(self) {
 
   self.style = function(s) {
     style = s;
-    mode.changeStyle(s);
+    photo.style.objectFit = s;
   };
+  self.style(style);
 
   self.pause = function() {
     if (timer) {
