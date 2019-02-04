@@ -12,7 +12,7 @@ var photos = (function(self) {
   var photo;
 
   var modes = {
-    photo: {
+    img: {
       init: function() {
         photo = $('body').prepend('<img id="photo">').find('#photo')[0];
         photo.onload = () => loadNextPhotoAfter(self.interval);
@@ -38,7 +38,7 @@ var photos = (function(self) {
     }
   };
 
-  var mode = modes.photo;
+  var mode = modes.img;
   mode.init();
 
   photo.onerror = photoLoadingFailed;

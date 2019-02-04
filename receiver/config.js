@@ -1,9 +1,10 @@
-var lanBaseUrl = 'http://192.168.0.2'; // for faster downloads when in LAN
+var lanBaseUrl = 'http://nas.local'; // for faster downloads when in LAN
 
 var photos = {
   interval: 10000,  // ms
   photoListUrl: '/backend/photos_list.php',
-  photoUrlPrefix: '/backend/photov.php?file=',
+  photoUrlPrefix: '/backend/photo.php?file=',
+  photoVideoUrlPrefix: '/backend/photov.php?file=',
   metaUrlPrefix: '/backend/photo_meta.php?file=',
   markPhotoUrl: '/backend/photo_mark.php',
   lanBaseUrl: lanBaseUrl
