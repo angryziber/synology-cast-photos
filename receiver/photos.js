@@ -24,11 +24,15 @@ var photos = (function(self) {
       },
       preloadNext: function() {
         nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + `&style=${style}&preload=true`;
+      },
+      changeStyle: function(s) {
+        photo.style.objectFit = s;
       }
     }
   };
 
   var mode = modes.video;
+  mode.changeStyle(style);
 
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
@@ -49,7 +53,8 @@ var photos = (function(self) {
   };
 
   self.style = function(s) {
-    photo.style.objectFit = style = s;
+    style = s;
+    mode.changeStyle(s);
   };
 
   self.pause = function() {
