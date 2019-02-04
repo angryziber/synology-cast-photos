@@ -20,7 +20,16 @@ var photos = (function(self) {
         photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
       },
       preloadNext: function() {
-        nextImg.href = self.photoUrlPrefix + self.nextUrl();
+        nextImg.href = self.lanBaseUrl + self.photoUrlPrefix + self.nextUrl();
+      },
+      metaLoaded: function(meta) {
+        var imgRatio = 1.3333;
+        switch (meta.orientation) {
+          case '3': photo.style.transform = 'rotate(180deg)'; break;
+          case '6': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; break;
+          case '8': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; break;
+          default:  photo.style.transform = 'none';
+        }
       }
     },
     video: {
@@ -34,7 +43,8 @@ var photos = (function(self) {
       preloadNext: function() {
         var sendStyle = innerWidth/innerHeight == 16/9;
         nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + '&preload=true' + (sendStyle ? `&style=${style}` : '');
-      }
+      },
+      metaLoaded: () => {}
     }
   };
 
@@ -92,10 +102,10 @@ var photos = (function(self) {
 
   self.loadCurrent = function() {
     var url = self.currentUrl();
-    meta = null;
     $.get(self.metaUrlPrefix + url).then(function(data) {
       meta = data;
       updateStatus(meta);
+      mode.metaLoaded(meta);
     });
 
     loading = true;
