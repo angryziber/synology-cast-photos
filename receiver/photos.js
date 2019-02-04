@@ -6,6 +6,7 @@ var photos = (function(self) {
   var $status = $('#status');
   var $meta = $('#meta');
   var timer, meta, loading, displayedUrl;
+  var somePhotosLoaded = false;
   var style = innerWidth/innerHeight == 16/9 ? 'contain' : 'cover';
 
   var photo = $('#photo')[0];
@@ -13,16 +14,13 @@ var photos = (function(self) {
   photo.onerror = photoLoadingFailed;
   photo.addEventListener('click', () => document.documentElement.requestFullscreen());
 
-  var photoUrlPrefix = self.lanBaseUrl + self.photoVideoUrlPrefix;
-  var somePhotosLoaded = false;
-
   var modes = {
     photo: {
       // TODO
     },
     video: {
       renderPhoto: function(url) {
-        photo.src = photoUrlPrefix + url;
+        photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url;
       },
       preloadNext: function() {
         nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + `&style=${style}&preload=true`;
@@ -104,7 +102,7 @@ var photos = (function(self) {
 
   function photoLoadingFailed() {
     if (!somePhotosLoaded) {
-      photoUrlPrefix = self.photoVideoUrlPrefix;
+      self.lanBaseUrl = '';
       mode.renderPhoto(self.currentUrl());
       return;
     }
