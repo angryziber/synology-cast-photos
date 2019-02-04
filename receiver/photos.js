@@ -9,16 +9,29 @@ var photos = (function(self) {
   var somePhotosLoaded = false;
   var style = innerWidth/innerHeight == 16/9 ? 'contain' : 'cover';
 
-  var photo = $('#photo')[0];
-  photo.onplay = () => loadNextPhotoAfter(self.interval);
-  photo.onerror = photoLoadingFailed;
-  photo.addEventListener('click', () => document.documentElement.requestFullscreen());
+  var photo;
 
   var modes = {
     photo: {
-      // TODO
+      init: function() {
+        photo = $('body').prepend('<img id="photo">').find('#photo')[0];
+        photo.onload = () => loadNextPhotoAfter(self.interval);
+      },
+      renderPhoto: function(url) {
+        photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
+      },
+      preloadNext: function() {
+        nextImg.href = self.photoUrlPrefix + self.nextUrl();
+      },
+      changeStyle: function(s) {
+        photo.style.objectFit = s;
+      }
     },
     video: {
+      init: function() {
+        photo = $('body').prepend('<video id="photo" muted autoplay></video>').find('#photo')[0];
+        photo.onplay = () => loadNextPhotoAfter(self.interval);
+      },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url;
       },
@@ -31,8 +44,12 @@ var photos = (function(self) {
     }
   };
 
-  var mode = modes.video;
+  var mode = modes.photo;
+  mode.init();
   mode.changeStyle(style);
+
+  photo.onerror = photoLoadingFailed;
+  photo.addEventListener('click', () => document.documentElement.requestFullscreen());
 
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
