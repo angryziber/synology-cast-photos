@@ -13,8 +13,24 @@ var photos = (function(self) {
   photo.onerror = photoLoadingFailed;
   photo.addEventListener('click', () => document.documentElement.requestFullscreen());
 
-  var photoUrlPrefix = self.lanBaseUrl + self.photoUrlPrefix;
+  var photoUrlPrefix = self.lanBaseUrl + self.photoVideoUrlPrefix;
   var somePhotosLoaded = false;
+
+  var modes = {
+    photo: {
+      // TODO
+    },
+    video: {
+      renderPhoto: function(url) {
+        photo.src = photoUrlPrefix + url;
+      },
+      preloadNext: function() {
+        nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + `&style=${style}&preload=true`;
+      }
+    }
+  };
+
+  var mode = modes.video;
 
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
@@ -72,16 +88,9 @@ var photos = (function(self) {
     loading = true;
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
-    renderPhoto(url);
-
-    setTimeout(function() {
-      nextImg.href = self.photoUrlPrefix + self.nextUrl() + `&style=${style}&preload=true`;
-    }, self.interval/2);
+    mode.renderPhoto(url);
+    setTimeout(() => mode.preloadNext(), self.interval/2);
   };
-
-  function renderPhoto(url) {
-    photo.src = photoUrlPrefix + url;
-  }
 
   function updateStatus(meta) {
     displayedUrl = meta.file;
@@ -95,8 +104,8 @@ var photos = (function(self) {
 
   function photoLoadingFailed() {
     if (!somePhotosLoaded) {
-      photoUrlPrefix = self.photoUrlPrefix;
-      renderPhoto(self.currentUrl());
+      photoUrlPrefix = self.photoVideoUrlPrefix;
+      mode.renderPhoto(self.currentUrl());
       return;
     }
     $status.text(self.index + '/' + self.urls.length + ': failed');
