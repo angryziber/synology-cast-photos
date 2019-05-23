@@ -13,6 +13,7 @@ function Receiver(config, content, keyboard) {
 
   function initAsReceiver() {
     var receiverManager = cast.receiver.CastReceiverManager.getInstance();
+    content.supports4k = receiverManager.canDisplayType('video/mp4', 'hev1.1.2.L150', 3840, 2160);
 
     self.messageBus = receiverManager.getCastMessageBus(self.namespace);
     self.messageBus.onMessage = function(e) {
@@ -25,6 +26,7 @@ function Receiver(config, content, keyboard) {
   }
 
   function initAsStandalone() {
+    content.supports4k = window.innerHeight * window.devicePixelRatio > 1080;
     if (keyboard) keyboard.init();
   }
 

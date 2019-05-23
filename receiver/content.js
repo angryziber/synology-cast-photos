@@ -2,6 +2,7 @@ function BaseContent(self) {
   self.urls = [];
   self.index = 0;
   self.status = document.getElementById('status');
+  self.supports4k = undefined;
 
   self.currentUrl = function() {
     return self.urls[self.index - 1];
