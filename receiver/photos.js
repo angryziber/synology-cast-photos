@@ -14,7 +14,7 @@ var photos = (function(self) {
     img: {
       init: function() {
         photo = $('body').prepend('<img id="photo">').find('#photo')[0];
-        photo.onload = () => loadNextPhotoAfter(self.interval);
+        photo.onload = function() {loadNextPhotoAfter(self.interval)}
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
@@ -42,7 +42,7 @@ var photos = (function(self) {
     video: {
       init: function() {
         photo = $('body').prepend('<video id="photo" muted autoplay></video>').find('#photo')[0];
-        photo.onplay = () => loadNextPhotoAfter(self.interval);
+        photo.onplay = function() {loadNextPhotoAfter(self.interval)}
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url + this.videoStyle();
@@ -50,8 +50,8 @@ var photos = (function(self) {
       preloadNext: function() {
         nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + this.videoStyle() + '&preload=true';
       },
-      videoStyle: () => innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : '',
-      metaLoaded: () => {}
+      videoStyle: function() {return innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : ''},
+      metaLoaded: function() {}
     }
   };
 
@@ -59,7 +59,8 @@ var photos = (function(self) {
   mode.init();
 
   photo.onerror = photoLoadingFailed;
-  photo.addEventListener('click', () => document.documentElement.requestFullscreen());
+  if (document.documentElement.requestFullscreen)
+    photo.addEventListener('click', function() {document.documentElement.requestFullscreen()});
 
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
@@ -119,7 +120,7 @@ var photos = (function(self) {
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
     mode.renderPhoto(url);
-    setTimeout(() => mode.preloadNext(), self.interval/2);
+    setTimeout(function() {mode.preloadNext()}, self.interval/2);
   };
 
   function updateStatus(meta) {

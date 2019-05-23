@@ -1,6 +1,4 @@
-function Receiver(config, content, keyboard) {
-  var self = Object.assign(this, config);
-
+function Receiver(self, content, keyboard) {
   if (navigator.userAgent.indexOf('CrKey') >= 0)
     initAsReceiver(); // running under Chromecast - receive commands from Chromecast senders
   else
@@ -19,7 +17,7 @@ function Receiver(config, content, keyboard) {
     self.messageBus.onMessage = function(e) {
       self.onCommand(e.data);
     };
-
+    
     var config = new cast.receiver.CastReceiverManager.Config();
     config.maxInactivity = 60000;
     receiverManager.start(config);
@@ -92,5 +90,7 @@ function Receiver(config, content, keyboard) {
       content.title(title);
       self.broadcast(title);
     }
-  }
+  };
+
+  return self;
 }
