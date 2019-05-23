@@ -1,6 +1,6 @@
 <?
 include 'config.php';
-if (!preg_match('/receiver\/$/', $_SERVER['HTTP_REFERER'])) forbidden();
+if (!preg_match('/receiver\//', $_SERVER['HTTP_REFERER'])) forbidden();
 
 $dir = $_GET['dir'];
 if (!$dir) forbidden();
