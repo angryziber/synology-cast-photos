@@ -18,6 +18,7 @@ var photos = (function(self) {
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
+        this.applyMeta();
       },
       preloadNext: function() {
         nextImg.href = self.lanBaseUrl + self.photoUrlPrefix + self.nextUrl();
@@ -25,20 +26,24 @@ var photos = (function(self) {
       metaLoaded: function(meta) {
         var imgRatio = photo.width/photo.height;
         var horizontal = imgRatio >= 1.33;
-        var css = {};
+        this.metaCss = {transform: 'none'};
         switch (meta.orientation) {
-          case '3': css.transform = 'rotate(180deg)'; break;
-          case '6': css.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; horizontal = false; break;
-          case '8': css.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; horizontal = false; break;
-          default:  css.transform = 'none';
+          case '3': this.metaCss.transform = 'rotate(180deg)'; break;
+          case '6': this.metaCss.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; horizontal = false; break;
+          case '8': this.metaCss.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; horizontal = false; break;
         }
         var screenRatio = innerWidth/innerHeight;
         if (style === 'cover' && horizontal) {
           var verticalScale = 100 * screenRatio / imgRatio * 0.9;
-          css.backgroundSize = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
+          this.metaCss.backgroundSize = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
         }
-        else css.backgroundSize = 'contain';
-        $(photo).css(css);
+        else this.metaCss.backgroundSize = 'contain';
+        if (photo.src.indexOf(meta.file.replace(/.*\//, '')) >= 0)
+          this.applyMeta();
+      },
+      applyMeta: function() {
+        $(photo).css(this.metaCss);
+        this.metaCss = undefined;
       }
     },
     video: {
