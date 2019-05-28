@@ -35,9 +35,9 @@ var photos = (function(self) {
         var screenRatio = innerWidth/innerHeight;
         if (style === 'cover' && horizontal) {
           var verticalScale = 100 * screenRatio / imgRatio * 0.9;
-          this.metaCss.backgroundSize = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
+          this.metaCss.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
         }
-        else this.metaCss.backgroundSize = 'contain';
+        else this.metaCss.objectFit = 'contain';
         if (photo.src.indexOf(meta.file.replace(/.*\//, '')) >= 0)
           this.applyMeta();
       },
