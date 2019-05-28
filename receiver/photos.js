@@ -25,18 +25,20 @@ var photos = (function(self) {
       metaLoaded: function(meta) {
         var imgRatio = photo.width/photo.height;
         var horizontal = imgRatio >= 1.33;
+        var css = {};
         switch (meta.orientation) {
-          case '3': photo.style.transform = 'rotate(180deg)'; break;
-          case '6': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; horizontal = false; break;
-          case '8': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; horizontal = false; break;
-          default:  photo.style.transform = 'none';
+          case '3': css.transform = 'rotate(180deg)'; break;
+          case '6': css.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; horizontal = false; break;
+          case '8': css.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; horizontal = false; break;
+          default:  css.transform = 'none';
         }
         var screenRatio = innerWidth/innerHeight;
         if (style === 'cover' && horizontal) {
           var verticalScale = 100 * screenRatio / imgRatio * 0.9;
-          photo.style.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
+          css.backgroundSize = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
         }
-        else photo.style.objectFit = 'contain';
+        else css.backgroundSize = 'contain';
+        $(photo).css(css);
       }
     },
     video: {
