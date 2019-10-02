@@ -55,8 +55,11 @@ function Receiver(self, content, keyboard) {
       content.interval = parseInt(arg) * 1000;
       title = 'Interval: ' + arg + 's';
     }
+    else if (cmd == 'mode') {
+      content.changeMode(arg);
+    }
     else if (cmd == 'style') {
-      content.style(arg);
+      content.changeStyle(arg);
     }
     else if (cmd == 'prev') {
       content.prev(arg);

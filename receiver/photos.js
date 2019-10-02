@@ -8,7 +8,7 @@ var photos = (function(self) {
   var timer, meta, loading, displayedUrl;
   var somePhotosLoaded = false;
   var style = 'contain';
-  var photo;
+  var photo, mode, supports4k;
 
   var modes = {
     img: {
@@ -62,8 +62,6 @@ var photos = (function(self) {
     }
   };
 
-  var mode, supports4k;
-
   self.init = function() {
     mode = modes[self.mode];
     mode.init();
@@ -101,7 +99,13 @@ var photos = (function(self) {
     );
   };
 
-  self.style = function(s) {
+  self.changeMode = function(m) {
+    $(photo).remove();
+    self.mode = m;
+    self.init();
+  };
+
+  self.changeStyle = function(s) {
     style = s;
     photo.style.objectFit = s;
   };
