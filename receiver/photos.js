@@ -10,12 +10,6 @@ var photos = (function(self) {
   var style = 'contain';
   var photo;
 
-  Object.defineProperty(self, 'supports4k', {
-    set: function(supports4k) {
-      self.mode = supports4k ? 'video' : 'img';
-    }
-  })
-
   var modes = {
     img: {
       init: function() {
@@ -68,12 +62,22 @@ var photos = (function(self) {
     }
   };
 
-  var mode = modes[self.mode];
-  mode.init();
+  var mode;
 
-  photo.onerror = photoLoadingFailed;
-  if (document.documentElement.requestFullscreen)
-    photo.addEventListener('click', function() {document.documentElement.requestFullscreen()});
+  self.init = function() {
+    mode = modes[self.mode];
+    mode.init();
+    photo.onerror = photoLoadingFailed;
+    if (document.documentElement.requestFullscreen)
+      photo.addEventListener('click', function() {document.documentElement.requestFullscreen()});
+  };
+
+  Object.defineProperty(self, 'supports4k', {
+    set: function(supports4k) {
+      self.mode = supports4k ? 'video' : 'img';
+      self.init();
+    }
+  });
 
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
