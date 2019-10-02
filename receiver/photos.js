@@ -62,7 +62,7 @@ var photos = (function(self) {
     }
   };
 
-  var mode;
+  var mode, supports4k;
 
   self.init = function() {
     mode = modes[self.mode];
@@ -73,7 +73,11 @@ var photos = (function(self) {
   };
 
   Object.defineProperty(self, 'supports4k', {
-    set: function(supports4k) {
+    get: function() {
+      return supports4k;
+    },
+    set: function(val) {
+      supports4k = val;
       self.mode = supports4k ? 'video' : 'img';
       self.init();
     }
