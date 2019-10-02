@@ -5,7 +5,7 @@ var photos = (function(self) {
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
-  var timer, meta, loading, displayedUrl;
+  var timer, meta, nextMeta, loading, displayedUrl;
   var somePhotosLoaded = false;
   var style = 'contain';
   var photo, mode, supports4k;
@@ -25,8 +25,9 @@ var photos = (function(self) {
         nextImg.href = self.lanBaseUrl + self.photoUrlPrefix + self.nextUrl();
       },
       metaLoaded: function(meta) {
-        var imgRatio = photo.width/photo.height;
+        var imgRatio = photo.naturalWidth / photo.naturalHeight;
         var horizontal = imgRatio >= 1.33;
+        console.log(imgRatio)
         this.metaCss = {transform: 'none'};
         switch (meta.orientation) {
           case '3': this.metaCss.transform = 'rotate(180deg)'; break;
@@ -147,7 +148,7 @@ var photos = (function(self) {
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
     mode.renderPhoto(url);
-    setTimeout(function() {mode.preloadNext()}, self.interval/2);
+    setTimeout(function() {mode.preloadNext()}, 500);
   };
 
   function updateStatus(meta) {
