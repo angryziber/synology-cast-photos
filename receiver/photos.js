@@ -42,7 +42,7 @@ var photos = (function(self) {
           this.applyMeta();
       },
       applyMeta: function() {
-        $(photo).css(this.metaCss);
+        if (this.metaCss) $(photo).css(this.metaCss);
         this.metaCss = undefined;
       }
     },
