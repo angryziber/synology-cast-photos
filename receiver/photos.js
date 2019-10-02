@@ -14,10 +14,11 @@ var photos = (function(self) {
     img: {
       init: function() {
         photo = $('body').prepend('<img id="photo">').find('#photo')[0];
-        photo.onload = () => loadNextPhotoAfter(self.interval);
+        photo.onload = function() {loadNextPhotoAfter(self.interval)}
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
+        this.applyMeta();
       },
       preloadNext: function() {
         nextImg.href = self.lanBaseUrl + self.photoUrlPrefix + self.nextUrl();
@@ -25,24 +26,30 @@ var photos = (function(self) {
       metaLoaded: function(meta) {
         var imgRatio = photo.width/photo.height;
         var horizontal = imgRatio >= 1.33;
+        this.metaCss = {transform: 'none'};
         switch (meta.orientation) {
-          case '3': photo.style.transform = 'rotate(180deg)'; break;
-          case '6': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; horizontal = false; break;
-          case '8': photo.style.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; horizontal = false; break;
-          default:  photo.style.transform = 'none';
+          case '3': this.metaCss.transform = 'rotate(180deg)'; break;
+          case '6': this.metaCss.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; horizontal = false; break;
+          case '8': this.metaCss.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; horizontal = false; break;
         }
         var screenRatio = innerWidth/innerHeight;
         if (style === 'cover' && horizontal) {
           var verticalScale = 100 * screenRatio / imgRatio * 0.9;
-          photo.style.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
+          this.metaCss.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
         }
-        else photo.style.objectFit = 'contain';
+        else this.metaCss.objectFit = 'contain';
+        if (photo.src.indexOf(meta.file.replace(/.*\//, '')) >= 0)
+          this.applyMeta();
+      },
+      applyMeta: function() {
+        $(photo).css(this.metaCss);
+        this.metaCss = undefined;
       }
     },
     video: {
       init: function() {
         photo = $('body').prepend('<video id="photo" muted autoplay></video>').find('#photo')[0];
-        photo.onplay = () => loadNextPhotoAfter(self.interval);
+        photo.onplay = function() {loadNextPhotoAfter(self.interval)}
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url + this.videoStyle();
@@ -50,8 +57,8 @@ var photos = (function(self) {
       preloadNext: function() {
         nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + this.videoStyle() + '&preload=true';
       },
-      videoStyle: () => innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : '',
-      metaLoaded: () => {}
+      videoStyle: function() {return innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : ''},
+      metaLoaded: function() {}
     }
   };
 
@@ -59,7 +66,8 @@ var photos = (function(self) {
   mode.init();
 
   photo.onerror = photoLoadingFailed;
-  photo.addEventListener('click', () => document.documentElement.requestFullscreen());
+  if (document.documentElement.requestFullscreen)
+    photo.addEventListener('click', function() {document.documentElement.requestFullscreen()});
 
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
@@ -119,7 +127,7 @@ var photos = (function(self) {
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
     mode.renderPhoto(url);
-    setTimeout(() => mode.preloadNext(), self.interval/2);
+    setTimeout(function() {mode.preloadNext()}, self.interval/2);
   };
 
   function updateStatus(meta) {

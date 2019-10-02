@@ -1,31 +1,30 @@
-function Videos(config) {
-  BaseContent(this);
-  var self = Object.assign(this, config);
+function Videos(self) {
+  BaseContent(self);
 
   var title = document.getElementById('title');
   var status = document.getElementById('status');
   var video = document.getElementsByTagName('video')[0];
 
-  var videoUrlPrefix = config.lanBaseUrl + config.videoUrlPrefix;
+  var videoUrlPrefix = self.lanBaseUrl + self.videoUrlPrefix;
   var someVideosPlayed = false;
 
-  video.addEventListener('ended', () => self.next());
-  video.addEventListener('error', () => {
+  video.addEventListener('ended', function() {self.next()});
+  video.addEventListener('error', function() {
     console.error(video.error);
     status.textContent = video.error.message;
-    if (!someVideosPlayed) videoUrlPrefix = config.videoUrlPrefix;
+    if (!someVideosPlayed) videoUrlPrefix = self.videoUrlPrefix;
     self.next();
   });
-  video.addEventListener('canplaythrough', () => {
+  video.addEventListener('canplaythrough', function() {
     status.textContent = self.index + '/' + self.urls.length;
     someVideosPlayed = true;
     play();
   });
 
-  video.addEventListener('mouseenter', () => {
+  video.addEventListener('mouseenter', function() {
     if (!video.controls) video.controls = true;
   });
-  video.addEventListener('click', () => {
+  video.addEventListener('click', function() {
     if (video.muted) video.muted = false;
     if (!video.controls) video.controls = true;
     video.requestFullscreen();
@@ -52,7 +51,7 @@ function Videos(config) {
   };
 
   self.loadUrls = function(dir, random) {
-    fetch(config.videoListUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
+    fetch(self.videoListUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
       if (res.ok) return res.text();
       else throw new Error(res.status);
     }).then(result => {
@@ -75,4 +74,6 @@ function Videos(config) {
       }
     });
   }
+
+  return self;
 }

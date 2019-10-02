@@ -11,6 +11,9 @@ var photos = {
   lanBaseUrl: lanBaseUrl
 };
 
+if (location.search.indexOf('?mode') == 0)
+  photos.mode = location.search.split('=')[1];
+
 var videos = {
   videoListUrl: '/backend/videos_list.php',
   videoUrlPrefix: '/video/',
