@@ -14,7 +14,8 @@ var photos = (function(self) {
     img: {
       init: function() {
         photo = $('body').prepend('<img id="photo">').find('#photo')[0];
-        photo.onload = function() {loadNextPhotoAfter(self.interval)}
+        photo.onload = function() {loadNextPhotoAfter(self.interval)};
+        nextImg.as = 'image';
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
@@ -29,8 +30,8 @@ var photos = (function(self) {
         this.metaCss = {transform: 'none'};
         switch (meta.orientation) {
           case '3': this.metaCss.transform = 'rotate(180deg)'; break;
-          case '6': this.metaCss.transform = 'scale(' + 1/imgRatio + ') rotate(90deg)'; horizontal = false; break;
-          case '8': this.metaCss.transform = 'scale(' + 1/imgRatio + ') rotate(-90deg)'; horizontal = false; break;
+          case '6': this.metaCss.transform = 'scale(' + (1 / imgRatio) + ') rotate(90deg)'; horizontal = false; break;
+          case '8': this.metaCss.transform = 'scale(' + (1 / imgRatio) + ') rotate(-90deg)'; horizontal = false; break;
         }
         var screenRatio = innerWidth/innerHeight;
         if (style === 'cover' && horizontal) {
@@ -49,7 +50,8 @@ var photos = (function(self) {
     video: {
       init: function() {
         photo = $('body').prepend('<video id="photo" muted autoplay></video>').find('#photo')[0];
-        photo.onplay = function() {loadNextPhotoAfter(self.interval)}
+        photo.onplay = function() {loadNextPhotoAfter(self.interval)};
+        nextImg.as = 'video';
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url + this.videoStyle();
