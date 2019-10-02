@@ -20,6 +20,10 @@ function Receiver(config, content, keyboard) {
       self.onCommand(e.data);
     };
 
+    receiverManager.onSenderConnected(function(e) {
+      self.messageBus.send(e.senderId, content.supports4k ? 'mode:video' : 'mode:img');
+    });
+
     var config = new cast.receiver.CastReceiverManager.Config();
     config.maxInactivity = 60000;
     receiverManager.start(config);
