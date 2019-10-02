@@ -19,34 +19,27 @@ var photos = (function(self) {
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
-        this.applyMeta();
       },
-      preloadNext: function() {
-        nextImg.href = self.lanBaseUrl + self.photoUrlPrefix + self.nextUrl();
+      preloadNext: function(url) {
+        nextImg.href = self.lanBaseUrl + self.photoUrlPrefix + url;
       },
-      metaLoaded: function(meta) {
+      applyMeta: function(meta) {
         var imgRatio = photo.naturalWidth / photo.naturalHeight;
         var horizontal = imgRatio >= 1.33;
-        console.log(imgRatio)
-        this.metaCss = {transform: 'none'};
+        var metaCss = {transform: 'none'};
         switch (meta.orientation) {
-          case '3': this.metaCss.transform = 'rotate(180deg)'; break;
-          case '6': this.metaCss.transform = 'scale(' + (1 / imgRatio) + ') rotate(90deg)'; horizontal = false; break;
-          case '8': this.metaCss.transform = 'scale(' + (1 / imgRatio) + ') rotate(-90deg)'; horizontal = false; break;
+          case '3': metaCss.transform = 'rotate(180deg)'; break;
+          case '6': metaCss.transform = 'scale(' + (1 / imgRatio) + ') rotate(90deg)'; horizontal = false; break;
+          case '8': metaCss.transform = 'scale(' + (1 / imgRatio) + ') rotate(-90deg)'; horizontal = false; break;
         }
-        var screenRatio = innerWidth/innerHeight;
+        var screenRatio = innerWidth / innerHeight;
         if (style === 'cover' && horizontal) {
           var verticalScale = 100 * screenRatio / imgRatio * 0.9;
-          this.metaCss.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
+          metaCss.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
         }
-        else this.metaCss.objectFit = 'contain';
-        if (photo.src.indexOf(meta.file.replace(/.*\//, '')) >= 0)
-          this.applyMeta();
+        else metaCss.objectFit = 'contain';
+        $(photo).css(metaCss);
       },
-      applyMeta: function() {
-        if (this.metaCss) $(photo).css(this.metaCss);
-        this.metaCss = undefined;
-      }
     },
     video: {
       init: function() {
@@ -57,11 +50,11 @@ var photos = (function(self) {
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url + this.videoStyle();
       },
-      preloadNext: function() {
-        nextImg.href = self.photoVideoUrlPrefix + self.nextUrl() + this.videoStyle() + '&preload=true';
+      preloadNext: function(url) {
+        nextImg.href = self.photoVideoUrlPrefix + url + this.videoStyle() + '&preload=true';
       },
       videoStyle: function() {return innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : ''},
-      metaLoaded: function() {}
+      applyMeta: function() {}
     }
   };
 
@@ -136,19 +129,36 @@ var photos = (function(self) {
     $title.text(title);
   };
 
+  function loadMeta(url) {
+    return $.get(self.metaUrlPrefix + url);
+  }
+
   self.loadCurrent = function() {
     var url = self.currentUrl();
-    $.get(self.metaUrlPrefix + url).then(function(data) {
-      meta = data;
-      updateStatus(meta);
-      mode.metaLoaded(meta);
-    });
-
     loading = true;
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
+    function metaLoaded(data) {
+      meta = data;
+      updateStatus(meta);
+      mode.applyMeta(meta);
+    }
+
+    if (nextMeta) metaLoaded(nextMeta);
+    else loadMeta(url).then(metaLoaded);
+
     mode.renderPhoto(url);
-    setTimeout(function() {mode.preloadNext()}, 500);
+
+    setTimeout(self.preloadNext, 500);
+  };
+
+  self.preloadNext = function() {
+    var nextUrl = self.nextUrl();
+    mode.preloadNext(nextUrl);
+    nextMeta = undefined;
+    loadMeta(nextUrl).then(function(data) {
+      nextMeta = data;
+    });
   };
 
   function updateStatus(meta) {
