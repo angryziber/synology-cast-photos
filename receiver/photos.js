@@ -5,7 +5,7 @@ var photos = (function(self) {
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
-  var timer, meta, nextMeta, loading, displayedUrl;
+  var timer, nextMeta, loading, displayedUrl;
   var somePhotosLoaded = false;
   var style = 'contain';
   var photo, mode, supports4k;
@@ -99,11 +99,13 @@ var photos = (function(self) {
     $(photo).remove();
     self.mode = m;
     self.init();
+    self.loadCurrent();
   };
 
   self.changeStyle = function(s) {
     style = s;
     photo.style.objectFit = s;
+    self.loadCurrent();
   };
 
   self.pause = function() {
@@ -138,8 +140,7 @@ var photos = (function(self) {
     loading = true;
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
-    function metaLoaded(data) {
-      meta = data;
+    function metaLoaded(meta) {
       updateStatus(meta);
       mode.applyMeta(meta);
     }
