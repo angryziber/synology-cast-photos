@@ -1,4 +1,4 @@
-var lanBaseUrl = 'http://nas.local'; // for faster downloads when in LAN
+var lanBaseUrl = 'http://192.168.0.2'; // for faster downloads when in LAN (.local names not supported)
 
 var photos = {
   interval: 10000,  // ms
@@ -8,13 +8,13 @@ var photos = {
   metaUrlPrefix: '/backend/photo_meta.php?file=',
   markPhotoUrl: '/backend/photo_mark.php',
   mode: 'video', // 'video' supports 4k/UHD resolution on Google Cast, while 'img' doesn't do server-side processing
-  lanBaseUrl: lanBaseUrl
+  lanBaseUrl
 };
 
 var videos = {
   videoListUrl: '/backend/videos_list.php',
   videoUrlPrefix: '/video/',
-  lanBaseUrl: lanBaseUrl
+  lanBaseUrl
 };
 
 var receiver = {
