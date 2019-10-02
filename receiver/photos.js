@@ -10,6 +10,12 @@ var photos = (function(self) {
   var style = 'contain';
   var photo;
 
+  Object.defineProperty(self, 'supports4k', {
+    set: function(supports4k) {
+      self.mode = supports4k ? 'video' : 'img';
+    }
+  })
+
   var modes = {
     img: {
       init: function() {
