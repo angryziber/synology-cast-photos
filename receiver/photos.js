@@ -15,7 +15,6 @@ var photos = (function(self) {
       init: function() {
         photo = $('body').prepend('<img id="photo">').find('#photo')[0];
         photo.onload = function() {loadNextPhotoAfter(self.interval)};
-        nextImg.as = 'image';
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
@@ -45,7 +44,6 @@ var photos = (function(self) {
       init: function() {
         photo = $('body').prepend('<video id="photo" muted autoplay></video>').find('#photo')[0];
         photo.onplay = function() {loadNextPhotoAfter(self.interval)};
-        nextImg.as = 'video';
       },
       renderPhoto: function(url) {
         photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url + this.videoStyle();
