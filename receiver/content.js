@@ -7,7 +7,7 @@ function BaseContent(self) {
 
   setTimeout(function checkLanForQuickerDownloads() {
     var start = Date.now();
-    fetch(self.lanBaseUrl + '/backend/config.php').then(res => {
+    fetch(self.lanBaseUrl + self.lanCheckUrl).then(res => {
       if (res.ok) {
         self.baseUrl = self.lanBaseUrl;
         console.log(self.lanBaseUrl + ' is accessible, took ' + (Date.now() - start) + 'ms');
