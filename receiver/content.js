@@ -5,17 +5,32 @@ function BaseContent(self) {
   self.supports4k = undefined;
 
   self.loadUrls = function(dir, random) {
-    fetch(self.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
-      if (res.ok) return res.text();
-      else throw new Error(res.status);
-    }).then(result => {
+    self.urls = [];
+    self.index = 1;
+
+    function onUrlsLoaded(result) {
+      if (urls.length != 0) return;
       self.urls = result.trim().split('\n');
       self.urlsRandom = self.urlsSequential = null;
       if (random) self.random(); else self.sequential();
       self.title((random ? 'Random: ' : 'Sequential: ') + dir);
-      self.index = 1;
       self.loadCurrent();
-    }, e => self.title(e));
+    }
+
+    var url = self.listUrl + '?dir=' + encodeURIComponent(dir)
+    fetch(url).then(res => {
+      if (!res.ok) throw new Error(res.status);
+      return res.text();
+    }).then(onUrlsLoaded, e => self.title(e));
+
+    if (!self.lanBaseUrl) return;
+    fetch(self.lanBaseUrl + url).then(res => {
+      if (!res.ok) throw new Error(res.status);
+      return res.text();
+    }).then(onUrlsLoaded, () => {
+      console.log(self.lanBaseUrl + ' inaccessible, not using');
+      self.lanBaseUrl = '';
+    });
   };
 
   self.currentUrl = function() {
