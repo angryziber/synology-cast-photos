@@ -10,6 +10,7 @@ var photos = {...common,
   photoVideoUrlPrefix: '/backend/photov.php?file=',
   metaUrlPrefix: '/backend/photo_meta.php?file=',
   markPhotoUrl: '/backend/photo_mark.php',
+  googleMapsApiKey: 'AIzaSyBgn7wSYI8l-JD1X2LAJUqIUfWX9ezLoIA',
   mode: 'video', // 'video' supports 4k/UHD resolution on Google Cast, while 'img' doesn't do server-side processing
 };
 

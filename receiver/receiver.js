@@ -61,6 +61,12 @@ function Receiver(self, content, keyboard) {
     else if (cmd == 'style') {
       content.changeStyle(arg);
     }
+    else if (cmd == 'show') {
+      content.show(arg);
+    }
+    else if (cmd == 'hide') {
+      content.hide(arg);
+    }
     else if (cmd == 'prev') {
       content.prev(arg);
     }

@@ -5,7 +5,7 @@ var photos = (function(self) {
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
-  var timer, nextMeta, loading, displayedUrl;
+  var timer, meta, nextMeta, loading, displayedUrl;
   var style = 'contain';
   var photo, mode, supports4k;
 
@@ -110,6 +110,17 @@ var photos = (function(self) {
     $title.text(title);
   };
 
+  self.show = function(what) {
+    var el = $('#' + what).show();
+    if (what == 'map') {
+      el[0].src = 'https://maps.googleapis.com/maps/api/staticmap?center=' + meta.latitude + ',' + meta.longitude + '&zoom=8&size=500x300&maptype=terrain&' + self.googleMapsApiKey;
+    }
+  };
+
+  self.hide = function(what) {
+    $('#' + what).hide();
+  };
+
   function loadMeta(url) {
     return $.get(self.metaUrlPrefix + url);
   }
@@ -119,7 +130,8 @@ var photos = (function(self) {
     loading = true;
     $status.text('Loading ' + self.index + '/' + self.urls.length);
 
-    function metaLoaded(meta) {
+    function metaLoaded(data) {
+      meta = data;
       updateStatus(meta);
       mode.applyMeta(meta);
     }

@@ -41,3 +41,11 @@ html, body {
   right: 50px;
   width: auto;
 }
+
+#map {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: none;
+}
