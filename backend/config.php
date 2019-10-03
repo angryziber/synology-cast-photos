@@ -22,12 +22,12 @@ $marks_file = "$photos_list_dir/marks.txt";
 # If defined, requests will be allowed only from this host
 $allowed_hosts = '';
 
-if ($allowed_hosts && strpos($allowed_hosts, $_SERVER['HTTP_HOST']) === false) {
-    forbidden();
-}
-
 if ($_SERVER['HTTP_ORIGIN']) {
     header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
+}
+
+if ($allowed_hosts && strpos($allowed_hosts, $_SERVER['HTTP_HOST']) === false) {
+    forbidden();
 }
 
 # Helper functions
