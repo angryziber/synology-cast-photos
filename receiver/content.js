@@ -3,34 +3,36 @@ function BaseContent(self) {
   self.index = 0;
   self.status = document.getElementById('status');
   self.supports4k = undefined;
+  self.baseUrl = '';
+
+  setTimeout(function checkLanForQuickerDownloads() {
+    var start = Date.now();
+    fetch(self.lanBaseUrl + '/backend/config.php').then(res => {
+      if (res.ok) {
+        self.baseUrl = self.lanBaseUrl;
+        console.log(self.lanBaseUrl + ' is accessible, took ' + (Date.now() - start) + 'ms');
+      }
+      else throw res.status;
+    }, e => {
+      console.log(self.lanBaseUrl + ' is not accessible, took ' + (Date.now() - start) + 'ms: ' + e);
+    });
+  }, 0);
 
   self.loadUrls = function(dir, random) {
-    self.urls = [];
-    self.index = 1;
-
     function onUrlsLoaded(result) {
       if (urls.length != 0) return;
       self.urls = result.trim().split('\n');
       self.urlsRandom = self.urlsSequential = null;
       if (random) self.random(); else self.sequential();
       self.title((random ? 'Random: ' : 'Sequential: ') + dir);
+      self.index = 1;
       self.loadCurrent();
     }
 
-    var url = self.listUrl + '?dir=' + encodeURIComponent(dir)
-    fetch(url).then(res => {
+    fetch(self.baseUrl + self.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
       if (!res.ok) throw new Error(res.status);
       return res.text();
     }).then(onUrlsLoaded, e => self.title(e));
-
-    if (!self.lanBaseUrl) return;
-    fetch(self.lanBaseUrl + url).then(res => {
-      if (!res.ok) throw new Error(res.status);
-      return res.text();
-    }).then(onUrlsLoaded, () => {
-      console.log(self.lanBaseUrl + ' inaccessible, not using');
-      self.lanBaseUrl = '';
-    });
   };
 
   self.currentUrl = function() {

@@ -6,7 +6,6 @@ var photos = (function(self) {
   var $status = $('#status');
   var $meta = $('#meta');
   var timer, nextMeta, loading, displayedUrl;
-  var somePhotosLoaded = false;
   var style = 'contain';
   var photo, mode, supports4k;
 
@@ -17,10 +16,10 @@ var photos = (function(self) {
         photo.onload = function() {loadNextPhotoAfter(self.interval)};
       },
       renderPhoto: function(url) {
-        photo.src = self.lanBaseUrl + self.photoUrlPrefix + url;
+        photo.src = self.baseUrl + self.photoUrlPrefix + url;
       },
       preloadNext: function(url) {
-        nextImg.href = self.lanBaseUrl + self.photoUrlPrefix + url;
+        nextImg.href = self.baseUrl + self.photoUrlPrefix + url;
       },
       applyMeta: function(meta) {
         var imgRatio = photo.naturalWidth / photo.naturalHeight;
@@ -46,7 +45,7 @@ var photos = (function(self) {
         photo.onplay = function() {loadNextPhotoAfter(self.interval)};
       },
       renderPhoto: function(url) {
-        photo.src = self.lanBaseUrl + self.photoVideoUrlPrefix + url + this.videoStyle();
+        photo.src = self.baseUrl + self.photoVideoUrlPrefix + url + this.videoStyle();
       },
       preloadNext: function(url) {
         nextImg.href = self.photoVideoUrlPrefix + url + this.videoStyle() + '&preload=true';
@@ -153,18 +152,12 @@ var photos = (function(self) {
   }
 
   function photoLoadingFailed() {
-    if (!somePhotosLoaded) {
-      self.lanBaseUrl = '';
-      mode.renderPhoto(self.currentUrl());
-      return;
-    }
     $status.text(self.index + '/' + self.urls.length + ': failed');
     loadNextPhotoAfter(self.interval / 4);
   }
 
   function loadNextPhotoAfter(timeout) {
     loading = false;
-    somePhotosLoaded = true;
     clearTimeout(timer);
     timer = setTimeout(self.next, timeout);
   }

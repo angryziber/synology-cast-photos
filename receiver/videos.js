@@ -5,7 +5,7 @@ function Videos(self) {
   var status = document.getElementById('status');
   var video = document.getElementsByTagName('video')[0];
 
-  var videoUrlPrefix = self.lanBaseUrl + self.videoUrlPrefix;
+  var videoUrlPrefix = self.baseUrl + self.videoUrlPrefix;
   var someVideosPlayed = false;
 
   video.addEventListener('ended', function() {self.next()});
