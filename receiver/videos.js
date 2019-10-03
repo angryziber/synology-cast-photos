@@ -50,19 +50,6 @@ function Videos(self) {
       video.pause();
   };
 
-  self.loadUrls = function(dir, random) {
-    fetch(self.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
-      if (res.ok) return res.text();
-      else throw new Error(res.status);
-    }).then(result => {
-      self.urls = result.split('\n');
-      self.urlsRandom = self.urlsSequential = null;
-      if (random) self.random(); else self.sequential();
-      self.index = 1;
-      self.loadCurrent();
-    }, e => self.title('Error: ' + e));
-  };
-
   function play() {
     var promise = video.play();
     if (promise) promise.catch((e) => {

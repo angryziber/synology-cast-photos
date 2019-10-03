@@ -4,6 +4,20 @@ function BaseContent(self) {
   self.status = document.getElementById('status');
   self.supports4k = undefined;
 
+  self.loadUrls = function(dir, random) {
+    fetch(self.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
+      if (res.ok) return res.text();
+      else throw new Error(res.status);
+    }).then(result => {
+      self.urls = result.trim().split('\n');
+      self.urlsRandom = self.urlsSequential = null;
+      if (random) self.random(); else self.sequential();
+      self.title((random ? 'Random: ' : 'Sequential: ') + dir);
+      self.index = 1;
+      self.loadCurrent();
+    }, e => self.title(e));
+  };
+
   self.currentUrl = function() {
     return self.urls[self.index - 1];
   };

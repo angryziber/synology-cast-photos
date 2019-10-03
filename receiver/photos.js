@@ -75,24 +75,6 @@ var photos = (function(self) {
     }
   });
 
-  self.loadUrls = function(dir, random) {
-    self.title('Loading photos from ' + dir);
-
-    $.get(self.listUrl, {dir: dir}).then(
-      function (data) {
-        self.urls = data.trim().split('\n');
-        self.urlsRandom = self.urlsSequential = null;
-        if (random) self.random(); else self.sequential();
-        self.title((random ? 'Random: ' : 'Sequential: ') + dir);
-        self.index = 1;
-        self.loadCurrent();
-      },
-      function (xhr, status, text) {
-        self.title('Error: ' + text);
-      }
-    );
-  };
-
   self.changeMode = function(m) {
     $(photo).remove();
     self.mode = m;
