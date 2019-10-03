@@ -18,7 +18,7 @@ function exif_value($key, $lines, $n) {
 function exif_coord($key, $lines) {
     $ref = exif_value($key.'Ref', $lines, 1);
     $parts = preg_split("/ /", exif_value($key, $lines, 2));
-    return ($ref == 'N' ? 1 : -1) * $parts[0] + $parts[1] / 60;
+    return ($ref == 'S' || $ref == 'W' ? -1 : 1) * $parts[0] + $parts[1] / 60;
 }
 
 header("Content-type: application/json");
