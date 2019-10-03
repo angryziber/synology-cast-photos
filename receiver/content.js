@@ -20,7 +20,6 @@ function BaseContent(self) {
 
   self.loadUrls = function(dir, random) {
     function onUrlsLoaded(result) {
-      if (urls.length != 0) return;
       self.urls = result.trim().split('\n');
       self.urlsRandom = self.urlsSequential = null;
       if (random) self.random(); else self.sequential();
