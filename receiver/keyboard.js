@@ -35,6 +35,10 @@ var keyboard = {
         return 'mark:5';
       case 46: // Del
         return 'mark:delete';
+      case 77: // m
+        return 'show:map';
+      case 78: // n
+        return 'hide:map';
     }
   },
 
