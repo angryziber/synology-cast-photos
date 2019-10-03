@@ -1,8 +1,8 @@
 var lanBaseUrl = 'http://192.168.0.2'; // for faster downloads when in LAN (.local names not supported)
 
 var photos = {
-  interval: 10000,  // ms
-  photoListUrl: '/backend/photos_list.php',
+  interval: 10000, // ms
+  listUrl: '/backend/photos_list.php',
   photoUrlPrefix: '/backend/photo.php?file=',
   photoVideoUrlPrefix: '/backend/photov.php?file=',
   metaUrlPrefix: '/backend/photo_meta.php?file=',
@@ -12,7 +12,7 @@ var photos = {
 };
 
 var videos = {
-  videoListUrl: '/backend/videos_list.php',
+  listUrl: '/backend/videos_list.php',
   videoUrlPrefix: '/video/',
   lanBaseUrl
 };

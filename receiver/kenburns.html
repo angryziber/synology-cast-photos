@@ -70,7 +70,7 @@
   var urls = [];
   var prefix = photos.photoUrlPrefix;
 
-  $.get(photos.photoListUrl, {dir: dir}).then(
+  $.get(photos.listUrl, {dir: dir}).then(
     function (data) {
       urls = data.trim().split('\n');
       shuffle(urls);

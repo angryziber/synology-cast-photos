@@ -51,7 +51,7 @@ function Videos(self) {
   };
 
   self.loadUrls = function(dir, random) {
-    fetch(self.videoListUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
+    fetch(self.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
       if (res.ok) return res.text();
       else throw new Error(res.status);
     }).then(result => {

@@ -78,7 +78,7 @@ var photos = (function(self) {
   self.loadUrls = function(dir, random) {
     self.title('Loading photos from ' + dir);
 
-    $.get(self.photoListUrl, {dir: dir}).then(
+    $.get(self.listUrl, {dir: dir}).then(
       function (data) {
         self.urls = data.trim().split('\n');
         self.urlsRandom = self.urlsSequential = null;
