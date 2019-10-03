@@ -27,7 +27,7 @@ if ($allowed_hosts && strpos($allowed_hosts, $_SERVER['HTTP_HOST']) === false) {
 }
 
 if ($_SERVER['HTTP_ORIGIN']) {
-    header('Access-Control-Allow-Origin', $_SERVER['HTTP_ORIGIN']);
+    header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
 }
 
 # Helper functions
