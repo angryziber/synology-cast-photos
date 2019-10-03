@@ -23,4 +23,3 @@ foreach ($files as $file) {
   if ($ext == 'mp4' || $ext == 'avi' || $ext == 'mov' || $ext == 'ogv')
     echo $file."\n";
 }
-?>

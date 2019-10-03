@@ -37,4 +37,3 @@ $result = array('file' => $file,
               'lens' => str_replace('(65535)', '', exif_value('Exif.CanonCs.LensType', $lines, 2)));
 
 echo json_encode($result);
-?>

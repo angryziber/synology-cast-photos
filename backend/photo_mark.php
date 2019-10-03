@@ -25,4 +25,3 @@ if (file_put_contents($marks_file, $what."\n", FILE_APPEND)) {
 else {
     echo "Failed to mark $what";
 }
-?>

@@ -24,4 +24,3 @@ foreach ($files as $file) {
   else if ($ext != 'jpg') continue;
   echo $file."\n";
 }
-?>

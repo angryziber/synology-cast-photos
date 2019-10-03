@@ -11,4 +11,3 @@ header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($path)).' GMT');
 ob_clean();
 flush();
 readfile($path);
-?>

@@ -53,4 +53,3 @@ function forbidden() {
     echo "Forbidden";
     exit;
 }
-?>
