@@ -4,7 +4,7 @@ $photos_dir = "/volume1/photo";
 
 # This is where photo listings are taken from (in my case, it is the real location of raw CR2 files)
 # Can be the same as $photos_dir if you don't use rawfs
-$photos_list_dir = $photos_dir;
+$photos_list_dir = "/volume1/Photos";
 
 # Listing and serving of videos
 $videos_dir = "/volume1/video";
@@ -19,16 +19,18 @@ $access_token = trim(file("$photos_list_dir/php-access-token.txt")[0]);
 # This file must be writable by web server
 $marks_file = "$photos_list_dir/marks.txt";
 
-# If defined, requests will be allowed only from this host
+# If defined, requests will be allowed only from these hosts (comma-separated)
 $allowed_hosts = '';
 
-if ($_SERVER['HTTP_ORIGIN']) {
-    header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
+$origin = $_SERVER['HTTP_ORIGIN'];
+if ($origin) {
+	$origin_host = preg_replace('/^https?:\/\//', '', $origin);
+	if ($allowed_hosts && strpos($allowed_hosts, $origin_host) === false) forbidden();
+	header('Access-Control-Allow-Origin: '.$origin);
 }
 
-if ($allowed_hosts && strpos($allowed_hosts, $_SERVER['HTTP_HOST']) === false) {
-    forbidden();
-}
+if ($allowed_hosts && strpos($allowed_hosts, $_SERVER['HTTP_HOST']) === false) forbidden();
+
 
 # Helper functions
 
@@ -53,3 +55,4 @@ function forbidden() {
     echo "Forbidden";
     exit;
 }
+

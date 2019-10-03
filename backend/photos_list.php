@@ -1,6 +1,6 @@
 <?
 include 'config.php';
-if (!preg_match('/receiver\//', $_SERVER['HTTP_REFERER'])) forbidden();
+if (!$origin && !preg_match('/receiver\//', $_SERVER['HTTP_REFERER'])) forbidden();
 
 $dir = $_GET['dir'];
 if (!$dir) forbidden();
@@ -24,3 +24,4 @@ foreach ($files as $file) {
   else if ($ext != 'jpg') continue;
   echo $file."\n";
 }
+
