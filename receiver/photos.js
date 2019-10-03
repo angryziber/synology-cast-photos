@@ -113,7 +113,7 @@ var photos = (function(self) {
   self.show = function(what) {
     var el = $('#' + what).show();
     if (what == 'map') {
-      el[0].src = 'https://maps.googleapis.com/maps/api/staticmap?center=' + meta.latitude + ',' + meta.longitude + '&zoom=7&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey;
+      el[0].src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude + '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey;
     }
   };
 
