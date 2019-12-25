@@ -29,8 +29,8 @@ if ($origin) {
 	header('Access-Control-Allow-Origin: '.$origin);
 }
 
-if ($allowed_hosts && strpos($allowed_hosts, $_SERVER['HTTP_HOST']) === false) forbidden();
-
+$host = $_SERVER['HTTP_HOST'];
+if ($allowed_hosts && strpos($allowed_hosts, $host) === false) forbidden();
 
 # Helper functions
 

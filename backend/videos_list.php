@@ -1,6 +1,6 @@
 <?
 include 'config.php';
-if (!preg_match('/receiver\/video.html$/', $_SERVER['HTTP_REFERER'])) forbidden();
+if (!$origin && !strpos($_SERVER['HTTP_REFERER'], "://$host/receiver/")) forbidden();
 
 $dir = $_GET['dir'];
 if (!$dir) forbidden();
