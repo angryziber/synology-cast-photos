@@ -5,7 +5,7 @@ var photos = (function(self) {
   var $title = $('#title');
   var $status = $('#status');
   var $meta = $('#meta');
-  var timer, meta, nextMeta, loading, displayedUrl;
+  var timer, meta, nextMeta, loading, displayedUrl, showingMap;
   var style = 'contain';
   var photo, mode, supports4k;
 
@@ -113,16 +113,23 @@ var photos = (function(self) {
   self.show = function(what) {
     var el = $('#' + what).show();
     if (what == 'map') {
-      el[0].src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude + '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey;
+      showingMap = true;
+      updateMap(el);
     }
   };
 
   self.hide = function(what) {
     $('#' + what).hide();
+    if (what == 'map') showingMap = false
   };
 
   function loadMeta(url) {
     return $.get(self.metaUrlPrefix + url);
+  }
+
+  function updateMap(mapEl) {
+    mapEl[0].src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
+                   '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey;
   }
 
   self.loadCurrent = function() {
@@ -134,6 +141,7 @@ var photos = (function(self) {
       meta = data;
       updateStatus(meta);
       mode.applyMeta(meta);
+      if (showingMap) updateMap($('#map'))
     }
 
     if (nextMeta && nextMeta.url == url) metaLoaded(nextMeta.data);
