@@ -1,5 +1,5 @@
 <?
-# This will convert photo to 4k video, because it's currently the only way to render photos at
+# This will convert photo to 4k 1-frame video, because it's currently the only way to render photos at
 # 4k resolution on Chromecast/Android TV
 include 'config.php';
 

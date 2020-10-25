@@ -57,15 +57,19 @@ function BaseContent(self) {
       self.status.textContent = self.index + '/' + self.urls.length;
   }
 
+  var debounce
+
   self.prev = function(by) {
     self.index -= parseInt(by || 1);
     if (self.index <= 0) self.index = self.urls.length;
-    setTimeout(self.loadCurrent, 0);
+    clearTimeout(debounce)
+    debounce = setTimeout(self.loadCurrent, 100);
   };
 
   self.next = function(by) {
     self.index += parseInt(by || 1);
     if (self.index > self.urls.length) self.index = 1;
-    setTimeout(self.loadCurrent, 0);
+    clearTimeout(debounce)
+    debounce = setTimeout(self.loadCurrent, 100);
   };
 }
