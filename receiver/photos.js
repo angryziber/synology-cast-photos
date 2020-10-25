@@ -136,7 +136,7 @@ var photos = (function(self) {
       mode.applyMeta(meta);
     }
 
-    if (nextMeta) metaLoaded(nextMeta);
+    if (nextMeta && nextMeta.url == url) metaLoaded(nextMeta.data);
     else loadMeta(url).then(metaLoaded);
 
     mode.renderPhoto(url);
@@ -149,7 +149,7 @@ var photos = (function(self) {
     mode.preloadNext(nextUrl);
     nextMeta = undefined;
     loadMeta(nextUrl).then(function(data) {
-      nextMeta = data;
+      nextMeta = {url: nextUrl, data};
     });
   };
 
