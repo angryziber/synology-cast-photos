@@ -132,6 +132,8 @@ var photos = (function(self) {
                    '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey;
   }
 
+  var preloadTimer
+
   self.loadCurrent = function() {
     var url = self.currentUrl();
     loading = true;
@@ -149,7 +151,8 @@ var photos = (function(self) {
 
     mode.renderPhoto(url);
 
-    setTimeout(self.preloadNext, 500);
+    clearTimeout(preloadTimer)
+    preloadTimer = setTimeout(self.preloadNext, 500);
   };
 
   self.preloadNext = function() {
