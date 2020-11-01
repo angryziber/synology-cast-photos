@@ -30,7 +30,10 @@ $datetime = preg_replace('/:/', '-', $datetime, 2);
 $datetime = preg_replace('/:[0-9]{2}$/', '', $datetime);
 
 $exposure = exif_value('Exif.Photo.ExposureTime', $lines, 1);
-if (substr($exposure, 0, 2) != '1/') $exposure = exif_value('Exif.Photo.ExposureTime', $lines, 2);
+if (substr($exposure, 0, 2) != '1/') {
+    $parts = preg_split('/\//', $exposure, 2);
+    $exposure = $parts[0] / $parts[1];
+}
 
 $result = array('file' => $file,
               'camera' => str_replace('DIGITAL REBEL', '300D', str_replace('DIGITAL REBEL XT', '350D', exif_value('Exif.Image.Model', $lines, 2))),
