@@ -24,14 +24,9 @@ var photos = (function(self) {
       applyMeta: function(meta) {
         var imgRatio = photo.naturalWidth / photo.naturalHeight;
         var horizontal = imgRatio >= 1.33;
-        var metaCss = {transform: 'none'};
-        switch (meta.orientation) {
-          case '3': metaCss.transform = 'rotate(180deg)'; break;
-          case '6': metaCss.transform = 'scale(' + (1 / imgRatio) + ') rotate(90deg)'; horizontal = false; break;
-          case '8': metaCss.transform = 'scale(' + (1 / imgRatio) + ') rotate(-90deg)'; horizontal = false; break;
-        }
-        var screenRatio = innerWidth / innerHeight;
+        var metaCss = {};
         if (style === 'cover' && horizontal) {
+          var screenRatio = innerWidth / innerHeight;
           var verticalScale = 100 * screenRatio / imgRatio * 0.9;
           metaCss.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover';
         }
