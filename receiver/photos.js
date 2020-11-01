@@ -50,7 +50,10 @@ var photos = (function(self) {
       preloadNext: function(url) {
         nextImg.href = self.photoVideoUrlPrefix + url + this.videoStyle() + '&preload=true';
       },
-      videoStyle: function() {return innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : ''},
+      videoStyle: function() {
+        return (supports4k ? '&w=3840&h=2160' : '&w=' + innerWidth * devicePixelRatio + '&h=' + innerHeight * devicePixelRatio) +
+               (innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : '')
+      },
       applyMeta: function() {}
     }
   };

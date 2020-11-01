@@ -11,8 +11,8 @@ $outfile = sys_get_temp_dir().'/img2mp4$'.str_replace('/', '$', $file).'.mp4';
 $exists = file_exists($outfile);
 
 if (!$exists) {
-  $w = 3840;
-  $h = 2160;
+  $w = $_GET['w'] || 3840;
+  $h = $_GET['h'] || 2160;
 
   $exif_orientation = exec("exiv2 -g Exif.Image.Orientation -Pv '$path'");
   $transpose = "";
