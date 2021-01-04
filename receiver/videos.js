@@ -1,6 +1,7 @@
 function Videos(self) {
   BaseContent(self);
 
+  var meta = document.getElementById('meta');
   var title = document.getElementById('title');
   var status = document.getElementById('status');
   var video = document.getElementsByTagName('video')[0];
@@ -37,6 +38,7 @@ function Videos(self) {
     video.setAttribute('src', videoUrlPrefix + url);
     video.pause();
     self.title(url.substring(0, url.lastIndexOf('/')).replace(/\//g, ' / '));
+    meta.textContent = url.substring(url.lastIndexOf('/'));
   };
 
   self.title = function(text) {
