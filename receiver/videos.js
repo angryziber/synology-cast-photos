@@ -38,7 +38,7 @@ function Videos(self) {
     video.setAttribute('src', videoUrlPrefix + url);
     video.pause();
     self.title(url.substring(0, url.lastIndexOf('/')).replace(/\//g, ' / '));
-    meta.textContent = url.substring(url.lastIndexOf('/'));
+    meta.textContent = url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'));
   };
 
   self.title = function(text) {
