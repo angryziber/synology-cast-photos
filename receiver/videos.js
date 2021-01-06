@@ -10,9 +10,9 @@ function Videos(self) {
   var someVideosPlayed = false;
 
   setInterval(() => {
-    if (video.currentTime >= video.duration - 3)
+    if (video.currentTime >= video.duration - 1.5)
       video.classList.add('fade-out');
-  }, 1500);
+  }, 1000);
 
   video.addEventListener('ended', function() {
     video.classList.remove('fade-out');
