@@ -15,7 +15,6 @@ function Videos(self) {
   }, 1000);
 
   video.addEventListener('ended', function() {
-    video.classList.remove('fade-out');
     self.next();
   });
   
@@ -64,6 +63,7 @@ function Videos(self) {
   };
 
   function play() {
+    video.classList.remove('fade-out');
     var promise = video.play();
     if (promise) promise.catch((e) => {
       console.error(e);
