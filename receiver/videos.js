@@ -9,13 +9,23 @@ function Videos(self) {
   var videoUrlPrefix = self.baseUrl + self.videoUrlPrefix;
   var someVideosPlayed = false;
 
-  video.addEventListener('ended', function() {self.next()});
+  setInterval(() => {
+    if (video.currentTime >= video.duration - 3)
+      video.classList.add('fade-out');
+  }, 1500);
+
+  video.addEventListener('ended', function() {
+    video.classList.remove('fade-out');
+    self.next();
+  });
+  
   video.addEventListener('error', function() {
     console.error(video.error);
     status.textContent = video.error.message;
     if (!someVideosPlayed) videoUrlPrefix = self.videoUrlPrefix;
     self.next();
   });
+  
   video.addEventListener('canplaythrough', function() {
     status.textContent = self.index + '/' + self.urls.length;
     someVideosPlayed = true;
@@ -25,6 +35,7 @@ function Videos(self) {
   video.addEventListener('mouseenter', function() {
     if (!video.controls) video.controls = true;
   });
+  
   video.addEventListener('click', function() {
     if (video.muted) video.muted = false;
     if (!video.controls) video.controls = true;
