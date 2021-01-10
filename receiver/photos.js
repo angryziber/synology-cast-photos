@@ -1,18 +1,19 @@
 var photos = (function(self) {
   BaseContent(self)
 
-  var nextImg = $('link[rel=preload]')[0]
-  var $title = $('#title')
-  var $status = $('#status')
-  var $meta = $('#meta')
+  var photo = document.getElementById('photo')
+  var nextImg = document.querySelector('link[rel=preload]')
+  var $title = document.getElementById('title')
+  var $status = document.getElementById('status')
+  var $meta = document.getElementById('meta')
   var timer, meta, nextMeta, loading, displayedUrl, showingMap
   var style = 'contain'
-  var photo, mode, supports4k
+  var mode, supports4k
 
   var modes = {
     img: {
       init: function() {
-        photo = $('body').prepend('<img id="photo">').find('#photo')[0]
+        photo.outerHTML = '<img id="photo">'
         photo.onload = function() {loadNextPhotoAfter(self.interval)}
       },
       renderPhoto: function(url) {
@@ -24,19 +25,17 @@ var photos = (function(self) {
       applyMeta: function(meta) {
         var imgRatio = photo.naturalWidth / photo.naturalHeight
         var horizontal = imgRatio >= 1.33
-        var metaCss = {}
         if (style === 'cover' && horizontal) {
           var screenRatio = innerWidth / innerHeight
           var verticalScale = 100 * screenRatio / imgRatio * 0.9
-          metaCss.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover'
+          photo.style.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover'
         }
-        else metaCss.objectFit = 'contain'
-        $(photo).css(metaCss)
+        else photo.style.objectFit = 'contain'
       },
     },
     video: {
       init: function() {
-        photo = $('body').prepend('<video id="photo" muted autoplay></video>').find('#photo')[0]
+        photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo.onplay = function() {loadNextPhotoAfter(self.interval)}
       },
       renderPhoto: function(url) {
@@ -73,7 +72,6 @@ var photos = (function(self) {
   })
 
   self.changeMode = function(m) {
-    $(photo).remove()
     self.mode = m
     self.init()
     self.loadCurrent()
@@ -105,20 +103,21 @@ var photos = (function(self) {
   }
 
   self.title = function(title) {
-    $title.text(title)
+    $title.textContent = title
   }
 
-  self.show = function(what) {
-    var el = $('#' + what).show()
-    if (what == 'map') {
+  self.show = function(id) {
+    var el = document.getElementById(id)
+    el.style.display = 'block'
+    if (id == 'map') {
       showingMap = true
       updateMap(el)
     }
   }
 
-  self.hide = function(what) {
-    $('#' + what).hide()
-    if (what == 'map') showingMap = false
+  self.hide = function(id) {
+    document.getElementById(id).style.display = 'none'
+    if (id == 'map') showingMap = false
   }
 
   function loadMeta(url) {
@@ -135,13 +134,13 @@ var photos = (function(self) {
   self.loadCurrent = function() {
     var url = self.currentUrl()
     loading = true
-    $status.text('Loading ' + self.index + '/' + self.urls.length)
+    $status.textContent = 'Loading ' + self.index + '/' + self.urls.length
 
     function metaLoaded(data) {
       meta = data
       updateStatus(meta)
       mode.applyMeta(meta)
-      if (showingMap) updateMap($('#map'))
+      if (showingMap) updateMap(document.getElementById('map'))
     }
 
     if (nextMeta && nextMeta.url == url) metaLoaded(nextMeta.data)
@@ -167,13 +166,13 @@ var photos = (function(self) {
     var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ')
     self.title(title)
     receiver.broadcast(self.index + ': ' + title + '|' + displayedUrl)
-    $status.text(self.index + '/' + self.urls.length)
-    $meta.html((meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
-               (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : ''))
+    $status.textContent = self.index + '/' + self.urls.length
+    $meta.innerHTML = (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
+                      (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
   }
 
   function photoLoadingFailed() {
-    $status.text(self.index + '/' + self.urls.length + ': failed')
+    $status.textContent = self.index + '/' + self.urls.length + ': failed'
     loadNextPhotoAfter(self.interval / 4)
   }
 
