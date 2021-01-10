@@ -22,7 +22,7 @@ function BaseContent(self) {
     function onUrlsLoaded(result) {
       self.urls = result.trim().split('\n')
       self.urlsRandom = self.urlsSequential = null
-      if (random) self.random() else self.sequential()
+      if (random) self.random(); else self.sequential()
       self.title((random ? 'Random: ' : 'Sequential: ') + dir)
       self.index = 1
       self.loadCurrent()
