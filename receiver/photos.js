@@ -2,6 +2,7 @@ var photos = (function(self) {
   BaseContent(self)
 
   var photo = document.getElementById('photo')
+  var map = document.getElementById('map')
   var nextImg = document.querySelector('link[rel=preload]')
   var timer, meta, nextMeta, loading, displayedUrl, showingMap
   var style = 'contain'
@@ -97,26 +98,27 @@ var photos = (function(self) {
   }
 
   self.show = function(id) {
-    var el = document.getElementById(id)
-    el.style.display = 'block'
     if (id == 'map') {
-      showingMap = true
-      updateMap(el)
+      map.style.display = 'block'
+      updateMap()
     }
   }
 
   self.hide = function(id) {
-    document.getElementById(id).style.display = 'none'
-    if (id == 'map') showingMap = false
+    if (id == 'map') {
+      map.style.display = 'none'
+      showingMap = false
+    }
+  }
+
+  function updateMap() {
+    showingMap = true
+    map.src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
+      '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey
   }
 
   function loadMeta(url) {
     return fetch(self.metaUrlPrefix + url).then(r => r.json())
-  }
-
-  function updateMap(mapEl) {
-    mapEl.src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
-                '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey
   }
 
   var preloadTimer
@@ -130,7 +132,7 @@ var photos = (function(self) {
       meta = data
       updateStatus(meta)
       mode.applyMeta(meta)
-      if (showingMap) updateMap(document.getElementById('map'))
+      if (showingMap) updateMap()
     }
 
     if (nextMeta && nextMeta.url == url) metaLoaded(nextMeta.data)
