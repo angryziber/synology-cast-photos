@@ -11,7 +11,7 @@ function Videos(self) {
 
   setInterval(() => {
     if (video.currentTime >= video.duration - 1.5)
-      video.classList.add('fade-out')
+      document.body.classList.add('fade-out')
   }, 1000)
 
   video.addEventListener('ended', function() {
@@ -63,7 +63,7 @@ function Videos(self) {
   }
 
   function play() {
-    video.classList.remove('fade-out')
+    document.body.classList.remove('fade-out')
     var promise = video.play()
     if (promise) promise.catch((e) => {
       console.error(e)
