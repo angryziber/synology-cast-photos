@@ -5,14 +5,20 @@
   <title>Cast NAS photos</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="style.css" type="text/css">
-  <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="//twitter.github.io/typeahead.js/releases/0.10.2/typeahead.jquery.js"></script>
 </head>
 <body>
   <h1>Send <a id="photos" href="">photos</a>/<a id="videos" href="">videos</a> from NAS to Chromecast!</h1>
 
   <form>
-    <input class="typeahead" type="text" name="prefix" value="" placeholder="2019" autofocus>
+    <input class="typeahead" type="text" name="prefix" value="" placeholder="2021" autofocus list="paths">
+    <datalist id="paths">
+      <option value="2021">
+      <option value="2020">
+      <option value="2019">
+      <option value="2018">
+      <option value="2017">
+      <option value="2016">
+    </datalist>
 
     <div>
       <label><input type="checkbox" name="random" checked> Random</label>
@@ -38,4 +44,5 @@
 <script src="../receiver/keyboard.js"></script>
 <script src="chromecast.js"></script>
 <script src="sender.js"></script>
+<script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js" async></script>
 </html>

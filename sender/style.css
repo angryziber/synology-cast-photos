@@ -3,7 +3,7 @@ body {
   text-align: center;
 }
 
-input[type=text], .tt-dropdown-menu {
+input[type=text] {
   font-family: sans-serif;
   font-size: 24px;
   border: 2px solid lightgray;
@@ -12,30 +12,6 @@ input[type=text], .tt-dropdown-menu {
   outline: none;
   padding: 10px 20px;
   box-sizing: border-box;
-}
-
-.tt-dropdown-menu {
-  margin-top: 12px;
-  padding: 0;
-  background: white;
-  text-align: left;
-  box-shadow: 0 5px 10px rgba(0,0,0,.2);
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.tt-suggestion {
-  padding: 5px 20px;
-  margin: 0;
-}
-
-.tt-suggestion p {
-  margin: 0;
-}
-
-.tt-suggestion.tt-cursor {
-  color: #fff;
-  background-color: #0097cf;
 }
 
 button {

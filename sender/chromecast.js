@@ -4,16 +4,15 @@ var chromecast = (function(self) {
   self = Object.assign({
     appId: undefined,
     namespace: 'urn:x-cast:message',
-    onMessage: $.noop,
+    onMessage: () => {},
     onError: (e) => console.log(e)
   }, self)
 
-  $('<script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js" async></script>').appendTo('body')
   window['__onGCastApiAvailable'] = function(loaded, error) {
     if (loaded) {
       var sessionRequest = new chrome.cast.SessionRequest(self.appId)
       var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener)
-      chrome.cast.initialize(apiConfig, $.noop, onerror)
+      chrome.cast.initialize(apiConfig, () => {}, onerror)
     }
     else self.onError(error)
   }
@@ -30,12 +29,16 @@ var chromecast = (function(self) {
 
   function receiverListener(e) {
     if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !self.session) {
-      $('body').one('click', () => self.start())
+      const handler = () => {
+        self.start()
+        document.body.removeEventListener('click', handler)
+      }
+      document.body.addEventListener('click', handler)
     }
   }
 
   self.start = function(callback) {
-    chrome.cast.requestSession(function(session) {
+    chrome.cast.requestSession(session => {
       sessionListener(session)
       if (callback) callback()
     }, self.onError)
@@ -43,7 +46,7 @@ var chromecast = (function(self) {
 
   self.message = function(message, callback) {
     function sendMessage() {
-      self.session.sendMessage(self.namespace, message, callback || $.noop, self.onError)
+      self.session.sendMessage(self.namespace, message, callback || (() => {}), self.onError)
     }
 
     if (self.session) sendMessage()
