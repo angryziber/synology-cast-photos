@@ -32,7 +32,7 @@ if (!$exists) {
   else
     $scale = "-vf ${transpose}scale=w=$w:h=$h:force_original_aspect_ratio=decrease";
 
-  $codec = "-vcodec libx264 -profile:v high -tune stillimage -preset superfast -pix_fmt yuv420p";
+  $codec = "-vcodec libx264 -profile:v high -crf 22 -tune stillimage -preset ultrafast -pix_fmt yuv420p";
 
   exec("ffmpeg -hide_banner -noautorotate -i '$path' $codec $scale -r 1 '$outfile'");
 }
