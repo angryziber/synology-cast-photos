@@ -1,5 +1,6 @@
 var sender = (function(self) {
   var input = document.querySelector('[name=prefix]')
+  var suggestions = document.querySelector('datalist#paths')
   var random = document.querySelector('[name=random]')
   var cover = document.querySelector('[name=cover]')
   var interval = document.querySelector('[name=interval]')
@@ -11,18 +12,24 @@ var sender = (function(self) {
     if (accessToken) localStorage['accessToken'] = accessToken
   }
 
-  // input.typeahead({hint: true, highlight: true, minLength: 3}, {
-  //   name: 'photo-dirs',
-  //   displayKey: 'dir',
-  //   source: function (dir, cb) {
-  //     $.get(self.photoDirsSuggestUrl, {dir:dir, accessToken:accessToken}, function(data) {
-  //       var values = data.trim().split('\n')
-  //       cb($.map(values, function (value) {
-  //         return {dir: value}
-  //       }))
-  //     })
-  //   }
-  // })
+  var year = new Date().getFullYear()
+  var years = Array(10).fill(0).map((_, i) => year - i)
+  suggest(years)
+
+  function suggest(values) {
+    suggestions.innerHTML = values.map(v => `<option value="${v}">`).join('\n')
+  }
+
+  var debounce
+  input.addEventListener('keyup', e => {
+    clearTimeout(debounce)
+    debounce = setTimeout(() => {
+      if (!input.value) suggest(years)
+      else fetch(`${self.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${input.value}`).then(r => r.json()).then(data => {
+        suggest(data.trim().split('\n'))
+      })
+    }, 300)
+  })
 
   chromecast.onMessage = function(ns, text) {
     var parts = text.split('|')
