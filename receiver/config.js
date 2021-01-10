@@ -35,6 +35,6 @@ function randomInt(max) {
 }
 
 function shuffle(o) {
-  for (var j, x, i = o.length i j = randomInt(i), x = o[--i], o[i] = o[j], o[j] = x)
+  for (var j, x, i = o.length; i; j = randomInt(i), x = o[--i], o[i] = o[j], o[j] = x);
   return o
 }
