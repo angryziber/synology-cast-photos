@@ -16,19 +16,27 @@ var sender = (function(self) {
   var years = Array(10).fill(0).map((_, i) => year - i)
   suggest(years)
 
+  var suggestedValues = []
   function suggest(values) {
+    suggestedValues = values
     suggestions.innerHTML = values.map(v => `<option value="${v}">`).join('\n')
   }
 
   var debounce
-  input.addEventListener('keyup', e => {
-    clearTimeout(debounce)
-    debounce = setTimeout(() => {
-      if (!input.value) suggest(years)
-      else fetch(`${self.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${input.value}`).then(r => r.json()).then(data => {
-        suggest(data.trim().split('\n'))
-      })
-    }, 300)
+  input.addEventListener('keydown', e => {
+    if (e.code === 'Enter') self.sendPhotoDir()
+    else {
+      clearTimeout(debounce)
+      debounce = setTimeout(() => {
+        if (!input.value && suggestedValues !== years) suggest(years)
+        else {
+          if (suggestedValues.includes(input.value)) return
+          fetch(`${self.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${input.value}`).then(r => r.text()).then(data => {
+            suggest(data.trim().split('\n'))
+          })
+        }  
+      }, 300)
+    }
   })
 
   chromecast.onMessage = function(ns, text) {
@@ -45,11 +53,6 @@ var sender = (function(self) {
   self.sendPhotoDir = function() {
     sendCommand((random.checked ? 'rnd:' : 'seq:') + input.value)
   }
-
-  // input.addEventListener('typeahead:selected', self.sendPhotoDir)
-  input.addEventListener('keydown', e => {
-    if (e.code == 'Enter') self.sendPhotoDir()
-  })
 
   random.addEventListener('click', () => {
     sendCommand(random.checked ? 'rnd' : 'seq')
