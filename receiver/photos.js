@@ -12,6 +12,7 @@ var photos = (function(self) {
     img: {
       init: function() {
         photo.outerHTML = '<img id="photo">'
+        photo = document.getElementById('photo')
         photo.onload = function() {loadNextPhotoAfter(self.interval)}
       },
       renderPhoto: function(url) {
@@ -34,8 +35,8 @@ var photos = (function(self) {
     video: {
       init: function() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
-        photo.onplay = function() {loadNextPhotoAfter(self.interval)}
         photo = document.getElementById('photo')
+        photo.onplay = function() {loadNextPhotoAfter(self.interval)}
       },
       renderPhoto: function(url) {
         photo.src = self.baseUrl + self.photoVideoUrlPrefix + url + this.videoStyle()
