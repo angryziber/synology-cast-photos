@@ -31,13 +31,8 @@ function Videos(self) {
     play()
   })
 
-  video.addEventListener('mouseenter', function() {
-    if (!video.controls) video.controls = true
-  })
-
-  video.addEventListener('click', function() {
+  document.body.addEventListener('click', function() {
     if (video.muted) video.muted = false
-    if (!video.controls) video.controls = true
     video.requestFullscreen()
     if (!video.paused) play()
   })
@@ -69,7 +64,6 @@ function Videos(self) {
       console.error(e)
       if (!video.muted) {
         video.muted = true
-        video.controls = true
         play()
       }
     })
