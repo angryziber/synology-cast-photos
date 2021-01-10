@@ -4,6 +4,7 @@ function BaseContent(self) {
   self.status = document.getElementById('status')
   self.supports4k = undefined
   self.baseUrl = ''
+  var title = document.getElementById('title')
 
   setTimeout(function checkLanForQuickerDownloads() {
     var start = Date.now()
@@ -48,6 +49,10 @@ function BaseContent(self) {
 
   self.sequential = function() {
     updateIndex(self.currentUrl(), self.urlsSequential || (self.urlsSequential = self.urls.slice().sort()))
+  }
+
+  self.title = function(text) {
+    title.textContent = text
   }
 
   function updateIndex(currentUrl, newUrls) {

@@ -3,8 +3,6 @@ var photos = (function(self) {
 
   var photo = document.getElementById('photo')
   var nextImg = document.querySelector('link[rel=preload]')
-  var $title = document.getElementById('title')
-  var $status = document.getElementById('status')
   var $meta = document.getElementById('meta')
   var timer, meta, nextMeta, loading, displayedUrl, showingMap
   var style = 'contain'
@@ -99,10 +97,6 @@ var photos = (function(self) {
     )
   }
 
-  self.title = function(title) {
-    $title.textContent = title
-  }
-
   self.show = function(id) {
     var el = document.getElementById(id)
     el.style.display = 'block'
@@ -131,7 +125,7 @@ var photos = (function(self) {
   self.loadCurrent = function() {
     var url = self.currentUrl()
     loading = true
-    $status.textContent = 'Loading ' + self.index + '/' + self.urls.length
+    self.status.textContent = 'Loading ' + self.index + '/' + self.urls.length
 
     function metaLoaded(data) {
       meta = data
@@ -161,13 +155,13 @@ var photos = (function(self) {
     var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ')
     self.title(title)
     receiver.broadcast(self.index + ': ' + title + '|' + displayedUrl)
-    $status.textContent = self.index + '/' + self.urls.length
+    self.status.textContent = self.index + '/' + self.urls.length
     $meta.innerHTML = (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                       (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
   }
 
   function photoLoadingFailed() {
-    $status.textContent = self.index + '/' + self.urls.length + ': failed'
+    self.status.textContent = self.index + '/' + self.urls.length + ': failed'
     loadNextPhotoAfter(self.interval / 4)
   }
 
