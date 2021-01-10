@@ -37,6 +37,7 @@ var photos = (function(self) {
       init: function() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo.onplay = function() {loadNextPhotoAfter(self.interval)}
+        photo = document.getElementById('photo')
       },
       renderPhoto: function(url) {
         photo.src = self.baseUrl + self.photoVideoUrlPrefix + url + this.videoStyle()
