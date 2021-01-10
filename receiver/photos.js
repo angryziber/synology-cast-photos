@@ -2,10 +2,8 @@ var photos = (function(self) {
   BaseContent(self)
 
   var photo = document.getElementById('photo')
+  var map = document.getElementById('map')
   var nextImg = document.querySelector('link[rel=preload]')
-  var $title = document.getElementById('title')
-  var $status = document.getElementById('status')
-  var $meta = document.getElementById('meta')
   var timer, meta, nextMeta, loading, displayedUrl, showingMap
   var style = 'contain'
   var mode, supports4k
@@ -100,31 +98,28 @@ var photos = (function(self) {
     )
   }
 
-  self.title = function(title) {
-    $title.textContent = title
-  }
-
   self.show = function(id) {
-    var el = document.getElementById(id)
-    el.style.display = 'block'
     if (id == 'map') {
-      showingMap = true
-      updateMap(el)
+      map.style.display = 'block'
+      updateMap()
     }
   }
 
   self.hide = function(id) {
-    document.getElementById(id).style.display = 'none'
-    if (id == 'map') showingMap = false
+    if (id == 'map') {
+      map.style.display = 'none'
+      showingMap = false
+    }
+  }
+
+  function updateMap() {
+    showingMap = true
+    map.src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
+      '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey
   }
 
   function loadMeta(url) {
     return fetch(self.metaUrlPrefix + url).then(r => r.json())
-  }
-
-  function updateMap(mapEl) {
-    mapEl[0].src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
-                   '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey
   }
 
   var preloadTimer
@@ -132,13 +127,13 @@ var photos = (function(self) {
   self.loadCurrent = function() {
     var url = self.currentUrl()
     loading = true
-    $status.textContent = 'Loading ' + self.index + '/' + self.urls.length
+    self.status.textContent = 'Loading ' + self.index + '/' + self.urls.length
 
     function metaLoaded(data) {
       meta = data
       updateStatus(meta)
       mode.applyMeta(meta)
-      if (showingMap) updateMap(document.getElementById('map'))
+      if (showingMap) updateMap()
     }
 
     if (nextMeta && nextMeta.url == url) metaLoaded(nextMeta.data)
@@ -162,13 +157,13 @@ var photos = (function(self) {
     var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ')
     self.title(title)
     receiver.broadcast(self.index + ': ' + title + '|' + displayedUrl)
-    $status.textContent = self.index + '/' + self.urls.length
-    $meta.innerHTML = (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
-                      (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
+    self.status.textContent = self.index + '/' + self.urls.length
+    self.meta.innerHTML = (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
+                          (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
   }
 
   function photoLoadingFailed() {
-    $status.textContent = self.index + '/' + self.urls.length + ': failed'
+    self.status.textContent = self.index + '/' + self.urls.length + ': failed'
     loadNextPhotoAfter(self.interval / 4)
   }
 
