@@ -3,7 +3,6 @@ var photos = (function(self) {
 
   var photo = document.getElementById('photo')
   var nextImg = document.querySelector('link[rel=preload]')
-  var $meta = document.getElementById('meta')
   var timer, meta, nextMeta, loading, displayedUrl, showingMap
   var style = 'contain'
   var mode, supports4k
@@ -116,8 +115,8 @@ var photos = (function(self) {
   }
 
   function updateMap(mapEl) {
-    mapEl[0].src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
-                   '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey
+    mapEl.src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
+                '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey
   }
 
   var preloadTimer
@@ -156,8 +155,8 @@ var photos = (function(self) {
     self.title(title)
     receiver.broadcast(self.index + ': ' + title + '|' + displayedUrl)
     self.status.textContent = self.index + '/' + self.urls.length
-    $meta.innerHTML = (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
-                      (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
+    self.meta.innerHTML = (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
+                          (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
   }
 
   function photoLoadingFailed() {

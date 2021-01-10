@@ -1,7 +1,6 @@
 function Videos(self) {
   BaseContent(self)
 
-  var meta = document.getElementById('meta')
   var video = document.getElementsByTagName('video')[0]
 
   var videoUrlPrefix = self.baseUrl + self.videoUrlPrefix
@@ -41,7 +40,7 @@ function Videos(self) {
     video.setAttribute('src', videoUrlPrefix + url)
     video.pause()
     self.title(url.substring(0, url.lastIndexOf('/')).replace(/\//g, ' / '))
-    meta.textContent = url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'))
+    self.meta.textContent = url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'))
   }
 
   self.pause = function() {
