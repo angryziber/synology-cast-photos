@@ -92,13 +92,9 @@ var photos = (function(self) {
   }
 
   self.mark = function(how) {
-    $.post(self.markPhotoUrl, {file: displayedUrl, how: how}).then(
-      function(text) {
-        self.title(text)
-      },
-      function() {
-        self.title('Failed to mark: ' + text)
-      }
+    fetch(self.markPhotoUrl, {method: 'POST', body: JSON.stringify({file: displayedUrl, how: how})}).then(
+      text => self.title(text),
+      e => self.title('Failed to mark: ' + e)
     )
   }
 
@@ -121,7 +117,7 @@ var photos = (function(self) {
   }
 
   function loadMeta(url) {
-    return $.get(self.metaUrlPrefix + url)
+    return fetch(self.metaUrlPrefix + url).then(r => r.json())
   }
 
   function updateMap(mapEl) {
@@ -156,9 +152,7 @@ var photos = (function(self) {
     var nextUrl = self.nextUrl()
     mode.preloadNext(nextUrl)
     nextMeta = undefined
-    loadMeta(nextUrl).then(function(data) {
-      nextMeta = {url: nextUrl, data}
-    })
+    loadMeta(nextUrl).then(data => nextMeta = {url: nextUrl, data})
   }
 
   function updateStatus(meta) {
