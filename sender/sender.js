@@ -1,14 +1,14 @@
 var sender = (function(self) {
-  var input = $('[name=prefix]');
-  var random = $('[name=random]');
-  var cover = $('[name=cover]');
-  var interval = $('[name=interval]');
-  var status = $('#status');
+  var input = $('[name=prefix]')
+  var random = $('[name=random]')
+  var cover = $('[name=cover]')
+  var interval = $('[name=interval]')
+  var status = $('#status')
 
-  var accessToken = self.accessToken || localStorage['accessToken'];
+  var accessToken = self.accessToken || localStorage['accessToken']
   if (!accessToken) {
-    accessToken = prompt('Access Token (defined in backend config)');
-    if (accessToken) localStorage['accessToken'] = accessToken;
+    accessToken = prompt('Access Token (defined in backend config)')
+    if (accessToken) localStorage['accessToken'] = accessToken
   }
 
   input.typeahead({hint: true, highlight: true, minLength: 3}, {
@@ -16,89 +16,89 @@ var sender = (function(self) {
     displayKey: 'dir',
     source: function (dir, cb) {
       $.get(self.photoDirsSuggestUrl, {dir:dir, accessToken:accessToken}, function(data) {
-        var values = data.trim().split('\n');
+        var values = data.trim().split('\n')
         cb($.map(values, function (value) {
-          return {dir: value};
-        }));
-      });
+          return {dir: value}
+        }))
+      })
     }
-  });
+  })
 
   chromecast.onMessage = function(ns, text) {
-    var parts = text.split('|');
-    if (parts.length == 1) status.text(text);
-    else status.html('<a href="' + parts[1] + '">' + parts[0] + '</a>');
-  };
+    var parts = text.split('|')
+    if (parts.length == 1) status.text(text)
+    else status.html('<a href="' + parts[1] + '">' + parts[0] + '</a>')
+  }
 
   function sendCommand(cmd) {
-    chromecast.message(cmd);
-    status.text(cmd);
+    chromecast.message(cmd)
+    status.text(cmd)
   }
 
   self.sendPhotoDir = function() {
-    sendCommand((random.is(':checked') ? 'rnd:' : 'seq:') + input.val());
-  };
+    sendCommand((random.is(':checked') ? 'rnd:' : 'seq:') + input.val())
+  }
 
   self.sendAudio = function(url, name) {
-    sendCommand('audio:' + url + (name ? '#' + name : ''));
-  };
+    sendCommand('audio:' + url + (name ? '#' + name : ''))
+  }
 
-  input.on('typeahead:selected', self.sendPhotoDir);
+  input.on('typeahead:selected', self.sendPhotoDir)
   input.on('keydown', function(e) {
-    if (e.which == 13) self.sendPhotoDir();
-  });
+    if (e.which == 13) self.sendPhotoDir()
+  })
 
   random.on('click', function() {
-    sendCommand(random.is(':checked') ? 'rnd' : 'seq');
-  });
+    sendCommand(random.is(':checked') ? 'rnd' : 'seq')
+  })
 
   cover.on('click', function() {
-    sendCommand(cover.is(':checked') ? 'style:cover' : 'style:contain');
-  });
+    sendCommand(cover.is(':checked') ? 'style:cover' : 'style:contain')
+  })
 
   interval.on('change', function() {
-    sendCommand('interval:' + interval.val());
-  });
+    sendCommand('interval:' + interval.val())
+  })
 
   $('#prev').on('click', function() {
-    sendCommand('prev');
-  });
+    sendCommand('prev')
+  })
 
   $('#next').on('click', function() {
-    sendCommand('next');
-  });
+    sendCommand('next')
+  })
 
   $('#prev-more').on('click', function() {
-    sendCommand('prev:10');
-  });
+    sendCommand('prev:10')
+  })
 
   $('#next-more').on('click', function() {
-    sendCommand('next:10');
-  });
+    sendCommand('next:10')
+  })
 
   $('#pause').on('click', function() {
-    sendCommand('pause');
-  });
+    sendCommand('pause')
+  })
 
   $('#photos').on('click', function() {
-    sendCommand('photos:' + input.val());
-    return false;
-  });
+    sendCommand('photos:' + input.val())
+    return false
+  })
 
   $('#videos').on('click', function() {
-    sendCommand('videos:' + input.val());
-    return false;
-  });
+    sendCommand('videos:' + input.val())
+    return false
+  })
 
   $('body').on('keydown', function(e) {
-    if ($(e.target).is('input')) return;
+    if ($(e.target).is('input')) return
 
-    var command = keyboard.toCommand(e.which);
+    var command = keyboard.toCommand(e.which)
     if (command) {
-      e.preventDefault();
-      sendCommand(command);
+      e.preventDefault()
+      sendCommand(command)
     }
-  });
+  })
 
-  return self;
-})(sender || {});
+  return self
+})(sender || {})
