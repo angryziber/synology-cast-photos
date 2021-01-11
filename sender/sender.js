@@ -28,8 +28,9 @@ var sender = (function(self) {
     else {
       clearTimeout(debounce)
       debounce = setTimeout(() => {
-        if (!input.value && suggestedValues !== years) suggest(years)
-        else {
+        if (!input.value) {
+          if (suggestedValues !== years) suggest(years)
+        } else {
           if (suggestedValues.includes(input.value)) return
           fetch(`${self.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${input.value}`).then(r => r.text()).then(data => {
             suggest(data.trim().split('\n'))
