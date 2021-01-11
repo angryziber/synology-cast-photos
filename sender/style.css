@@ -15,14 +15,15 @@ input[type=text] {
 }
 
 button {
-  font-size: 24px;
+  font-size: 30px;
   line-height: 30px;
   position: relative;
   top: 15px;
   padding: 8px;
-  border-radius: 8px;
-  border: 2px solid #b8b8b8;
+  border: none;
+  background: transparent;
   min-width: 50px;
+  cursor: pointer;
 }
 
 form > div {
