@@ -30,6 +30,7 @@ function Videos(self) {
 
   document.body.addEventListener('click', function() {
     if (video.muted) video.muted = false
+    video.controls = true
     video.requestFullscreen()
     if (!video.paused) play()
   })
