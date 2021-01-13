@@ -1,57 +1,50 @@
 // Chromecast sender API wrapper
 
-function Chromecast(config) {
-  const self = {
-    namespace: 'urn:x-cast:message',
-    onMessage: () => {},
-    onError: e => console.log(e),
-    ...this
-  }
+class Chromecast {
+  namespace = 'urn:x-cast:message'
+  onMessage = () => {}
+  onError = e => console.log(e)
 
-  window['__onGCastApiAvailable'] = function(loaded, error) {
-    if (loaded) {
-      var sessionRequest = new chrome.cast.SessionRequest(config.castAppId)
-      var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener)
-      chrome.cast.initialize(apiConfig, () => {}, onerror)
-    }
-    else self.onError(error)
-  }
-
-  function sessionListener(session) {
-    self.session = session
-    session.addMessageListener(self.namespace, self.onMessage)
-    session.addUpdateListener(function() {
-      if (session.status != chrome.cast.SessionStatus.CONNECTED) {
-        self.session = null
+  constructor(appId) {
+    window['__onGCastApiAvailable'] = (loaded, error) => {
+      if (loaded) {
+        const sessionRequest = new chrome.cast.SessionRequest(appId)
+        const apiConfig = new chrome.cast.ApiConfig(sessionRequest, this.sessionListener.bind(this), this.receiverListener.bind(this))
+        chrome.cast.initialize(apiConfig, () => {}, this.onError)
       }
+      else this.onError(error)
+    }
+  }
+
+  sessionListener(session) {
+    this.session = session
+    session.addMessageListener(this.namespace, this.onMessage)
+    session.addUpdateListener(() => {
+      if (session.status != chrome.cast.SessionStatus.CONNECTED)
+        this.session = null
     })
   }
 
-  function receiverListener(e) {
-    if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !self.session) {
-      const handler = () => {
-        self.start()
-        document.body.removeEventListener('click', handler)
+  receiverListener(e) {
+    if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !this.session) {
+      const onceHandler = () => {
+        this.start()
+        document.body.removeEventListener('click', onceHandler)
       }
-      document.body.addEventListener('click', handler)
+      document.body.addEventListener('click', onceHandler)
     }
   }
 
-  self.start = function(callback) {
+  start(callback) {
     chrome.cast.requestSession(session => {
-      sessionListener(session)
+      this.sessionListener(session)
       if (callback) callback()
-    }, self.onError)
+    }, this.onError)
   }
 
-  self.message = function(message, callback) {
-    function sendMessage() {
-      self.session.sendMessage(self.namespace, message, callback || (() => {}), self.onError)
-    }
-
-    if (self.session) sendMessage()
-    else self.start(sendMessage)
+  message(message, callback) {
+    const sendMessage = () => this.session.sendMessage(this.namespace, message, callback || (() => {}), this.onError)
+    if (this.session) sendMessage()
+    else this.start(sendMessage)
   }
-
-  return self
 }

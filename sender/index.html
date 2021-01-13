@@ -37,6 +37,6 @@
 <script src="../receiver/keyboard.js"></script>
 <script src="chromecast.js"></script>
 <script src="sender.js"></script>
-<script>var sender = new Sender(config, new Chromecast(config))</script>
+<script>var sender = new Sender(config, new Chromecast(config.castAppId))</script>
 <script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js" async></script>
 </html>
