@@ -1,28 +1,29 @@
-var sender = (function(self) {
-  var input = document.querySelector('[name=prefix]')
-  var suggestions = document.querySelector('datalist#paths')
-  var random = document.querySelector('[name=random]')
-  var cover = document.querySelector('[name=cover]')
-  var interval = document.querySelector('[name=interval]')
-  var status = document.getElementById('status')
+var sender = new (function Sender() {
+  const self = this
+  const input = document.querySelector('[name=prefix]')
+  const suggestions = document.querySelector('datalist#paths')
+  const random = document.querySelector('[name=random]')
+  const cover = document.querySelector('[name=cover]')
+  const interval = document.querySelector('[name=interval]')
+  const status = document.getElementById('status')
 
-  var accessToken = self.accessToken || localStorage['accessToken']
+  let accessToken = self.accessToken || localStorage['accessToken']
   if (!accessToken) {
     accessToken = prompt('Access Token (defined in backend config)')
     if (accessToken) localStorage['accessToken'] = accessToken
   }
 
-  var year = new Date().getFullYear()
-  var years = Array(10).fill(0).map((_, i) => year - i)
+  const year = new Date().getFullYear()
+  const years = Array(10).fill(0).map((_, i) => year - i)
   suggest(years)
 
-  var suggestedValues = []
+  let suggestedValues = []
   function suggest(values) {
     suggestedValues = values
     suggestions.innerHTML = values.map(v => `<option value="${v}">`).join('\n')
   }
 
-  var debounce
+  let debounce
   input.addEventListener('keydown', e => {
     if (e.code === 'Enter') self.sendPhotoDir()
     else {
@@ -35,13 +36,13 @@ var sender = (function(self) {
           fetch(`${self.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${input.value}`).then(r => r.text()).then(data => {
             suggest(data.trim().split('\n'))
           })
-        }  
+        }
       }, 300)
     }
   })
 
   chromecast.onMessage = function(ns, text) {
-    var parts = text.split('|')
+    const parts = text.split('|')
     if (parts.length == 1) status.textContent = text
     else status.innerHTML = '<a href="' + parts[1] + '">' + parts[0] + '</a>'
   }
@@ -88,12 +89,10 @@ var sender = (function(self) {
   document.body.addEventListener('keydown', e => {
     if (e.target.tagName == 'INPUT') return
 
-    var command = keyboard.toCommand(e.which)
+    const command = keyboard.toCommand(e.which)
     if (command) {
       e.preventDefault()
       sendCommand(command)
     }
   })
-
-  return self
-})(sender || {})
+})
