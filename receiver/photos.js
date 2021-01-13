@@ -24,6 +24,16 @@ var photos = (function(self) {
       applyMeta: function(meta) {
         var imgRatio = photo.naturalWidth / photo.naturalHeight
         var horizontal = imgRatio >= 1.33
+
+        if (navigator.userAgent.includes('1.36.') /* Chromecast 1st gen */) {
+          switch (meta.orientation) {
+            case '3': photo.style.transform = 'rotate(180deg)'; break
+            case '6': photo.style.transform = 'scale(' + (1 / imgRatio) + ') rotate(90deg)'; horizontal = false; break
+            case '8': photo.style.transform = 'scale(' + (1 / imgRatio) + ') rotate(-90deg)'; horizontal = false; break
+            default: photo.style.transform = 'none'
+          }
+        }
+
         if (style === 'cover' && horizontal) {
           var screenRatio = innerWidth / innerHeight
           var verticalScale = 100 * screenRatio / imgRatio * 0.9
