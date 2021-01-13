@@ -1,4 +1,4 @@
-var sender = new (function Sender() {
+function Sender(config, chromecast) {
   const self = this
   const input = document.querySelector('[name=prefix]')
   const suggestions = document.querySelector('datalist#paths')
@@ -15,9 +15,10 @@ var sender = new (function Sender() {
 
   const year = new Date().getFullYear()
   const years = Array(10).fill(0).map((_, i) => year - i)
-  suggest(years)
 
   let suggestedValues = []
+  suggest(years)
+
   function suggest(values) {
     suggestedValues = values
     suggestions.innerHTML = values.map(v => `<option value="${v}">`).join('\n')
@@ -33,7 +34,7 @@ var sender = new (function Sender() {
           if (suggestedValues !== years) suggest(years)
         } else {
           if (suggestedValues.includes(input.value)) return
-          fetch(`${self.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${input.value}`).then(r => r.text()).then(data => {
+          fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${input.value}`).then(r => r.text()).then(data => {
             suggest(data.trim().split('\n'))
           })
         }
@@ -95,4 +96,4 @@ var sender = new (function Sender() {
       sendCommand(command)
     }
   })
-})
+}

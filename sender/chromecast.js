@@ -1,16 +1,16 @@
 // Chromecast sender API wrapper
 
-var chromecast = (function(self) {
-  self = Object.assign({
-    appId: undefined,
+function Chromecast(config) {
+  const self = {
     namespace: 'urn:x-cast:message',
     onMessage: () => {},
-    onError: (e) => console.log(e)
-  }, self)
+    onError: e => console.log(e),
+    ...this
+  }
 
   window['__onGCastApiAvailable'] = function(loaded, error) {
     if (loaded) {
-      var sessionRequest = new chrome.cast.SessionRequest(self.appId)
+      var sessionRequest = new chrome.cast.SessionRequest(config.castAppId)
       var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener)
       chrome.cast.initialize(apiConfig, () => {}, onerror)
     }
@@ -54,4 +54,4 @@ var chromecast = (function(self) {
   }
 
   return self
-})(chromecast || {})
+}
