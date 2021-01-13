@@ -10,18 +10,18 @@ var photos = (function(self) {
 
   var modes = {
     img: {
-      init: function() {
+      init() {
         photo.outerHTML = '<img id="photo">'
         photo = document.getElementById('photo')
         photo.onload = function() {loadNextPhotoAfter(self.interval)}
       },
-      renderPhoto: function(url) {
+      renderPhoto(url) {
         photo.src = self.baseUrl + self.photoUrlPrefix + url
       },
-      preloadNext: function(url) {
+      preloadNext(url) {
         nextImg.href = self.baseUrl + self.photoUrlPrefix + url
       },
-      applyMeta: function(meta) {
+      applyMeta(meta) {
         var imgRatio = photo.naturalWidth / photo.naturalHeight
         var horizontal = imgRatio >= 1.33
 
@@ -43,22 +43,22 @@ var photos = (function(self) {
       },
     },
     video: {
-      init: function() {
+      init() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo = document.getElementById('photo')
         photo.onplay = function() {loadNextPhotoAfter(self.interval)}
       },
-      renderPhoto: function(url) {
+      renderPhoto(url) {
         photo.src = self.baseUrl + self.photoVideoUrlPrefix + url + this.videoStyle()
       },
-      preloadNext: function(url) {
+      preloadNext(url) {
         nextImg.href = self.photoVideoUrlPrefix + url + this.videoStyle() + '&preload=true'
       },
-      videoStyle: function() {
+      videoStyle() {
         return (supports4k ? '&w=3840&h=2160' : '&w=' + innerWidth * devicePixelRatio + '&h=' + innerHeight * devicePixelRatio) +
                (innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : '')
       },
-      applyMeta: function() {}
+      applyMeta() {}
     }
   }
 
@@ -71,10 +71,8 @@ var photos = (function(self) {
   }
 
   Object.defineProperty(self, 'supports4k', {
-    get: function() {
-      return supports4k
-    },
-    set: function(val) {
+    get: () => supports4k,
+    set(val) {
       supports4k = val
       self.mode = supports4k ? 'video' : 'img'
       self.init()
