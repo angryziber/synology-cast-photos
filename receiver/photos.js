@@ -25,7 +25,7 @@ var photos = (function(self) {
         var imgRatio = photo.naturalWidth / photo.naturalHeight
         var horizontal = imgRatio >= 1.33
 
-        if (navigator.userAgent.includes('1.36.') /* Chromecast 1st gen */) {
+        if (navigator.userAgent.includes('CrKey/1.3') /* Chromecast 1st gen */) {
           switch (meta.orientation) {
             case '3': photo.style.transform = 'rotate(180deg)'; break
             case '6': photo.style.transform = 'scale(' + (1 / imgRatio) + ') rotate(90deg)'; horizontal = false; break
