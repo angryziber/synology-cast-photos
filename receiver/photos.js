@@ -10,6 +10,7 @@ function Photos(config) {
   var mode, supports4k
 
   var modes = {
+    // loads images as-is, without server-side processing (good for older NAS with slow CPU)
     img: {
       init() {
         photo.outerHTML = '<img id="photo">'
@@ -43,6 +44,7 @@ function Photos(config) {
         else photo.style.objectFit = 'contain'
       },
     },
+    // supports 4k/UHD resolution on Google Cast
     video: {
       init() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
@@ -64,7 +66,7 @@ function Photos(config) {
   }
 
   self.init = function() {
-    mode = modes[self.mode]
+    mode = modes[config.mode]
     mode.init()
     photo.onerror = photoLoadingFailed
     if (document.documentElement.requestFullscreen)
@@ -75,13 +77,13 @@ function Photos(config) {
     get: () => supports4k,
     set(val) {
       supports4k = val
-      self.mode = supports4k ? 'video' : 'img'
+      config.mode = supports4k ? 'video' : 'img'
       self.init()
     }
   })
 
   self.changeMode = function(m) {
-    self.mode = m
+    config.mode = m
     self.init()
     self.loadCurrent()
   }
