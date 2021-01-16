@@ -1,8 +1,8 @@
 function Receiver(config, content, keyboard) {
   if (navigator.userAgent.indexOf('CrKey') >= 0)
-    initAsReceiver() // running under Chromecast - receive commands from Chromecast senders
+    initAsReceiver.call(this) // running under Chromecast - receive commands from Chromecast senders
   else
-    initAsStandalone() // running as standalone web page - take commands from location hash
+    initAsStandalone.call(this) // running as standalone web page - take commands from location hash
 
   window.onhashchange = () => {
     if (location.hash) this.onCommand(decodeURIComponent(location.hash.substring(1)))
@@ -52,39 +52,17 @@ function Receiver(config, content, keyboard) {
       content.interval = parseInt(arg) * 1000
       title = 'Interval: ' + arg + 's'
     }
-    else if (cmd == 'mode') {
-      content.changeMode(arg)
-    }
-    else if (cmd == 'style') {
-      content.changeStyle(arg)
-    }
-    else if (cmd == 'show') {
-      content.show(arg)
-    }
-    else if (cmd == 'hide') {
-      content.hide(arg)
-    }
-    else if (cmd == 'prev') {
-      content.prev(arg)
-    }
-    else if (cmd == 'next') {
-      content.next(arg)
-    }
-    else if (cmd == 'pause') {
-      content.pause()
-    }
-    else if (cmd == 'mark') {
-      content.mark(arg)
-    }
-    else if (cmd == 'photos') {
-      location.href = location.origin + '/receiver/#' + arg
-    }
-    else if (cmd == 'videos') {
-      location.href = location.origin + '/receiver/video.html#' + arg
-    }
-    else {
-      content.loadUrls(cmd, true)
-    }
+    else if (cmd == 'mode') content.changeMode(arg)
+    else if (cmd == 'style') content.changeStyle(arg)
+    else if (cmd == 'show') content.show(arg)
+    else if (cmd == 'hide') content.hide(arg)
+    else if (cmd == 'prev') content.prev(arg)
+    else if (cmd == 'next') content.next(arg)
+    else if (cmd == 'pause') content.pause()
+    else if (cmd == 'mark') content.mark(arg)
+    else if (cmd == 'photos') location.href = location.origin + '/receiver/#' + arg
+    else if (cmd == 'videos') location.href = location.origin + '/receiver/video.html#' + arg
+    else content.loadUrls(cmd, true)
 
     if (title) {
       content.title(title)
