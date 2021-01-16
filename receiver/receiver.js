@@ -1,30 +1,27 @@
-function Receiver(self, content, keyboard) {
+function Receiver(config, content, keyboard) {
   if (navigator.userAgent.indexOf('CrKey') >= 0)
     initAsReceiver() // running under Chromecast - receive commands from Chromecast senders
   else
     initAsStandalone() // running as standalone web page - take commands from location hash
 
-  window.onhashchange = function() {
-    if (location.hash) self.onCommand(decodeURIComponent(location.hash.substring(1)))
+  window.onhashchange = () => {
+    if (location.hash) this.onCommand(decodeURIComponent(location.hash.substring(1)))
   }
   setTimeout(onhashchange)
 
   function initAsReceiver() {
-    var receiverManager = cast.receiver.CastReceiverManager.getInstance()
+    const receiverManager = cast.receiver.CastReceiverManager.getInstance()
     content.supports4k = receiverManager.canDisplayType('video/mp4', 'hev1.1.2.L150', 3840, 2160)
 
-    self.messageBus = receiverManager.getCastMessageBus(self.namespace)
-    self.messageBus.onMessage = function(e) {
-      self.onCommand(e.data)
-    }
+    this.messageBus = receiverManager.getCastMessageBus(castConfig.namespace)
+    this.messageBus.onMessage = e => this.onCommand(e.data)
 
-    receiverManager.onSenderConnected = function(e) {
-      self.messageBus.send(e.senderId, content.supports4k ? 'mode:video' : 'mode:img')
-    }
+    receiverManager.onSenderConnected = e =>
+      this.messageBus.send(e.senderId, content.supports4k ? 'mode:video' : 'mode:img')
 
-    var config = new cast.receiver.CastReceiverManager.Config()
-    config.maxInactivity = 60000
-    receiverManager.start(config)
+    const castConfig = new cast.receiver.CastReceiverManager.Config()
+    castConfig.maxInactivity = 60000
+    receiverManager.start(castConfig)
   }
 
   function initAsStandalone() {
@@ -32,16 +29,16 @@ function Receiver(self, content, keyboard) {
     if (keyboard) keyboard.init()
   }
 
-  self.broadcast = function(message) {
-    if (self.messageBus) self.messageBus.broadcast(message)
+  this.broadcast = message => {
+    if (this.messageBus) this.messageBus.broadcast(message)
   }
 
-  self.onCommand = function(command) {
-    var separatorPos = command.indexOf(':')
+  this.onCommand = command => {
+    let separatorPos = command.indexOf(':')
     if (separatorPos == -1) separatorPos = command.length
-    var cmd = command.substring(0, separatorPos)
-    var arg = command.substring(separatorPos + 1)
-    var title = command
+    let cmd = command.substring(0, separatorPos)
+    let arg = command.substring(separatorPos + 1)
+    let title = command
 
     if (cmd == 'rnd') {
       if (arg) content.loadUrls(arg, true)
@@ -85,25 +82,13 @@ function Receiver(self, content, keyboard) {
     else if (cmd == 'videos') {
       location.href = location.origin + '/receiver/video.html#' + arg
     }
-    else if (cmd == 'audio') {
-      if (arg == 'prev') audio.prev()
-      else if (arg == 'next') audio.next()
-      else if (arg == 'stop') audio.stop()
-      else {
-        arg = arg.split('#')
-        audio.addToPlaylist(arg[0], arg[1])
-      }
-      title = null
-    }
     else {
       content.loadUrls(cmd, true)
     }
 
     if (title) {
       content.title(title)
-      self.broadcast(title)
+      this.broadcast(title)
     }
   }
-
-  return self
 }
