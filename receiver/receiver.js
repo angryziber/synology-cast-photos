@@ -13,7 +13,7 @@ function Receiver(config, content, keyboard) {
     const receiverManager = cast.receiver.CastReceiverManager.getInstance()
     content.supports4k = receiverManager.canDisplayType('video/mp4', 'hev1.1.2.L150', 3840, 2160)
 
-    this.messageBus = receiverManager.getCastMessageBus(castConfig.namespace)
+    this.messageBus = receiverManager.getCastMessageBus('urn:x-cast:message')
     this.messageBus.onMessage = e => this.onCommand(e.data)
 
     receiverManager.onSenderConnected = e =>
@@ -49,7 +49,7 @@ function Receiver(config, content, keyboard) {
       else content.sequential()
     }
     else if (cmd == 'interval') {
-      content.interval = parseInt(arg) * 1000
+      config.interval = parseInt(arg) * 1000
       title = 'Interval: ' + arg + 's'
     }
     else if (cmd == 'mode') content.changeMode(arg)

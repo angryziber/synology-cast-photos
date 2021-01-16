@@ -1,9 +1,11 @@
-function Videos(self) {
-  BaseContent(self)
+function Videos(config) {
+  const self = this
+  config.listUrl = config.videoListUrl
+  BaseContent.call(this, config)
 
   var video = document.getElementsByTagName('video')[0]
 
-  var videoUrlPrefix = self.baseUrl + self.videoUrlPrefix
+  var videoUrlPrefix = self.baseUrl + config.videoUrlPrefix
   var someVideosPlayed = false
 
   setInterval(() => {
@@ -18,7 +20,7 @@ function Videos(self) {
   video.addEventListener('error', function() {
     console.error(video.error)
     self.status.textContent = video.error.message
-    if (!someVideosPlayed) videoUrlPrefix = self.videoUrlPrefix
+    if (!someVideosPlayed) videoUrlPrefix = config.videoUrlPrefix
     self.next()
   })
 
@@ -45,10 +47,8 @@ function Videos(self) {
   }
 
   self.pause = function() {
-    if (video.paused)
-      play()
-    else
-      video.pause()
+    if (video.paused) play()
+    else video.pause()
   }
 
   function play() {
@@ -62,6 +62,4 @@ function Videos(self) {
       }
     })
   }
-
-  return self
 }

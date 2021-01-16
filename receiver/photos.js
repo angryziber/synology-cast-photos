@@ -1,5 +1,6 @@
-var photos = (function(self) {
-  BaseContent(self)
+function Photos(config) {
+  const self = this
+  BaseContent.call(self, config)
 
   var photo = document.getElementById('photo')
   var map = document.getElementById('map')
@@ -13,13 +14,13 @@ var photos = (function(self) {
       init() {
         photo.outerHTML = '<img id="photo">'
         photo = document.getElementById('photo')
-        photo.onload = function() {loadNextPhotoAfter(self.interval)}
+        photo.onload = () => loadNextPhotoAfter(config.interval)
       },
       renderPhoto(url) {
-        photo.src = self.baseUrl + self.photoUrlPrefix + url
+        photo.src = self.baseUrl + config.photoUrlPrefix + url
       },
       preloadNext(url) {
-        nextImg.href = self.baseUrl + self.photoUrlPrefix + url
+        nextImg.href = self.baseUrl + config.photoUrlPrefix + url
       },
       applyMeta(meta) {
         var imgRatio = photo.naturalWidth / photo.naturalHeight
@@ -46,13 +47,13 @@ var photos = (function(self) {
       init() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo = document.getElementById('photo')
-        photo.onplay = function() {loadNextPhotoAfter(self.interval)}
+        photo.onplay = () => loadNextPhotoAfter(config.interval)
       },
       renderPhoto(url) {
-        photo.src = self.baseUrl + self.photoVideoUrlPrefix + url + this.videoStyle()
+        photo.src = self.baseUrl + config.photoVideoUrlPrefix + url + this.videoStyle()
       },
       preloadNext(url) {
-        nextImg.href = self.photoVideoUrlPrefix + url + this.videoStyle() + '&preload=true'
+        nextImg.href = config.photoVideoUrlPrefix + url + this.videoStyle() + '&preload=true'
       },
       videoStyle() {
         return (supports4k ? '&w=3840&h=2160' : '&w=' + innerWidth * devicePixelRatio + '&h=' + innerHeight * devicePixelRatio) +
@@ -67,7 +68,7 @@ var photos = (function(self) {
     mode.init()
     photo.onerror = photoLoadingFailed
     if (document.documentElement.requestFullscreen)
-      photo.addEventListener('click', function() {document.documentElement.requestFullscreen()})
+      photo.addEventListener('click', () => document.documentElement.requestFullscreen())
   }
 
   Object.defineProperty(self, 'supports4k', {
@@ -100,7 +101,7 @@ var photos = (function(self) {
   }
 
   self.mark = function(how) {
-    fetch(self.markPhotoUrl, {method: 'POST', body: JSON.stringify({file: displayedUrl, how: how})}).then(
+    fetch(config.markPhotoUrl, {method: 'POST', body: JSON.stringify({file: displayedUrl, how: how})}).then(
       text => self.title(text),
       e => self.title('Failed to mark: ' + e)
     )
@@ -123,11 +124,11 @@ var photos = (function(self) {
   function updateMap() {
     showingMap = true
     map.src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
-      '&zoom=9&size=500x300&maptype=terrain&key=' + self.googleMapsApiKey
+      '&zoom=9&size=500x300&maptype=terrain&key=' + config.googleMapsApiKey
   }
 
   function loadMeta(url) {
-    return fetch(self.metaUrlPrefix + url).then(r => r.json())
+    return fetch(config.metaUrlPrefix + url).then(r => r.json())
   }
 
   var preloadTimer
@@ -154,7 +155,7 @@ var photos = (function(self) {
   }
 
   self.preloadNext = function() {
-    var nextUrl = self.nextUrl()
+    const nextUrl = self.nextUrl()
     mode.preloadNext(nextUrl)
     nextMeta = undefined
     loadMeta(nextUrl).then(data => nextMeta = {url: nextUrl, data})
@@ -162,7 +163,7 @@ var photos = (function(self) {
 
   function updateStatus(meta) {
     displayedUrl = meta.file
-    var title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ')
+    const title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ')
     self.title(title)
     receiver.broadcast(self.index + ': ' + title + '|' + displayedUrl)
     self.status.textContent = self.index + '/' + self.urls.length
@@ -172,7 +173,7 @@ var photos = (function(self) {
 
   function photoLoadingFailed() {
     self.status.textContent = self.index + '/' + self.urls.length + ': failed'
-    loadNextPhotoAfter(self.interval / 4)
+    loadNextPhotoAfter(config.interval / 4)
   }
 
   function loadNextPhotoAfter(timeout) {
@@ -180,6 +181,4 @@ var photos = (function(self) {
     clearTimeout(timer)
     timer = setTimeout(self.next, timeout)
   }
-
-  return self
-}(photos || {}))
+}

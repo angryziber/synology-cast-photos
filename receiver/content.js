@@ -1,4 +1,5 @@
-function BaseContent(self) {
+function BaseContent(config) {
+  const self = this
   self.urls = []
   self.index = 0
   self.meta = document.getElementById('meta')
@@ -9,14 +10,14 @@ function BaseContent(self) {
 
   setTimeout(function checkLanForQuickerDownloads() {
     var start = Date.now()
-    fetch(self.lanBaseUrl + self.lanCheckUrl).then(res => {
+    fetch(config.lanBaseUrl + config.lanCheckUrl).then(res => {
       if (res.ok) {
-        self.baseUrl = self.lanBaseUrl
-        console.log(self.lanBaseUrl + ' is accessible, took ' + (Date.now() - start) + 'ms')
+        self.baseUrl = config.lanBaseUrl
+        console.log(config.lanBaseUrl + ' is accessible, took ' + (Date.now() - start) + 'ms')
       }
       else throw res.status
     }, e => {
-      console.log(self.lanBaseUrl + ' is not accessible, took ' + (Date.now() - start) + 'ms: ' + e)
+      console.log(config.lanBaseUrl + ' is not accessible, took ' + (Date.now() - start) + 'ms: ' + e)
     })
   }, 0)
 
@@ -30,7 +31,7 @@ function BaseContent(self) {
       self.loadCurrent()
     }
 
-    fetch(self.baseUrl + self.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
+    fetch(self.baseUrl + config.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
       if (!res.ok) throw new Error(res.status)
       return res.text()
     }).then(onUrlsLoaded, e => self.title(e))

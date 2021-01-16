@@ -1,9 +1,6 @@
-var common = {
+var config = {
   lanBaseUrl: 'http://192.168.0.2', // for faster downloads when in LAN (.local names not supported)
-  lanCheckUrl: '/backend/config.php'
-}
-
-var photos = {...common,
+  lanCheckUrl: '/backend/config.php',
   interval: 10000, // ms
   listUrl: '/backend/photos_list.php',
   photoUrlPrefix: '/backend/photo.php?file=',
@@ -12,13 +9,6 @@ var photos = {...common,
   markPhotoUrl: '/backend/photo_mark.php',
   googleMapsApiKey: '',
   mode: 'video', // 'video' supports 4k/UHD resolution on Google Cast, while 'img' doesn't do server-side processing
-}
-
-var videos = {...common,
-  listUrl: '/backend/videos_list.php',
-  videoUrlPrefix: '/video/',
-}
-
-var receiver = {
-  namespace: 'urn:x-cast:message',
+  videoListUrl: '/backend/videos_list.php',
+  videoUrlPrefix: '/video/'
 }
