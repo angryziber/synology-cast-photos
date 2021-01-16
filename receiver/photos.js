@@ -1,5 +1,6 @@
 function Photos(config) {
   const self = this
+  self.interval = config.interval
   BaseContent.call(self, config)
 
   var photo = document.getElementById('photo')
@@ -15,7 +16,7 @@ function Photos(config) {
       init() {
         photo.outerHTML = '<img id="photo">'
         photo = document.getElementById('photo')
-        photo.onload = () => loadNextPhotoAfter(config.interval)
+        photo.onload = () => loadNextPhotoAfter(self.interval)
       },
       renderPhoto(url) {
         photo.src = self.baseUrl + config.photoUrlPrefix + url
@@ -49,7 +50,7 @@ function Photos(config) {
       init() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo = document.getElementById('photo')
-        photo.onplay = () => loadNextPhotoAfter(config.interval)
+        photo.onplay = () => loadNextPhotoAfter(self.interval)
       },
       renderPhoto(url) {
         photo.src = self.baseUrl + config.photoVideoUrlPrefix + url + this.videoStyle()
@@ -175,7 +176,7 @@ function Photos(config) {
 
   function photoLoadingFailed() {
     self.status.textContent = self.index + '/' + self.urls.length + ': failed'
-    loadNextPhotoAfter(config.interval / 4)
+    loadNextPhotoAfter(self.interval / 4)
   }
 
   function loadNextPhotoAfter(timeout) {

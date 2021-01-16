@@ -1,4 +1,4 @@
-function Receiver(config, content, keyboard) {
+function Receiver(content, keyboard) {
   if (navigator.userAgent.indexOf('CrKey') >= 0)
     initAsReceiver.call(this) // running under Chromecast - receive commands from Chromecast senders
   else
@@ -49,7 +49,7 @@ function Receiver(config, content, keyboard) {
       else content.sequential()
     }
     else if (cmd == 'interval') {
-      config.interval = parseInt(arg) * 1000
+      content.interval = parseInt(arg) * 1000
       title = 'Interval: ' + arg + 's'
     }
     else if (cmd == 'mode') content.changeMode(arg)
