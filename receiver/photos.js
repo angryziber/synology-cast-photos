@@ -117,7 +117,11 @@ function Photos(config) {
   }
 
   self.pause = function() {
-    if (nextTimer) {
+    if (isVideo(content.src)) {
+      if (content.paused) playVideo()
+      else content.pause()
+    }
+    else if (nextTimer) {
       clearTimeout(fadeOutTimer)
       clearTimeout(nextTimer)
       nextTimer = null
