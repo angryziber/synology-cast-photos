@@ -53,6 +53,7 @@ function Sender(config, chromecast) {
       photos.checked = state.photos
       videos.checked = state.videos
       cover.checked = state.style == 'contain'
+      return
     }
     const parts = message.split('|')
     if (parts.length == 1) status.textContent = message
