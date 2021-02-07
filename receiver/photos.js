@@ -2,7 +2,7 @@ function Photos(config) {
   const self = this
   BaseContent.call(self, config)
 
-  let photo = document.getElementById('photo')
+  let content = document.getElementById('photo')
   const map = document.getElementById('map')
   const nextImg = document.querySelector('link[rel=preload]')
   let timer, meta, nextMeta, loading, displayedUrl, showingMap
@@ -18,50 +18,50 @@ function Photos(config) {
     // loads images as-is, without server-side processing (good for older NAS with slow CPU)
     img: {
       init() {
-        photo.outerHTML = '<img id="photo">'
-        photo = document.getElementById('photo')
-        photo.oncanplaythrough = () => photo.play()
-        photo.onended = () => isVideo(photo.src) ? self.next() : loadNextAfter(self.state.interval)
+        content.outerHTML = '<img id="photo">'
+        content = document.getElementById('photo')
+        content.oncanplaythrough = () => content.play()
+        content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
       },
       renderPhoto(url) {
-        photo.src = self.baseUrl + config.photoUrlPrefix + url
+        content.src = self.baseUrl + config.photoUrlPrefix + url
       },
       preloadNext(url) {
         nextImg.href = self.baseUrl + config.photoUrlPrefix + url
       },
       applyMeta(meta) {
-        const imgRatio = photo.naturalWidth / photo.naturalHeight
+        const imgRatio = content.naturalWidth / content.naturalHeight
         let horizontal = imgRatio >= 1.33
 
         if (navigator.userAgent.includes('CrKey/1.3') /* Chromecast 1st gen */) {
           switch (meta.orientation) {
-            case '3': photo.style.transform = 'rotate(180deg)'; break
-            case '6': photo.style.transform = 'scale(' + (1 / imgRatio) + ') rotate(90deg)'; horizontal = false; break
-            case '8': photo.style.transform = 'scale(' + (1 / imgRatio) + ') rotate(-90deg)'; horizontal = false; break
-            default: photo.style.transform = 'none'
+            case '3': content.style.transform = 'rotate(180deg)'; break
+            case '6': content.style.transform = 'scale(' + (1 / imgRatio) + ') rotate(90deg)'; horizontal = false; break
+            case '8': content.style.transform = 'scale(' + (1 / imgRatio) + ') rotate(-90deg)'; horizontal = false; break
+            default: content.style.transform = 'none'
           }
         }
 
         if (self.state.style === 'cover' && horizontal) {
           const screenRatio = innerWidth / innerHeight
           const verticalScale = 100 * screenRatio / imgRatio * 0.9
-          photo.style.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover'
+          content.style.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover'
         }
-        else photo.style.objectFit = 'contain'
+        else content.style.objectFit = 'contain'
       },
     },
     // supports photos with 4K/UHD resolution on Google Cast
     video: {
       init() {
-        photo.outerHTML = '<video id="photo" muted autoplay></video>'
-        photo = document.getElementById('photo')
-        photo.onplay = () => loadNextAfter(self.state.interval)
+        content.outerHTML = '<video id="photo" muted autoplay></video>'
+        content = document.getElementById('photo')
+        content.onplay = () => loadNextAfter(self.state.interval)
       },
       renderPhoto(url) {
         if (isVideo(url))
-          photo.src = self.baseUrl + config.videoUrlPrefix + url
+          content.src = self.baseUrl + config.videoUrlPrefix + url
         else
-          photo.src = self.baseUrl + config.photoVideoUrlPrefix + url + this.renderStyle()
+          content.src = self.baseUrl + config.photoVideoUrlPrefix + url + this.renderStyle()
       },
       preloadNext(url) {
         if (!isVideo(url))
@@ -78,9 +78,9 @@ function Photos(config) {
   self.init = function() {
     mode = modes[self.state.mode]
     mode.init()
-    photo.onerror = photoLoadingFailed
+    content.onerror = photoLoadingFailed
     if (document.documentElement.requestFullscreen)
-      photo.addEventListener('click', () => document.documentElement.requestFullscreen())
+      content.addEventListener('click', () => document.documentElement.requestFullscreen())
   }
 
   Object.defineProperty(self, 'supports4k', {
@@ -109,7 +109,7 @@ function Photos(config) {
 
   self.changeStyle = function(s) {
     self.state.style = s
-    photo.style.objectFit = s
+    content.style.objectFit = s
     self.loadCurrent()
   }
 
