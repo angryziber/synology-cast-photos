@@ -41,11 +41,11 @@ function Receiver(content, keyboard) {
     let title = command
 
     if (cmd == 'rnd') {
-      if (arg) content.loadUrls(arg, true)
+      if (arg) content.loadUrlsAndShow(arg, true)
       else content.random()
     }
     else if (cmd == 'seq') {
-      if (arg) content.loadUrls(arg, false)
+      if (arg) content.loadUrlsAndShow(arg, false)
       else content.sequential()
     }
     else if (cmd == 'interval') {
@@ -62,7 +62,7 @@ function Receiver(content, keyboard) {
     else if (cmd == 'mark') content.mark(arg)
     else if (cmd == 'photos') location.href = location.origin + '/receiver/#' + arg
     else if (cmd == 'videos') location.href = location.origin + '/receiver/video.html#' + arg
-    else content.loadUrls(cmd, true)
+    else content.loadUrlsAndShow(cmd)
 
     if (title) {
       content.title(title)

@@ -6,10 +6,10 @@ function BaseContent(config) {
   self.status = document.getElementById('status')
   self.supports4k = undefined
   self.baseUrl = ''
-  var title = document.getElementById('title')
+  let title = document.getElementById('title')
 
   setTimeout(function checkLanForQuickerDownloads() {
-    var start = Date.now()
+    const start = Date.now()
     fetch(config.lanBaseUrl + config.lanCheckUrl).then(res => {
       if (res.ok) {
         self.baseUrl = config.lanBaseUrl
@@ -21,20 +21,23 @@ function BaseContent(config) {
     })
   }, 0)
 
-  self.loadUrls = function(dir, random) {
-    function onUrlsLoaded(result) {
-      self.urls = result.trim().split('\n')
-      self.urlsRandom = self.urlsSequential = null
-      if (random) self.random(); else self.sequential()
-      self.title((random ? 'Random: ' : 'Sequential: ') + dir)
-      self.index = 1
-      self.loadCurrent()
+  self.loadUrls = async function(dir) {
+    const res = await fetch(self.baseUrl + listUrl + '?dir=' + encodeURIComponent(dir))
+    if (!res.ok) {
+      self.title('Error: ' + res.status + ' ' + res.statusText)
+      return
     }
+    return (await res.text()).trim().split('\n')
+  }
 
-    fetch(self.baseUrl + config.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
-      if (res.ok) return res.text()
-      else self.title('Error: ' + res.status + ' ' + res.statusText)
-    }).then(onUrlsLoaded)
+  self.loadUrlsAndShow = async function(dir, random = true) {
+    const urls = await self.loadUrls(dir)
+    if (append) self.urls.push(...urls); else self.urls = urls
+    self.urlsRandom = self.urlsSequential = null
+    if (random) self.random(); else self.sequential()
+    self.title((random ? 'Random: ' : 'Sequential: ') + dir)
+    self.index = 1
+    self.loadCurrent()
   }
 
   self.currentUrl = function() {
@@ -60,11 +63,10 @@ function BaseContent(config) {
   function updateIndex(currentUrl, newUrls) {
     if (currentUrl) self.index = newUrls.indexOf(currentUrl) + 1
     self.urls = newUrls
-    if (self.status)
-      self.status.textContent = self.index + '/' + self.urls.length
+    if (self.status) self.status.textContent = self.index + '/' + self.urls.length
   }
 
-  var debounce
+  let debounce
 
   self.prev = function(by) {
     self.index -= parseInt(by || 1)
@@ -83,7 +85,7 @@ function BaseContent(config) {
 
 function randomInt(max) {
   if (window.crypto) {
-    var array = new Uint32Array(1)
+    const array = new Uint32Array(1)
     crypto.getRandomValues(array)
     return array[0] % max
   }
@@ -91,6 +93,6 @@ function randomInt(max) {
 }
 
 function shuffle(o) {
-  for (var j, x, i = o.length; i; j = randomInt(i), x = o[--i], o[i] = o[j], o[j] = x);
+  for (let j, x, i = o.length; i; j = randomInt(i), x = o[--i], o[i] = o[j], o[j] = x);
   return o
 }
