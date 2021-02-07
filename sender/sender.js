@@ -1,6 +1,6 @@
 function Sender(config, chromecast) {
   const self = this
-  const input = document.querySelector('[name=prefix]')
+  const dir = document.querySelector('[name=prefix]')
   const suggestions = document.querySelector('datalist#paths')
   const random = document.querySelector('[name=random]')
   const cover = document.querySelector('[name=cover]')
@@ -25,16 +25,16 @@ function Sender(config, chromecast) {
   }
 
   let debounce
-  input.addEventListener('keydown', e => {
+  dir.addEventListener('keydown', e => {
     if (e.code === 'Enter') self.sendPhotoDir()
     else {
       clearTimeout(debounce)
       debounce = setTimeout(() => {
-        if (!input.value) {
+        if (!dir.value) {
           if (suggestedValues !== years) suggest(years)
         } else {
-          if (suggestedValues.includes(input.value)) return
-          fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${input.value}`).then(r => r.text()).then(data => {
+          if (suggestedValues.includes(dir.value)) return
+          fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${dir.value}`).then(r => r.text()).then(data => {
             suggest(data.trim().split('\n'))
           })
         }
@@ -54,10 +54,10 @@ function Sender(config, chromecast) {
   }
 
   self.sendPhotoDir = function() {
-    sendCommand((random.checked ? 'rnd:' : 'seq:') + input.value)
+    sendCommand((random.checked ? 'rnd:' : 'seq:') + dir.value)
   }
 
-  random.addEventListener('click', () => {
+  random.addEventListener('change', () => {
     sendCommand(random.checked ? 'rnd' : 'seq')
   })
 
