@@ -94,7 +94,7 @@ function Photos(config) {
   self.changeMode = function(mode) {
     self.state.mode = mode
     self.init()
-    if (self.urls) self.loadCurrent()
+    if (self.urls.length) self.loadCurrent()
   }
 
   self.updateState = function(key, value) {
