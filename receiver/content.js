@@ -6,6 +6,7 @@ function BaseContent(config) {
   self.status = document.getElementById('status')
   self.supports4k = undefined
   self.baseUrl = ''
+  self.listUrls = [config.listUrl]
   let title = document.getElementById('title')
 
   setTimeout(function checkLanForQuickerDownloads() {
@@ -22,12 +23,16 @@ function BaseContent(config) {
   }, 0)
 
   self.loadUrls = async function(dir) {
-    const res = await fetch(self.baseUrl + listUrl + '?dir=' + encodeURIComponent(dir))
-    if (!res.ok) {
-      self.title('Error: ' + res.status + ' ' + res.statusText)
-      return
+    let urls = []
+    for (let url of self.listUrls) {
+      const res = await fetch(self.baseUrl + url + '?dir=' + encodeURIComponent(dir))
+      if (!res.ok) {
+        self.title('Error: ' + res.status + ' ' + res.statusText)
+        return
+      }
+      urls = urls.concat((await res.text()).trim().split('\n'))
     }
-    return (await res.text()).trim().split('\n')
+    return urls
   }
 
   self.loadUrlsAndShow = async function(dir, random = true) {
