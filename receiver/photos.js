@@ -97,12 +97,12 @@ function Photos(config) {
     if (self.urls.length) self.loadCurrent()
   }
 
-  self.updateState = function(key, value) {
+  self.changeState = function(key, value) {
     self.state[key] = value
     if (key == 'photos' || key == 'videos') {
-      self.listUrl = []
-      if (self.state.photos) self.listUrl.push(config.listUrl)
-      if (self.state.videos) self.listUrl.push(config.videoListUrl)
+      self.listUrls = []
+      if (self.state.photos) self.listUrls.push(config.listUrl)
+      if (self.state.videos) self.listUrls.push(config.videoListUrl)
       self.loadUrlsAndShow(self.state.dir, self.state.random)
     }
   }
@@ -129,7 +129,7 @@ function Photos(config) {
   }
 
   self.show = function(key) {
-    if (key == 'photos' || key == 'videos') self.updateState(key, true)
+    if (key == 'photos' || key == 'videos') self.changeState(key, true)
     else if (key == 'map') {
       map.style.display = 'block'
       updateMap()
@@ -137,7 +137,7 @@ function Photos(config) {
   }
 
   self.hide = function(key) {
-    if (key == 'photos' || key == 'videos') self.updateState(key, true)
+    if (key == 'photos' || key == 'videos') self.changeState(key, false)
     else if (key == 'map') {
       map.style.display = 'none'
       showingMap = false
