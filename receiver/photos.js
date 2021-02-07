@@ -3,14 +3,14 @@ function Photos(config) {
   self.interval = config.interval
   BaseContent.call(self, config)
 
-  var photo = document.getElementById('photo')
-  var map = document.getElementById('map')
-  var nextImg = document.querySelector('link[rel=preload]')
-  var timer, meta, nextMeta, loading, displayedUrl, showingMap
-  var style = 'contain'
-  var mode, supports4k
+  let photo = document.getElementById('photo')
+  const map = document.getElementById('map')
+  const nextImg = document.querySelector('link[rel=preload]')
+  let timer, meta, nextMeta, loading, displayedUrl, showingMap
+  let style = 'contain'
+  let mode, supports4k
 
-  var modes = {
+  const modes = {
     // loads images as-is, without server-side processing (good for older NAS with slow CPU)
     img: {
       init() {
@@ -25,8 +25,8 @@ function Photos(config) {
         nextImg.href = self.baseUrl + config.photoUrlPrefix + url
       },
       applyMeta(meta) {
-        var imgRatio = photo.naturalWidth / photo.naturalHeight
-        var horizontal = imgRatio >= 1.33
+        const imgRatio = photo.naturalWidth / photo.naturalHeight
+        let horizontal = imgRatio >= 1.33
 
         if (navigator.userAgent.includes('CrKey/1.3') /* Chromecast 1st gen */) {
           switch (meta.orientation) {
@@ -38,8 +38,8 @@ function Photos(config) {
         }
 
         if (style === 'cover' && horizontal) {
-          var screenRatio = innerWidth / innerHeight
-          var verticalScale = 100 * screenRatio / imgRatio * 0.9
+          const screenRatio = innerWidth / innerHeight
+          const verticalScale = 100 * screenRatio / imgRatio * 0.9
           photo.style.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover'
         }
         else photo.style.objectFit = 'contain'
@@ -134,10 +134,10 @@ function Photos(config) {
     return fetch(config.metaUrlPrefix + url).then(r => r.json())
   }
 
-  var preloadTimer
+  let preloadTimer
 
   self.loadCurrent = function() {
-    var url = self.currentUrl()
+    const url = self.currentUrl()
     loading = true
     self.status.textContent = 'Loading ' + self.index + '/' + self.urls.length
 
