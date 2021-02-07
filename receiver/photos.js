@@ -51,14 +51,22 @@ function Photos(config) {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo = document.getElementById('photo')
         photo.onplay = () => loadNextPhotoAfter(self.interval)
+        self.listUrls.push(config.videoListUrl)
       },
       renderPhoto(url) {
-        photo.src = self.baseUrl + config.photoVideoUrlPrefix + url + this.videoStyle()
+        if (this.isVideo(url))
+          photo.src = self.baseUrl + config.videoUrlPrefix + url
+        else
+          photo.src = self.baseUrl + config.photoVideoUrlPrefix + url + this.renderStyle()
       },
       preloadNext(url) {
-        nextImg.href = config.photoVideoUrlPrefix + url + this.videoStyle() + '&preload=true'
+        if (!this.isVideo(url))
+          nextImg.href = config.photoVideoUrlPrefix + url + this.renderStyle() + '&preload=true'
       },
-      videoStyle() {
+      isVideo(url) {
+        return url.toLowerCase().endsWith('.mp4')
+      },
+      renderStyle() {
         return (supports4k ? '&w=3840&h=2160' : '&w=' + innerWidth * devicePixelRatio + '&h=' + innerHeight * devicePixelRatio) +
                (innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : '')
       },
