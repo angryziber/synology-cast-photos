@@ -54,11 +54,8 @@ function Photos(config) {
       init() {
         content.outerHTML = '<video id="photo"></video>'
         content = document.getElementById('photo')
-        content.oncanplaythrough = () => playVideo()
+        content.oncanplaythrough = playVideo
         content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
-        content.onprogress = () => {
-          if (content.currentTime >= content.duration - 1.5) fadeOut()
-        }
       },
       renderPhoto(url) {
         if (isVideo(url))
@@ -212,12 +209,20 @@ function Photos(config) {
     loading = false
     clearTimeout(fadeOutTimer)
     clearTimeout(nextTimer)
-    fadeOutTimer = setTimeout(fadeOut, (sec - 1.5) * 1000)
+    fadeOutAfter(sec)
     nextTimer = setTimeout(self.next, sec * 1000)
+  }
+
+  function fadeIn() {
+    document.body.classList.remove('fade-out')
   }
 
   function fadeOut() {
     document.body.classList.add('fade-out')
+  }
+
+  function fadeOutAfter(sec) {
+    if (sec > 2) fadeOutTimer = setTimeout(fadeOut, (sec - 1.5) * 1000)
   }
 
   function isVideo(url) {
@@ -225,9 +230,9 @@ function Photos(config) {
   }
 
   function playVideo() {
-    document.body.classList.remove('fade-out')
+    fadeIn()
     const promise = content.play()
-    if (promise) promise.catch((e) => {
+    if (promise) promise.then(() => fadeOutAfter(content.duration), e => {
       console.error(e)
       if (!content.muted) {
         content.muted = true
