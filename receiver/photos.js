@@ -54,17 +54,14 @@ function Photos(config) {
         self.listUrls.push(config.videoListUrl)
       },
       renderPhoto(url) {
-        if (this.isVideo(url))
+        if (isVideo(url))
           photo.src = self.baseUrl + config.videoUrlPrefix + url
         else
           photo.src = self.baseUrl + config.photoVideoUrlPrefix + url + this.renderStyle()
       },
       preloadNext(url) {
-        if (!this.isVideo(url))
+        if (!isVideo(url))
           nextImg.href = config.photoVideoUrlPrefix + url + this.renderStyle() + '&preload=true'
-      },
-      isVideo(url) {
-        return url.toLowerCase().endsWith('.mp4')
       },
       renderStyle() {
         return (supports4k ? '&w=3840&h=2160' : '&w=' + innerWidth * devicePixelRatio + '&h=' + innerHeight * devicePixelRatio) +
@@ -139,6 +136,7 @@ function Photos(config) {
   }
 
   function loadMeta(url) {
+    if (isVideo(url)) return new Promise(() => {})
     return fetch(config.metaUrlPrefix + url).then(r => r.json())
   }
 
@@ -191,5 +189,9 @@ function Photos(config) {
     loading = false
     clearTimeout(timer)
     timer = setTimeout(self.next, timeout)
+  }
+
+  function isVideo(url) {
+    return url.toLowerCase().endsWith('.mp4')
   }
 }
