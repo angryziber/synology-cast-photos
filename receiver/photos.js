@@ -16,7 +16,8 @@ function Photos(config) {
       init() {
         photo.outerHTML = '<img id="photo">'
         photo = document.getElementById('photo')
-        photo.onload = () => loadNextPhotoAfter(self.interval)
+        photo.oncanplaythrough = () => photo.play()
+        photo.onended = () => loadNextPhotoAfter(self.interval)
       },
       renderPhoto(url) {
         photo.src = self.baseUrl + config.photoUrlPrefix + url
