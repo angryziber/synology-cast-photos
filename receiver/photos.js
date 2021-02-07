@@ -55,7 +55,6 @@ function Photos(config) {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo = document.getElementById('photo')
         photo.onplay = () => loadNextAfter(self.interval)
-        self.listUrls.push(config.videoListUrl)
       },
       renderPhoto(url) {
         if (isVideo(url))
@@ -100,8 +99,12 @@ function Photos(config) {
 
   self.updateState = function(key, value) {
     self.state[key] = value
-    if (key == 'photos' || key == 'videos')
+    if (key == 'photos' || key == 'videos') {
+      self.listUrl = []
+      if (self.state.photos) self.listUrl.push(config.listUrl)
+      if (self.state.videos) self.listUrl.push(config.videoListUrl)
       self.loadUrlsAndShow(self.state.dir, self.state.random)
+    }
   }
 
   self.changeStyle = function(s) {
