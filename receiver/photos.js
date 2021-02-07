@@ -1,6 +1,5 @@
 function Photos(config) {
   const self = this
-  self.interval = config.interval
   BaseContent.call(self, config)
 
   let photo = document.getElementById('photo')
@@ -10,6 +9,7 @@ function Photos(config) {
   let mode, supports4k
 
   self.state.mode = config.mode
+  self.state.interval = config.interval
   self.state.style = 'contain'
   self.state.photos = true
   self.state.videos = false
@@ -21,7 +21,7 @@ function Photos(config) {
         photo.outerHTML = '<img id="photo">'
         photo = document.getElementById('photo')
         photo.oncanplaythrough = () => photo.play()
-        photo.onended = () => isVideo(photo.src) ? self.next() : loadNextAfter(self.interval)
+        photo.onended = () => isVideo(photo.src) ? self.next() : loadNextAfter(self.state.interval)
       },
       renderPhoto(url) {
         photo.src = self.baseUrl + config.photoUrlPrefix + url
@@ -55,7 +55,7 @@ function Photos(config) {
       init() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo = document.getElementById('photo')
-        photo.onplay = () => loadNextAfter(self.interval)
+        photo.onplay = () => loadNextAfter(self.state.interval)
       },
       renderPhoto(url) {
         if (isVideo(url))
@@ -197,7 +197,7 @@ function Photos(config) {
 
   function photoLoadingFailed() {
     self.status.textContent = self.index + '/' + self.urls.length + ': failed'
-    loadNextAfter(self.interval / 4)
+    loadNextAfter(self.state.interval / 4)
   }
 
   function loadNextAfter(timeout) {

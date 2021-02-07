@@ -49,6 +49,7 @@ function Sender(config, chromecast) {
       const state = JSON.parse(message.substring('state:'.length))
       if (state.dir) dir.value = state.dir
       random.checked = state.random
+      interval.value = state.interval
       photos.checked = state.photos
       videos.checked = state.videos
       cover.checked = state.style == 'contain'
