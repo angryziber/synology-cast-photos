@@ -36,8 +36,7 @@ function BaseContent(config) {
   }
 
   self.loadUrlsAndShow = async function(dir, random = true) {
-    const urls = await self.loadUrls(dir)
-    if (append) self.urls.push(...urls); else self.urls = urls
+    self.urls = await self.loadUrls(dir)
     self.urlsRandom = self.urlsSequential = null
     if (random) self.random(); else self.sequential()
     self.title((random ? 'Random: ' : 'Sequential: ') + dir)
