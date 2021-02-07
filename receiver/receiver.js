@@ -16,8 +16,7 @@ function Receiver(content, keyboard) {
     this.messageBus = receiverManager.getCastMessageBus('urn:x-cast:message')
     this.messageBus.onMessage = e => this.onCommand(e.data)
 
-    receiverManager.onSenderConnected = e =>
-      this.messageBus.send(e.senderId, content.supports4k ? 'mode:video' : 'mode:img')
+    receiverManager.onSenderConnected = e => this.messageBus.send(e.senderId, content.state)
 
     const castConfig = new cast.receiver.CastReceiverManager.Config()
     castConfig.maxInactivity = 60000

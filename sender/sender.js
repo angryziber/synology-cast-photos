@@ -42,10 +42,13 @@ function Sender(config, chromecast) {
     }
   })
 
-  chromecast.onMessage = function(ns, text) {
-    const parts = text.split('|')
-    if (parts.length == 1) status.textContent = text
-    else status.innerHTML = '<a href="' + parts[1] + '">' + parts[0] + '</a>'
+  chromecast.onMessage = function(ns, message) {
+    console.log('received', message)
+    if (typeof message == 'string') {
+      const parts = message.split('|')
+      if (parts.length == 1) status.textContent = message
+      else status.innerHTML = '<a href="' + parts[1] + '">' + parts[0] + '</a>'
+    }
   }
 
   function sendCommand(cmd) {

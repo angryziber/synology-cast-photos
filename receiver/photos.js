@@ -9,9 +9,10 @@ function Photos(config) {
   let timer, meta, nextMeta, loading, displayedUrl, showingMap
   let mode, supports4k
 
+  self.state.mode = config.mode
+  self.state.style = 'contain'
   self.state.photos = true
   self.state.videos = false
-  self.state.style = 'contain'
 
   const modes = {
     // loads images as-is, without server-side processing (good for older NAS with slow CPU)
@@ -75,7 +76,7 @@ function Photos(config) {
   }
 
   self.init = function() {
-    mode = modes[config.mode]
+    mode = modes[self.state.mode]
     mode.init()
     photo.onerror = photoLoadingFailed
     if (document.documentElement.requestFullscreen)
@@ -86,13 +87,12 @@ function Photos(config) {
     get: () => supports4k,
     set(val) {
       supports4k = val
-      config.mode = supports4k ? 'video' : 'img'
-      self.init()
+      self.changeMode(supports4k ? 'video' : 'img')
     }
   })
 
-  self.changeMode = function(m) {
-    config.mode = m
+  self.changeMode = function(mode) {
+    self.state.mode = mode
     self.init()
     self.loadCurrent()
   }
