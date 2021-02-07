@@ -66,26 +66,13 @@ function Sender(config, chromecast) {
   })
 
   interval.addEventListener('change', () => sendCommand('interval:' + interval.value))
-
   document.getElementById('prev').addEventListener('click', () => sendCommand('prev'))
-
   document.getElementById('next').addEventListener('click', () => sendCommand('next'))
-
   document.getElementById('prev-more').addEventListener('click', () => sendCommand('prev:10'))
-
   document.getElementById('next-more').addEventListener('click', () => sendCommand('next:10'))
-
   document.getElementById('pause').addEventListener('click', () => sendCommand('pause'))
-
-  document.getElementById('photos').addEventListener('click', () => {
-    sendCommand('photos:' + input.value)
-    return false
-  })
-
-  document.getElementById('videos').addEventListener('click', () => {
-    sendCommand('videos:' + input.value)
-    return false
-  })
+  document.getElementById('photos').addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':photos'))
+  document.getElementById('videos').addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':videos'))
 
   document.body.addEventListener('keydown', e => {
     if (e.target.tagName == 'INPUT') return

@@ -7,12 +7,16 @@
   <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-  <h1>Send <a id="photos" href="">photos</a>/<a id="videos" href="">videos</a> from NAS to Chromecast!</h1>
+  <h1>Send photos & videos from NAS to Chromecast!</h1>
 
   <form>
     <input class="typeahead" type="text" name="prefix" value="" placeholder="2021" autofocus list="paths">
     <datalist id="paths"></datalist>
 
+    <div>
+      <label><input type="checkbox" name="photos"> Photos</label>
+      <label><input type="checkbox" name="videos"> Videos</label>
+    </div>
     <div>
       <label><input type="checkbox" name="random" checked> Random</label>
       <label><input type="checkbox" name="cover"> Cover screen</label>

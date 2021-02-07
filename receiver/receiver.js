@@ -60,8 +60,6 @@ function Receiver(content, keyboard) {
     else if (cmd == 'next') content.next(arg)
     else if (cmd == 'pause') content.pause()
     else if (cmd == 'mark') content.mark(arg)
-    else if (cmd == 'photos') location.href = location.origin + '/receiver/#' + arg
-    else if (cmd == 'videos') location.href = location.origin + '/receiver/video.html#' + arg
     else content.loadUrlsAndShow(cmd)
 
     if (title) {

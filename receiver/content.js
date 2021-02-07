@@ -9,6 +9,11 @@ function BaseContent(config) {
   self.listUrls = [config.listUrl]
   let title = document.getElementById('title')
 
+  self.state = {
+    dir: '',
+    random: true
+  }
+
   setTimeout(function checkLanForQuickerDownloads() {
     const start = Date.now()
     fetch(config.lanBaseUrl + config.lanCheckUrl).then(res => {
@@ -36,6 +41,7 @@ function BaseContent(config) {
   }
 
   self.loadUrlsAndShow = async function(dir, random = true) {
+    self.state.dir = dir
     self.urls = await self.loadUrls(dir)
     self.urlsRandom = self.urlsSequential = null
     if (random) self.random(); else self.sequential()
@@ -53,10 +59,12 @@ function BaseContent(config) {
   }
 
   self.random = function() {
+    self.state.random = true
     updateIndex(self.currentUrl(), self.urlsRandom || (self.urlsRandom = shuffle(self.urls.slice())))
   }
 
   self.sequential = function() {
+    self.state.random = false
     updateIndex(self.currentUrl(), self.urlsSequential || (self.urlsSequential = self.urls.slice().sort()))
   }
 

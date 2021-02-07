@@ -7,8 +7,11 @@ function Photos(config) {
   const map = document.getElementById('map')
   const nextImg = document.querySelector('link[rel=preload]')
   let timer, meta, nextMeta, loading, displayedUrl, showingMap
-  let style = 'contain'
   let mode, supports4k
+
+  self.state.photos = true
+  self.state.videos = false
+  self.state.style = 'contain'
 
   const modes = {
     // loads images as-is, without server-side processing (good for older NAS with slow CPU)
@@ -38,7 +41,7 @@ function Photos(config) {
           }
         }
 
-        if (style === 'cover' && horizontal) {
+        if (self.state.style === 'cover' && horizontal) {
           const screenRatio = innerWidth / innerHeight
           const verticalScale = 100 * screenRatio / imgRatio * 0.9
           photo.style.objectFit = verticalScale > 100 ? '100% ' + verticalScale + '%' : 'cover'
@@ -46,7 +49,7 @@ function Photos(config) {
         else photo.style.objectFit = 'contain'
       },
     },
-    // supports 4k/UHD resolution on Google Cast
+    // supports photos with 4K/UHD resolution on Google Cast
     video: {
       init() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
@@ -66,7 +69,7 @@ function Photos(config) {
       },
       renderStyle() {
         return (supports4k ? '&w=3840&h=2160' : '&w=' + innerWidth * devicePixelRatio + '&h=' + innerHeight * devicePixelRatio) +
-               (innerWidth/innerHeight == 16/9 && style == 'contain' ? '&style=fill' : '')
+               (innerWidth/innerHeight == 16/9 && self.state.style == 'contain' ? '&style=fill' : '')
       },
       applyMeta() {}
     }
@@ -95,8 +98,14 @@ function Photos(config) {
     self.loadCurrent()
   }
 
+  self.updateState = function(key, value) {
+    self.state[key] = value
+    if (key == 'photos' || key == 'videos')
+      self.loadUrlsAndShow(self.state.dir, self.state.random)
+  }
+
   self.changeStyle = function(s) {
-    style = s
+    self.state.style = s
     photo.style.objectFit = s
     self.loadCurrent()
   }
@@ -116,15 +125,17 @@ function Photos(config) {
     }).then(text => self.title(text))
   }
 
-  self.show = function(id) {
-    if (id == 'map') {
+  self.show = function(key) {
+    if (key == 'photos' || key == 'videos') self.updateState(key, true)
+    else if (key == 'map') {
       map.style.display = 'block'
       updateMap()
     }
   }
 
-  self.hide = function(id) {
-    if (id == 'map') {
+  self.hide = function(key) {
+    if (key == 'photos' || key == 'videos') self.updateState(key, true)
+    else if (key == 'map') {
       map.style.display = 'none'
       showingMap = false
     }
