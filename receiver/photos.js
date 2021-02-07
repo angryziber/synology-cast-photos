@@ -222,7 +222,7 @@ function Photos(config) {
   }
 
   function fadeOutAfter(sec) {
-    if (sec > 2) fadeOutTimer = setTimeout(fadeOut, (sec - 1.5) * 1000)
+    if (sec > 2) fadeOutTimer = setTimeout(fadeOut, (sec - 1) * 1000)
   }
 
   function isVideo(url) {
