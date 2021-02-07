@@ -18,6 +18,7 @@ class Chromecast {
 
   sessionListener(session) {
     this.session = session
+    document.body.removeEventListener('click', this.requestStart)
     session.addMessageListener(this.namespace, this.onMessage)
     session.addUpdateListener(() => {
       if (session.status != chrome.cast.SessionStatus.CONNECTED)
@@ -26,13 +27,8 @@ class Chromecast {
   }
 
   receiverListener(e) {
-    if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !this.session) {
-      const onceHandler = () => {
-        this.start()
-        document.body.removeEventListener('click', onceHandler)
-      }
-      document.body.addEventListener('click', onceHandler)
-    }
+    if (e === chrome.cast.ReceiverAvailability.AVAILABLE && !this.session)
+      document.body.addEventListener('click', this.requestStart)
   }
 
   start(callback) {
@@ -41,6 +37,8 @@ class Chromecast {
       if (callback) callback()
     }, this.onError)
   }
+
+  requestStart = this.start.bind(this)
 
   message(message, callback) {
     const sendMessage = () => this.session.sendMessage(this.namespace, message, callback || (() => {}), this.onError)
