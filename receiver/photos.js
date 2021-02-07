@@ -104,10 +104,10 @@ function Photos(config) {
   }
 
   self.mark = function(how) {
-    fetch(config.markPhotoUrl, {method: 'POST', body: JSON.stringify({file: displayedUrl, how: how})}).then(
-      text => self.title(text),
-      e => self.title('Failed to mark: ' + e)
-    )
+    fetch(config.markPhotoUrl, {method: 'POST', body: JSON.stringify({file: displayedUrl, how: how})}).then(r => {
+      if (r.ok) return r.text()
+      else self.title('Failed to mark: ' + r.status + ' ' + r.statusText)
+    }).then(text => self.title(text))
   }
 
   self.show = function(id) {
