@@ -5,7 +5,7 @@ function Photos(config) {
   let content = document.getElementById('photo')
   const map = document.getElementById('map')
   const nextImg = document.querySelector('link[rel=preload]')
-  let timer, meta, nextMeta, loading, displayedUrl, showingMap
+  let nextTimer, fadeOutTimer, meta, nextMeta, loading, displayedUrl, showingMap
   let mode, supports4k
 
   self.state.mode = config.mode
@@ -57,8 +57,7 @@ function Photos(config) {
         content.oncanplaythrough = () => playVideo()
         content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
         content.onprogress = () => {
-          if (content.currentTime >= content.duration - 1.5)
-            document.body.classList.add('fade-out')
+          if (content.currentTime >= content.duration - 1.5) fadeOut()
         }
       },
       renderPhoto(url) {
@@ -118,9 +117,10 @@ function Photos(config) {
   }
 
   self.pause = function() {
-    if (timer) {
-      clearTimeout(timer)
-      timer = null
+    if (nextTimer) {
+      clearTimeout(fadeOutTimer)
+      clearTimeout(nextTimer)
+      nextTimer = null
     }
     else loadNextAfter(0)
   }
@@ -206,8 +206,14 @@ function Photos(config) {
 
   function loadNextAfter(sec) {
     loading = false
-    clearTimeout(timer)
-    timer = setTimeout(self.next, sec * 1000)
+    clearTimeout(fadeOutTimer)
+    clearTimeout(nextTimer)
+    fadeOutTimer = setTimeout(fadeOut, (sec - 1.5) * 1000)
+    nextTimer = setTimeout(self.next, sec * 1000)
+  }
+
+  function fadeOut() {
+    document.body.classList.add('fade-out')
   }
 
   function isVideo(url) {
