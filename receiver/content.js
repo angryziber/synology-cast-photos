@@ -32,9 +32,9 @@ function BaseContent(config) {
     }
 
     fetch(self.baseUrl + config.listUrl + '?dir=' + encodeURIComponent(dir)).then(res => {
-      if (!res.ok) throw new Error(res.status)
-      return res.text()
-    }).then(onUrlsLoaded, e => self.title(e))
+      if (res.ok) return res.text()
+      else self.title('Error: ' + res.status + ' ' + res.statusText)
+    }).then(onUrlsLoaded)
   }
 
   self.currentUrl = function() {
