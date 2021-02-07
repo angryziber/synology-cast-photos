@@ -136,8 +136,8 @@ function Photos(config) {
       '&zoom=9&size=500x300&maptype=terrain&key=' + config.googleMapsApiKey
   }
 
-  function loadMeta(url) {
-    if (isVideo(url)) return new Promise(() => {})
+  async function loadMeta(url) {
+    if (isVideo(url)) return {file: url, datetime: url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'))}
     return fetch(config.metaUrlPrefix + url).then(r => r.json())
   }
 
