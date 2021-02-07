@@ -204,10 +204,10 @@ function Photos(config) {
     loadNextAfter(self.state.interval / 4)
   }
 
-  function loadNextAfter(timeout) {
+  function loadNextAfter(sec) {
     loading = false
     clearTimeout(timer)
-    timer = setTimeout(self.next, timeout)
+    timer = setTimeout(self.next, sec * 1000)
   }
 
   function isVideo(url) {

@@ -1,7 +1,7 @@
 var config = {
   lanBaseUrl: 'http://192.168.0.2', // for faster downloads when in LAN (.local names not supported)
   lanCheckUrl: '/backend/config.php',
-  interval: 10000, // ms
+  interval: 10, // sec
   listUrl: '/backend/photos_list.php',
   photoUrlPrefix: '/backend/photo.php?file=',
   photoVideoUrlPrefix: '/backend/photov.php?file=',

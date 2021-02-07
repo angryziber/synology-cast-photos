@@ -48,7 +48,7 @@ function Receiver(content, keyboard) {
       else content.sequential()
     }
     else if (cmd == 'interval') {
-      content.state.interval = parseInt(arg) * 1000
+      content.state.interval = parseInt(arg)
       title = 'Interval: ' + arg + 's'
     }
     else if (cmd == 'mode') content.changeMode(arg)
