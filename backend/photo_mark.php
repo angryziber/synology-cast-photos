@@ -20,7 +20,7 @@ if ($marked) {
 }
 
 if (file_put_contents($marks_file, $what."\n", FILE_APPEND)) {
-    echo $marked ? "Unmarked $how" : "Marked $how";
+    echo $marked ? "Unmarked $what" : "Marked $what";
 }
 else {
     echo "Failed to mark $what";
