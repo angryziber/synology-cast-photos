@@ -56,6 +56,10 @@ function Photos(config) {
         content = document.getElementById('photo')
         content.oncanplaythrough = () => playVideo()
         content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
+        content.onprogress = () => {
+          if (content.currentTime >= content.duration - 1.5)
+            document.body.classList.add('fade-out')
+        }
       },
       renderPhoto(url) {
         if (isVideo(url))
