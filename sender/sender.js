@@ -4,6 +4,8 @@ function Sender(config, chromecast) {
   const suggestions = document.querySelector('datalist#paths')
   const random = document.querySelector('[name=random]')
   const cover = document.querySelector('[name=cover]')
+  const photos = document.getElementById('photos')
+  const videos = document.getElementById('videos')
   const interval = document.querySelector('[name=interval]')
   const status = document.getElementById('status')
 
@@ -43,12 +45,17 @@ function Sender(config, chromecast) {
   })
 
   chromecast.onMessage = function(ns, message) {
-    console.log('received', message)
-    if (typeof message == 'string') {
-      const parts = message.split('|')
-      if (parts.length == 1) status.textContent = message
-      else status.innerHTML = '<a href="' + parts[1] + '">' + parts[0] + '</a>'
+    if (message.startsWith('state:')) {
+      const state = JSON.parse(message.substring('state:'.length))
+      if (state.dir) dir.value = state.dir
+      random.checked = state.random
+      photos.checked = state.photos
+      videos.checked = state.videos
+      cover.checked = state.style == 'contain'
     }
+    const parts = message.split('|')
+    if (parts.length == 1) status.textContent = message
+    else status.innerHTML = '<a href="' + parts[1] + '">' + parts[0] + '</a>'
   }
 
   function sendCommand(cmd) {
@@ -68,14 +75,15 @@ function Sender(config, chromecast) {
     sendCommand(cover.checked ? 'style:cover' : 'style:contain')
   })
 
+  photos.addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':photos'))
+  videos.addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':videos'))
+
   interval.addEventListener('change', () => sendCommand('interval:' + interval.value))
   document.getElementById('prev').addEventListener('click', () => sendCommand('prev'))
   document.getElementById('next').addEventListener('click', () => sendCommand('next'))
   document.getElementById('prev-more').addEventListener('click', () => sendCommand('prev:10'))
   document.getElementById('next-more').addEventListener('click', () => sendCommand('next:10'))
   document.getElementById('pause').addEventListener('click', () => sendCommand('pause'))
-  document.getElementById('photos').addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':photos'))
-  document.getElementById('videos').addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':videos'))
 
   document.body.addEventListener('keydown', e => {
     if (e.target.tagName == 'INPUT') return
