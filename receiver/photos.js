@@ -17,7 +17,7 @@ function Photos(config) {
         photo.outerHTML = '<img id="photo">'
         photo = document.getElementById('photo')
         photo.oncanplaythrough = () => photo.play()
-        photo.onended = () => loadNextPhotoAfter(self.interval)
+        photo.onended = () => isVideo(photo.src) ? self.next() : loadNextAfter(self.interval)
       },
       renderPhoto(url) {
         photo.src = self.baseUrl + config.photoUrlPrefix + url
@@ -51,7 +51,7 @@ function Photos(config) {
       init() {
         photo.outerHTML = '<video id="photo" muted autoplay></video>'
         photo = document.getElementById('photo')
-        photo.onplay = () => loadNextPhotoAfter(self.interval)
+        photo.onplay = () => loadNextAfter(self.interval)
         self.listUrls.push(config.videoListUrl)
       },
       renderPhoto(url) {
@@ -106,7 +106,7 @@ function Photos(config) {
       clearTimeout(timer)
       timer = null
     }
-    else loadNextPhotoAfter(0)
+    else loadNextAfter(0)
   }
 
   self.mark = function(how) {
@@ -183,10 +183,10 @@ function Photos(config) {
 
   function photoLoadingFailed() {
     self.status.textContent = self.index + '/' + self.urls.length + ': failed'
-    loadNextPhotoAfter(self.interval / 4)
+    loadNextAfter(self.interval / 4)
   }
 
-  function loadNextPhotoAfter(timeout) {
+  function loadNextAfter(timeout) {
     loading = false
     clearTimeout(timer)
     timer = setTimeout(self.next, timeout)
