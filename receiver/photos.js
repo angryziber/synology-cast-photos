@@ -20,8 +20,7 @@ function Photos(config) {
       init() {
         content.outerHTML = '<img id="photo">'
         content = document.getElementById('photo')
-        content.oncanplaythrough = () => content.play()
-        content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
+        content.onload = () => loadNextAfter(self.state.interval)
       },
       renderPhoto(url) {
         content.src = self.baseUrl + config.photoUrlPrefix + url
@@ -53,9 +52,10 @@ function Photos(config) {
     // supports photos with 4K/UHD resolution on Google Cast
     video: {
       init() {
-        content.outerHTML = '<video id="photo" muted autoplay></video>'
+        content.outerHTML = '<video id="photo"></video>'
         content = document.getElementById('photo')
-        content.onplay = () => loadNextAfter(self.state.interval)
+        content.oncanplaythrough = () => playVideo()
+        content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
       },
       renderPhoto(url) {
         if (isVideo(url))
@@ -208,5 +208,17 @@ function Photos(config) {
 
   function isVideo(url) {
     return url.toLowerCase().endsWith('.mp4')
+  }
+
+  function playVideo() {
+    document.body.classList.remove('fade-out')
+    const promise = content.play()
+    if (promise) promise.catch((e) => {
+      console.error(e)
+      if (!content.muted) {
+        content.muted = true
+        playVideo()
+      }
+    })
   }
 }
