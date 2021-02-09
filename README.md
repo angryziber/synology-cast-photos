@@ -20,7 +20,7 @@ Cast photos & videos stored on a Synology NAS directly to Google Chromecast or A
 Android TVs and Chromecast Ultra still cannot display any non-video content above FullHD 1080p.
 2160p resolution is only used for compatible videos, any other elements of receiver are downscaled, including images.
 
-In order to display images at full TV resolution, they are converted to 1-frame mp4 videos using `ffmpeg`, see (photov.php)[backend/photov.php].
+In order to display images at full TV resolution, they are converted to 1-frame mp4 videos using `ffmpeg`, see [photov.php](backend/photov.php).
 Set `mode: 'img'` in [receiver/config](receiver/config.js) if you are fine with 1080p resolution or cannot use ffmpeg.
 
 ## Installing
