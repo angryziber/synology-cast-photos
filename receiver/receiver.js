@@ -39,7 +39,11 @@ function Receiver(content, keyboard) {
     let arg = command.substring(separatorPos + 1)
     let title = command
 
-    if (cmd == 'rnd') {
+    if (cmd == 'url') {
+      // allow switching of receiver to custom/local NAS
+      if (!location.href.startsWith(arg)) location.href = arg
+    }
+    else if (cmd == 'rnd') {
       if (arg) content.loadUrlsAndShow(arg, true)
       else content.random()
     }

@@ -7,7 +7,9 @@ function BaseContent(config) {
   self.supports4k = undefined
   self.baseUrl = ''
   self.listUrls = [config.listUrl]
-  let title = document.getElementById('title')
+
+  const title = document.getElementById('title')
+  title.textContent += ': ' + location.origin
 
   self.state = {
     dir: '',

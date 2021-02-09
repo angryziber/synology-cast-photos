@@ -1,5 +1,5 @@
 var config = {
   // appId of receiver, must be registered with Google, see README.md
-  castAppId: location.host.indexOf('192.168.') >= 0 || location.host.indexOf('.local') >= 0 ? '40FA4E04' : '87673D37',
+  castAppId: 'F8FB0863',
   photoDirsSuggestUrl: '/backend/photos_dirs.php'
 }
