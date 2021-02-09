@@ -38,7 +38,7 @@ class Chromecast {
     }, this.onError)
   }
 
-  requestStart = this.start.bind(this)
+  requestStart = () => this.start()
 
   message(message, callback) {
     const sendMessage = () => this.session.sendMessage(this.namespace, message, callback || (() => {}), this.onError)
