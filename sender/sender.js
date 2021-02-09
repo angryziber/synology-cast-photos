@@ -3,7 +3,7 @@ import {Chromecast} from './chromecast.js'
 
 export function Sender(chromecast = new Chromecast(config.castAppId)) {
   const self = this
-  const dir = document.querySelector('[name=prefix]')
+  const path = document.querySelector('[name=path]')
   const suggestions = document.querySelector('datalist#paths')
   const random = document.querySelector('[name=random]')
   const cover = document.querySelector('[name=cover]')
@@ -30,16 +30,16 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
   }
 
   let debounce
-  dir.addEventListener('keydown', e => {
+  path.addEventListener('keydown', e => {
     if (e.code === 'Enter') self.sendPhotoDir()
     else {
       clearTimeout(debounce)
       debounce = setTimeout(() => {
-        if (!dir.value) {
+        if (!path.value) {
           if (suggestedValues !== years) suggest(years)
         } else {
-          if (suggestedValues.includes(dir.value)) return
-          fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${dir.value}`).then(r => r.text()).then(data => {
+          if (suggestedValues.includes(path.value)) return
+          fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${path.value}`).then(r => r.text()).then(data => {
             suggest(data.trim().split('\n'))
           })
         }
@@ -50,7 +50,7 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
   chromecast.onMessage = function(ns, message) {
     if (message.startsWith('state:')) {
       const state = JSON.parse(message.substring('state:'.length))
-      if (state.dir) dir.value = state.dir
+      if (state.path) path.value = state.path
       random.checked = state.random
       interval.value = state.interval
       photos.checked = state.photos
@@ -69,7 +69,7 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
   }
 
   self.sendPhotoDir = function() {
-    sendCommand((random.checked ? 'rnd:' : 'seq:') + dir.value)
+    sendCommand((random.checked ? 'rnd:' : 'seq:') + path.value)
   }
 
   random.addEventListener('change', () => {

@@ -2,8 +2,8 @@ const config = {
   lanBaseUrl: '', // e.g. 'http://192.168.0.2' - for faster streaming when in LAN (.local names not supported)
   googleMapsApiKey: '', // to view map where geotagged photos were shot (M key)
   lanCheckUrl: '/backend/config.php',
-  listUrl: '/backend/photos_list.php',
-  videoListUrl: '/backend/videos_list.php',
+  listUrl: '/backend/photos_list.php?dir=',
+  videoListUrl: '/backend/videos_list.php?dir=',
   photoUrlPrefix: '/backend/photo.php?file=',
   photoVideoUrlPrefix: '/backend/photov.php?file=',
   videoUrlPrefix: '/video/',

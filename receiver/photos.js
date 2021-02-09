@@ -103,7 +103,7 @@ function Photos(config) {
       self.listUrls = []
       if (self.state.photos) self.listUrls.push(config.listUrl)
       if (self.state.videos) self.listUrls.push(config.videoListUrl)
-      self.loadUrlsAndShow(self.state.dir, self.state.random)
+      self.loadUrlsAndShow(self.state.path, self.state.random)
     }
   }
 

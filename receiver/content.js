@@ -13,7 +13,7 @@ function BaseContent(config) {
 
   self.state = {
     url: location.href,
-    dir: '',
+    path: '',
     random: true
   }
 
@@ -29,10 +29,10 @@ function BaseContent(config) {
     }).catch(e => console.log(config.lanBaseUrl + ' is not accessible, took ' + (Date.now() - start) + 'ms: ' + e))
   })
 
-  self.loadUrls = async function(dir) {
+  self.loadUrls = async function(path) {
     let urls = []
     for (let url of self.listUrls) {
-      const res = await fetch(self.baseUrl + url + '?dir=' + encodeURIComponent(dir))
+      const res = await fetch(self.baseUrl + url + encodeURIComponent(path))
       if (!res.ok) {
         self.title('Error: ' + res.status + ' ' + res.statusText)
         return
@@ -42,12 +42,12 @@ function BaseContent(config) {
     return urls
   }
 
-  self.loadUrlsAndShow = async function(dir, random = true) {
-    self.state.dir = dir
-    self.urls = await self.loadUrls(dir)
+  self.loadUrlsAndShow = async function(path, random = true) {
+    self.state.path = path
+    self.urls = await self.loadUrls(path)
     self.urlsRandom = self.urlsSequential = null
     if (random) self.random(); else self.sequential()
-    self.title((random ? 'Random: ' : 'Sequential: ') + dir)
+    self.title((random ? 'Random: ' : 'Sequential: ') + path)
     self.index = 1
     self.loadCurrent()
   }

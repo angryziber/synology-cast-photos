@@ -35,10 +35,6 @@ input[name=interval] {
   text-align: center;
 }
 
-.vk {
-  margin-top: 100px;
-}
-
 #status {
   margin-top: 20px;
   color: red;
