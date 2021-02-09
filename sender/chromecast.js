@@ -1,6 +1,6 @@
 // Chromecast sender API wrapper
 
-class Chromecast {
+export class Chromecast {
   namespace = 'urn:x-cast:message'
   onMessage = () => {}
   onError = e => console.log(e)

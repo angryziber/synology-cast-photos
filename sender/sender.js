@@ -1,4 +1,7 @@
-function Sender(config, chromecast) {
+import config from './config.js'
+import {Chromecast} from './chromecast.js'
+
+export function Sender(chromecast = new Chromecast(config.castAppId)) {
   const self = this
   const dir = document.querySelector('[name=prefix]')
   const suggestions = document.querySelector('datalist#paths')
@@ -91,7 +94,7 @@ function Sender(config, chromecast) {
   document.body.addEventListener('keydown', e => {
     if (e.target.tagName == 'INPUT') return
 
-    const command = keyboard.toCommand(e.which)
+    const command = window.keyboard.toCommand(e.which)
     if (command) {
       e.preventDefault()
       sendCommand(command)
