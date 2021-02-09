@@ -42,6 +42,7 @@ function Receiver(content, keyboard) {
     if (cmd == 'url') {
       // allow switching of receiver to custom/local NAS
       if (!location.href.startsWith(arg)) location.href = arg
+      return
     }
     else if (cmd == 'rnd') {
       if (arg) content.loadUrlsAndShow(arg, true)
