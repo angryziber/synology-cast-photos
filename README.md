@@ -1,7 +1,7 @@
 Cast photos from NAS directly to TV
 ===================================
 
-Cast photos & videos stored on a Synology NAS directly to Google Chromecast or Android TV.
+Cast photos & videos stored on a NAS directly to Google Chromecast or Android TV.
 
 This is like your biggest photo frame - images are shown in random order by default.
 
@@ -25,9 +25,9 @@ Android TVs and Chromecast Ultra still cannot display any non-video content abov
 In order to display images at full TV resolution, they are converted to 1-frame mp4 videos using `ffmpeg`, see [photov.php](backend/photov.php).
 Set `mode: 'img'` in [receiver/config](receiver/config.js) if you are fine with 1080p resolution or cannot use ffmpeg.
 
-## Installing
+## Installing on Synology NAS
 
-- Enable *Web Station* on your Synology NAS
+- Enable *Web Station* in DSM web interface
 - In PHP settings (in a tab), add your photos and videos directories to PHP open_basedir - otherwise they won't be accessible to PHP
 - Copy/clone this repository to the *'web'* directory on your NAS
 - [Register a Chromecast receiver app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/receiver**
@@ -40,7 +40,8 @@ Note: backend PHP scripts can take advantage of [rawfs](http://github.com/angryz
 possible to cast raw photos directly, without converting them to jpeg first. This is optional if your photos are already
 in jpeg format.
 
-Videos are streamed directly without transcoding, so your Chromecast must support their format. H264 works the best.
+Videos are streamed directly without transcoding, so your Chromecast must support their format. H264 works the best across devices.
+Newer TVs and Chromecast Ultra do support VP9 and HEVC/H265 as well.
 
 There is also an [Android sender app](https://github.com/angryziber/synology-cast-photos-android) for controlling the casted photos instead of *html sender*.
 
