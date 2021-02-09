@@ -12,6 +12,7 @@ function BaseContent(config) {
   title.textContent += ': ' + location.origin
 
   self.state = {
+    origin: location.origin,
     dir: '',
     random: true
   }

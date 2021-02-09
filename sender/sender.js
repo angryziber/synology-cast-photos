@@ -53,6 +53,7 @@ function Sender(config, chromecast) {
       photos.checked = state.photos
       videos.checked = state.videos
       cover.checked = state.style == 'contain'
+      if (state.origin != location.origin) sendCommand('url:' + location.origin + '/receiver/')
       return
     }
     const parts = message.split('|')
