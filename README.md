@@ -3,6 +3,8 @@ Cast photos from NAS directly to TV
 
 Cast photos & videos stored on a Synology NAS directly to Google Chromecast or Android TV.
 
+This is like your biggest photo frame - images are shown in random order by default.
+
 ## Required hardware
 
 - *Synology NAS* device (or any other server containing photos and running PHP)
