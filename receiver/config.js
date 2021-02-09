@@ -1,4 +1,4 @@
-var config = {
+const config = {
   lanBaseUrl: 'http://192.168.0.2', // for faster downloads when in LAN (.local names not supported)
   lanCheckUrl: '/backend/config.php',
   interval: 10, // sec
