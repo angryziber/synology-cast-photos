@@ -16,9 +16,9 @@ export class Chromecast {
     }
   }
 
-  sessionListener(session) {
+  sessionListener(session, callback) {
     this.session = session
-    this.message('url:' + location.href.replace('/sender/', '/receiver/'))
+    this.message('url:' + location.href.replace('/sender/', '/receiver/'), callback)
     session.addMessageListener(this.namespace, this.onMessage)
     session.addUpdateListener(() => {
       if (session.status != chrome.cast.SessionStatus.CONNECTED) this.session = null
@@ -30,10 +30,7 @@ export class Chromecast {
   }
 
   start(callback) {
-    chrome.cast.requestSession(session => {
-      this.sessionListener(session)
-      if (callback) callback()
-    }, this.onError)
+    chrome.cast.requestSession(session => this.sessionListener(session, callback), this.onError)
   }
 
   message(message, callback) {
