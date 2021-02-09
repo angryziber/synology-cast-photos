@@ -59,6 +59,11 @@ function Receiver(content, keyboard) {
     else if (cmd == 'next') content.next(arg)
     else if (cmd == 'pause') content.pause()
     else if (cmd == 'mark') content.mark(arg)
+    else if (cmd == 'photos' || cmd == 'videos') {
+      // backwards-compatibility with Android app
+      content.show(cmd)
+      this.onCommand(arg)
+    }
     else content.loadUrlsAndShow(cmd)
 
     if (title) {
