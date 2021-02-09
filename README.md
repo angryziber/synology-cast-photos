@@ -57,7 +57,7 @@ Note, in the Releases there is an ARMv5 binary of ffmpeg that supports H264 enco
 
 Chromecast receivers need to be registered with Google to get an *appId*.
 I have already registered one that anyone can use, specified in [sender config](sender/config.js) -
-it will load the receiver hosted at Github first, and then the sender will tell it to redirect to your own NAS.
+it will load the receiver hosted on Github first, and then the sender will tell it to redirect to your own NAS (same origin that you use to access the sender).
 
 If you want, you can also [register your own Chromecast receiver app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/receiver/**
 You will need to pay Google $5 for the privilege, but it will also be possible to register your Chromecast device for testing,
