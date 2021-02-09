@@ -56,8 +56,6 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
       photos.checked = state.photos
       videos.checked = state.videos
       cover.checked = state.style == 'contain'
-      if (state.url && !state.url.startsWith(location.origin))
-        chromecast.message('url:' + location.href.replace('/sender/', '/receiver/'))
       return
     }
     const parts = message.split('|')
