@@ -35,6 +35,6 @@ export class Chromecast {
 
   message(message, callback) {
     if (this.session) this.session.sendMessage(this.namespace, message, callback || (() => {}), this.onError)
-    else this.start(() => setTimeout(() => this.message(message, callback), 2000))
+    else this.start(() => setTimeout(() => this.message(message, callback), 1000))
   }
 }
