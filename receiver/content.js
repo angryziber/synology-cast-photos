@@ -18,6 +18,7 @@ function BaseContent(config) {
   }
 
   setTimeout(function checkLanForQuickerDownloads() {
+    if (!config.lanBaseUrl) return
     const start = Date.now()
     fetch(config.lanBaseUrl + config.lanCheckUrl).then(res => {
       if (res.ok) {
@@ -25,10 +26,8 @@ function BaseContent(config) {
         console.log(config.lanBaseUrl + ' is accessible, took ' + (Date.now() - start) + 'ms')
       }
       else throw res.status
-    }, e => {
-      console.log(config.lanBaseUrl + ' is not accessible, took ' + (Date.now() - start) + 'ms: ' + e)
-    })
-  }, 0)
+    }).catch(e => console.log(config.lanBaseUrl + ' is not accessible, took ' + (Date.now() - start) + 'ms: ' + e))
+  })
 
   self.loadUrls = async function(dir) {
     let urls = []
