@@ -1,5 +1,5 @@
-Cast photos from NAS directly to TV
-===================================
+Cast photos from NAS directly to TV in 4K/UHD
+=============================================
 
 Cast photos & videos stored on a NAS directly to Google Chromecast or Android TV.
 
