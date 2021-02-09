@@ -31,7 +31,8 @@ Set `mode: 'img'` in [receiver/config](receiver/config.js) if you are fine with 
 - In PHP settings (in a tab), add your photos and videos directories to PHP open_basedir - otherwise they won't be accessible to PHP
 - Copy/clone this repository to the *'web'* directory on your NAS
 - [Register a Chromecast receiver app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/receiver**
-  (Note: you need to pay Google $5 and register your Chromecast device for testing in order to be able to use http urls)
+  (Note: you need to pay Google $5 and register your Chromecast device for testing in order to be able to use **http** urls)
+- Optionally, you can also request Let's Encrypt https certificate and have the URL as **https://your-nas.synology.me/receiver**
 - Specify registered App ID in *sender/config.js*
 - Open **http://your-nas-ip/sender** in your browser, start casting!
 - Or open **http://your-nas-ip/receiver** to watch photos locally (Use Esc key to specify the directory to watch)
