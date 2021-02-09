@@ -9,10 +9,10 @@ function BaseContent(config) {
   self.listUrls = [config.listUrl]
 
   const title = document.getElementById('title')
-  title.textContent += ': ' + location.origin
+  if (location.host != 'keks.ee') title.textContent += ': ' + location.host
 
   self.state = {
-    origin: location.origin,
+    url: location.href,
     dir: '',
     random: true
   }
