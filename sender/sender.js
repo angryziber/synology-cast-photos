@@ -1,5 +1,6 @@
 import config from './config.js'
 import {Chromecast} from './chromecast.js'
+import {keyboard} from '../receiver/keyboard.js'
 
 export function Sender(chromecast = new Chromecast(config.castAppId)) {
   const self = this
@@ -92,7 +93,7 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
   document.body.addEventListener('keydown', e => {
     if (e.target.tagName == 'INPUT') return
 
-    const command = window.keyboard.toCommand(e.which)
+    const command = keyboard.toCommand(e.which)
     if (command) {
       e.preventDefault()
       sendCommand(command)

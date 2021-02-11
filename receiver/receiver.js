@@ -1,4 +1,6 @@
-function Receiver(content, keyboard) {
+import {keyboard} from './keyboard.js'
+
+export function Receiver(content) {
   if (navigator.userAgent.indexOf('CrKey') >= 0)
     initAsReceiver.call(this) // running under Chromecast - receive commands from Chromecast senders
   else
@@ -25,7 +27,7 @@ function Receiver(content, keyboard) {
 
   function initAsStandalone() {
     content.supports4k = window.innerHeight * window.devicePixelRatio > 1080
-    if (keyboard) keyboard.init()
+    keyboard.init()
   }
 
   this.broadcast = message => {

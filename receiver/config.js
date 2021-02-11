@@ -1,4 +1,4 @@
-const config = {
+export default {
   lanBaseUrl: '', // e.g. 'http://192.168.0.2' - for faster streaming when in LAN (.local names not supported)
   googleMapsApiKey: '', // to view map where geotagged photos were shot (M key)
   lanCheckUrl: '/backend/config.php',

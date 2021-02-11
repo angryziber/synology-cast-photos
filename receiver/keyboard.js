@@ -1,5 +1,5 @@
-var keyboard = {
-  toCommand: function(keyCode) {
+export const keyboard = {
+  toCommand(keyCode) {
     switch (keyCode) {
       case 37:
       case 38:
@@ -42,12 +42,12 @@ var keyboard = {
     }
   },
 
-  commandPrompt: function() {
+  commandPrompt() {
     var command = prompt('Photo dir/command', location.hash ? decodeURIComponent(location.hash.substring(1)) : '')
     if (command) location.hash = '#' + command
   },
 
-  onHammerLoaded: function () {
+  onHammerLoaded() {
     var hammer = new Hammer(document.body)
     hammer.on('swiperight', function () {
       receiver.onCommand('prev')
@@ -60,7 +60,7 @@ var keyboard = {
     })
   },
 
-  init: function() {
+  init() {
     window.onkeydown = function (e) {
       if (e.which == 27) {
         keyboard.commandPrompt()
@@ -74,6 +74,9 @@ var keyboard = {
       }
     }
 
-    document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js" onload="keyboard.onHammerLoaded()"></script>')
+    const script = document.createElement('script')
+    script.src = '//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js'
+    script.onload = this.onHammerLoaded.bind(this)
+    document.appendChild(script)
   }
 }

@@ -1,4 +1,6 @@
-function BaseContent(config) {
+import config from './config.js'
+
+export function BaseContent() {
   const self = this
   self.urls = []
   self.index = 0

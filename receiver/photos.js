@@ -1,6 +1,9 @@
-function Photos(config) {
+import {BaseContent} from './content.js'
+import config from './config.js'
+
+export function Photos() {
+  BaseContent.call(this)
   const self = this
-  BaseContent.call(self, config)
 
   let content = document.getElementById('photo')
   const map = document.getElementById('map')
