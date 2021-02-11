@@ -37,7 +37,7 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
         if (!dir) {
           if (suggestedValues !== years) suggest(years)
         } else {
-          if (suggestedValues[0].includes(dir)) return
+          if (suggestedValues.some(v => v.includes(dir))) return
           fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${dir}`).then(r => r.text()).then(data => {
             suggest(data.trim().split('\n'))
           })
