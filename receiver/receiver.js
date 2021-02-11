@@ -35,7 +35,8 @@ export function Receiver(content) {
   }
 
   this.onCommand = command => {
-    let [cmd, arg] = command.split(':', 2)
+    const pos = command.indexOf(':')
+    const [cmd, arg] = [command.substring(0, pos), command.substring(pos + 1)]
     let title = command
 
     if (cmd == 'url') {
