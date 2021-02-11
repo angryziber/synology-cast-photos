@@ -230,7 +230,8 @@ export function Photos() {
   }
 
   function isVideo(url) {
-    return url.toLowerCase().endsWith('.mp4')
+    const ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase()
+    return ext == 'mp4' || ext == 'mov' || ext == 'avi' || ext == 'mkv'
   }
 
   function playVideo() {
