@@ -17,7 +17,7 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
     localStorage['accessToken'] = accessToken = prompt('Access Token (defined in backend config)')
 
   const year = new Date().getFullYear()
-  const years = Array(10).fill(0).map((_, i) => year - i)
+  const years = Array(10).fill(0).map((_, i) => (year - i).toFixed())
 
   let suggestedValues = []
   suggest(years)
