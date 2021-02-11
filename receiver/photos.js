@@ -198,7 +198,7 @@ export function Photos() {
     displayedUrl = meta.file
     const title = displayedUrl.substring(0, displayedUrl.lastIndexOf('/')).replace(/\//g, ' / ')
     self.title(title)
-    receiver.broadcast(self.index + ': ' + title + '|' + displayedUrl)
+    receiver.broadcast(self.index + ': ' + title + '|' + content.src)
     self.status.textContent = self.index + '/' + self.urls.length
     self.meta.innerHTML = (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
                           (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
