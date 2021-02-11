@@ -7,9 +7,11 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
   const path = document.querySelector('[name=path]')
   const suggestions = document.querySelector('datalist#paths')
   const random = document.querySelector('[name=random]')
-  const cover = document.querySelector('[name=cover]')
   const photos = document.getElementById('photos')
   const videos = document.getElementById('videos')
+  const mode = document.querySelector('[name=mode]')
+  const cover = document.querySelector('[name=cover]')
+  const map = document.querySelector('[name=map]')
   const interval = document.querySelector('[name=interval]')
   const status = document.getElementById('status')
 
@@ -52,10 +54,12 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
       const state = JSON.parse(message.substring('state:'.length))
       if (state.path) path.value = state.path
       random.checked = state.random
-      interval.value = state.interval
       photos.checked = state.photos
       videos.checked = state.videos
+      mode.checked = state.mode == 'video'
       cover.checked = state.style == 'contain'
+      map.checked = state.map
+      interval.value = state.interval
       return
     }
     const parts = message.split('|')
@@ -72,16 +76,13 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
     sendCommand((random.checked ? 'rnd:' : 'seq:') + path.value)
   }
 
-  random.addEventListener('change', () => {
-    sendCommand(random.checked ? 'rnd' : 'seq')
-  })
-
-  cover.addEventListener('click', () => {
-    sendCommand(cover.checked ? 'style:cover' : 'style:contain')
-  })
-
+  random.addEventListener('change', () => sendCommand(random.checked ? 'rnd' : 'seq'))
   photos.addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':photos'))
   videos.addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':videos'))
+
+  mode.addEventListener('change', e => sendCommand((e.target.checked ? 'video' : 'img')))
+  cover.addEventListener('click', () => sendCommand(cover.checked ? 'style:cover' : 'style:contain'))
+  map.addEventListener('change', e => sendCommand((e.target.checked ? 'show' : 'hide') + ':map'))
 
   interval.addEventListener('change', () => sendCommand('interval:' + interval.value))
   document.getElementById('prev').addEventListener('click', () => sendCommand('prev'))
