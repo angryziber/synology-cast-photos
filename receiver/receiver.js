@@ -33,10 +33,7 @@ function Receiver(content, keyboard) {
   }
 
   this.onCommand = command => {
-    let separatorPos = command.indexOf(':')
-    if (separatorPos == -1) separatorPos = command.length
-    let cmd = command.substring(0, separatorPos)
-    let arg = command.substring(separatorPos + 1)
+    let [cmd, arg] = command.split(':', 2)
     let title = command
 
     if (cmd == 'url') {
