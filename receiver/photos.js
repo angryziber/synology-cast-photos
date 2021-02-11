@@ -5,7 +5,7 @@ function Photos(config) {
   let content = document.getElementById('photo')
   const map = document.getElementById('map')
   const nextImg = document.querySelector('link[rel=preload]')
-  let nextTimer, fadeOutTimer, meta, nextMeta, loading, displayedUrl, showingMap
+  let nextTimer, fadeOutTimer, meta, nextMeta, loading, displayedUrl
   let mode, supports4k
 
   self.state.mode = config.mode
@@ -13,6 +13,7 @@ function Photos(config) {
   self.state.style = 'contain'
   self.state.photos = true
   self.state.videos = false
+  self.state.map = false
 
   const modes = {
     // loads images as-is, without server-side processing (good for older NAS with slow CPU)
@@ -145,12 +146,12 @@ function Photos(config) {
     if (key == 'photos' || key == 'videos') self.changeState(key, false)
     else if (key == 'map') {
       map.style.display = 'none'
-      showingMap = false
+      self.state.map = false
     }
   }
 
   function updateMap() {
-    showingMap = true
+    self.state.map = true
     map.src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + meta.latitude + ',' + meta.longitude +
       '&zoom=9&size=500x300&maptype=terrain&key=' + config.googleMapsApiKey
   }
@@ -171,7 +172,7 @@ function Photos(config) {
       meta = data
       updateStatus(meta)
       mode.applyMeta(meta)
-      if (showingMap) updateMap()
+      if (self.state.map) updateMap()
     }
 
     if (nextMeta && nextMeta.url == url) metaLoaded(nextMeta.data)
