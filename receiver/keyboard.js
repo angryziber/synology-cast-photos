@@ -1,54 +1,36 @@
 export const keyboard = {
   toCommand(keyCode) {
     switch (keyCode) {
-      case 37:
-      case 38:
-        return 'prev'
-      case 33:
-        return 'prev:10'
-      case 39:
-      case 40:
-        return 'next'
-      case 34:
-        return 'next:10'
-      case 32:
-        return 'pause'
-      case 112: // F1
-        return 'mark:red'
-      case 113: // F2
-        return 'mark:yellow'
-      case 114: // F3
-        return 'mark:green'
-      case 115: // F4
-        return 'mark:blue'
-      case 48:
-        return 'mark:0'
-      case 49:
-        return 'mark:1'
-      case 50:
-        return 'mark:2'
-      case 51:
-        return 'mark:3'
-      case 52:
-        return 'mark:4'
-      case 53:
-        return 'mark:5'
-      case 46: // Del
-        return 'mark:delete'
-      case 77: // m
-        return 'show:map'
-      case 78: // n
-        return 'hide:map'
+      case 'ArrowUp':
+      case 'ArrowLeft': return 'prev'
+      case 'PageUp': return 'prev:10'
+      case 'ArrowDown':
+      case 'ArrowRight': return 'next'
+      case 'PageDown': return 'next:10'
+      case 'Space': return 'pause'
+      case 'F1': return 'mark:red'
+      case 'F2': return 'mark:yellow'
+      case 'F3': return 'mark:green'
+      case 'F4': return 'mark:blue'
+      case 'Digit0': return 'mark:0'
+      case 'Digit1': return 'mark:1'
+      case 'Digit2': return 'mark:2'
+      case 'Digit3': return 'mark:3'
+      case 'Digit4': return 'mark:4'
+      case 'Digi5': return 'mark:5'
+      case 'Delete': return 'mark:delete'
+      case 'KeyM': return 'show:map'
+      case 'KeyN': return 'hide:map'
     }
   },
 
   commandPrompt() {
-    var command = prompt('Photo dir/command', location.hash ? decodeURIComponent(location.hash.substring(1)) : '')
+    const command = prompt('Photo dir/command', location.hash ? decodeURIComponent(location.hash.substring(1)) : '')
     if (command) location.hash = '#' + command
   },
 
   onHammerLoaded() {
-    var hammer = new Hammer(document.body)
+    const hammer = new Hammer(document.body)
     hammer.on('swiperight', function () {
       receiver.onCommand('prev')
     })
@@ -62,12 +44,12 @@ export const keyboard = {
 
   init() {
     window.onkeydown = function (e) {
-      if (e.which == 27) {
+      if (e.code == 'Escape') {
         keyboard.commandPrompt()
         return
       }
 
-      var command = keyboard.toCommand(e.which)
+      const command = keyboard.toCommand(e.code)
       if (command) {
         e.preventDefault()
         receiver.onCommand(command)

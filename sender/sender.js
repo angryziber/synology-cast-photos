@@ -93,7 +93,7 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
   document.body.addEventListener('keydown', e => {
     if (e.target.tagName == 'INPUT') return
 
-    const command = keyboard.toCommand(e.which)
+    const command = keyboard.toCommand(e.code)
     if (command) {
       e.preventDefault()
       sendCommand(command)
