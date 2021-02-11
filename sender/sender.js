@@ -13,7 +13,7 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
   const status = document.getElementById('status')
 
   let accessToken = localStorage['accessToken']
-  if (!accessToken) 
+  if (!accessToken)
     localStorage['accessToken'] = accessToken = prompt('Access Token (defined in backend config)')
 
   const year = new Date().getFullYear()
@@ -37,7 +37,8 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
           if (suggestedValues !== years) suggest(years)
         } else {
           if (suggestedValues.includes(path.value)) return
-          fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${path.value}`).then(r => r.text()).then(data => {
+          const dir = path.value.substring(path.value.lastIndexOf('+'))
+          fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${dir}`).then(r => r.text()).then(data => {
             suggest(data.trim().split('\n'))
           })
         }
