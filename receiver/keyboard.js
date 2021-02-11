@@ -77,6 +77,6 @@ export const keyboard = {
     const script = document.createElement('script')
     script.src = '//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js'
     script.onload = this.onHammerLoaded.bind(this)
-    document.appendChild(script)
+    document.head.appendChild(script)
   }
 }
