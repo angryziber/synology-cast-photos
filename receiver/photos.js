@@ -223,10 +223,14 @@ export function Photos() {
     document.body.classList.add('fade-out')
   }
 
-  function fadeOutAfter(sec) {
+  function fadeOutBeforeEnds(noIncrease) {
     clearTimeout(fadeOutTimer)
-    if (sec <= 1) sec = self.state.interval; else sec--
-    fadeOutTimer = setTimeout(fadeOut, sec * 1000)
+    let sec = content.duration - content.currentTime
+    if (sec > 1 || noIncrease) sec--; else sec = self.state.interval
+    fadeOutTimer = setTimeout(() => {
+      if (content.duration - content.currentTime < 2) fadeOut()
+      else fadeOutBeforeEnds(true)
+    }, sec * 1000)
   }
 
   function isVideo(url) {
@@ -236,7 +240,7 @@ export function Photos() {
 
   function playVideo() {
     fadeIn()
-    content.play().then(() => fadeOutAfter(content.duration), e => {
+    content.play().then(() => fadeOutBeforeEnds(), e => {
       if (!content.muted) {
         content.muted = true
         playVideo()
