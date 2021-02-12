@@ -211,9 +211,7 @@ export function Photos() {
 
   function loadNextAfter(sec) {
     loading = false
-    clearTimeout(fadeOutTimer)
     clearTimeout(nextTimer)
-    fadeOutAfter(sec)
     nextTimer = setTimeout(self.next, sec * 1000)
   }
 
@@ -226,6 +224,7 @@ export function Photos() {
   }
 
   function fadeOutAfter(sec) {
+    clearTimeout(fadeOutTimer)
     if (sec > 2) fadeOutTimer = setTimeout(fadeOut, (sec - 1) * 1000)
   }
 
@@ -236,8 +235,7 @@ export function Photos() {
 
   function playVideo() {
     fadeIn()
-    const promise = content.play()
-    if (promise) promise.then(() => fadeOutAfter(content.duration), e => {
+    content.play().then(() => fadeOutAfter(content.duration), e => {
       console.error(e)
       if (!content.muted) {
         content.muted = true
