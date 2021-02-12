@@ -35,7 +35,8 @@ export function Receiver(content) {
   }
 
   this.onCommand = command => {
-    const pos = command.indexOf(':')
+    let pos = command.indexOf(':')
+    if (pos == -1) pos = command.length
     const [cmd, arg] = [command.substring(0, pos), command.substring(pos + 1)]
     let title = command
 
