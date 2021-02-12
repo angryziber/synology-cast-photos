@@ -9,7 +9,7 @@ export function Photos() {
   const map = document.getElementById('map')
   const nextImg = document.querySelector('link[rel=preload]')
   let nextTimer, fadeOutTimer, meta, nextMeta, loading, displayedUrl
-  let mode, supports4k
+  let mode, supports4k, w = innerWidth * devicePixelRatio, h = innerHeight * devicePixelRatio
 
   self.state.mode = config.mode
   self.state.interval = config.interval
@@ -72,8 +72,7 @@ export function Photos() {
           nextImg.href = config.photoVideoUrlPrefix + url + this.renderStyle() + '&preload=true'
       },
       renderStyle() {
-        return (supports4k ? '&w=3840&h=2160' : '&w=' + innerWidth * devicePixelRatio + '&h=' + innerHeight * devicePixelRatio) +
-               (innerWidth/innerHeight == 16/9 && self.state.style == 'contain' ? '&style=fill' : '')
+        return ('&w=' + w + '&h=' + h) + (innerWidth/innerHeight == 16/9 && self.state.style == 'contain' ? '&style=fill' : '')
       },
       applyMeta() {}
     }
@@ -87,13 +86,11 @@ export function Photos() {
       content.addEventListener('click', () => document.documentElement.requestFullscreen())
   }
 
-  Object.defineProperty(self, 'supports4k', {
-    get: () => supports4k,
-    set(val) {
-      supports4k = val
-      self.changeMode(supports4k ? 'video' : 'img')
-    }
-  })
+  self.init4k = function(supports, w_, h_) {
+    supports4k = supports
+    if (w_) w = w_; if (h_) h = h_
+    self.changeMode(supports4k ? 'video' : 'img')
+  }
 
   self.changeMode = function(mode) {
     self.state.mode = mode

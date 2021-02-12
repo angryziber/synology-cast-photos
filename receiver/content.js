@@ -6,7 +6,6 @@ export function BaseContent() {
   self.index = 0
   self.meta = document.getElementById('meta')
   self.status = document.getElementById('status')
-  self.supports4k = undefined
   self.baseUrl = ''
   self.listUrls = [config.listUrl]
 

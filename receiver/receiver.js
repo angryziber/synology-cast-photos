@@ -13,7 +13,7 @@ export function Receiver(content) {
 
   function initAsReceiver() {
     const receiverManager = cast.receiver.CastReceiverManager.getInstance()
-    content.supports4k = receiverManager.canDisplayType('video/mp4', 'hev1.1.2.L150', 3840, 2160)
+    content.init4k(receiverManager.canDisplayType('video/mp4', 'hev1.1.2.L150', 3840, 2160), 3840, 2160)
 
     this.messageBus = receiverManager.getCastMessageBus('urn:x-cast:message')
     this.messageBus.onMessage = e => this.onCommand(e.data)
@@ -26,7 +26,7 @@ export function Receiver(content) {
   }
 
   function initAsStandalone() {
-    content.supports4k = window.innerHeight * window.devicePixelRatio > 1080
+    content.init4k(innerHeight * devicePixelRatio > 1080)
     keyboard.init()
   }
 
