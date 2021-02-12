@@ -226,8 +226,8 @@ export function Photos() {
 
   function fadeOutAfter(sec) {
     clearTimeout(fadeOutTimer)
-    if (sec <= 1) sec = self.state.interval
-    fadeOutTimer = setTimeout(fadeOut, (sec - 1) * 1000)
+    if (sec <= 1) sec = self.state.interval; else sec--
+    fadeOutTimer = setTimeout(fadeOut, sec * 1000)
   }
 
   function isVideo(url) {
