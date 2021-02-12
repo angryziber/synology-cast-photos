@@ -82,7 +82,7 @@ export function Photos() {
   self.init = function() {
     mode = modes[self.state.mode]
     mode.init()
-    content.onerror = photoLoadingFailed
+    content.onerror = loadingFailed
     if (document.documentElement.requestFullscreen)
       content.addEventListener('click', () => document.documentElement.requestFullscreen())
   }
@@ -204,8 +204,9 @@ export function Photos() {
                           (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
   }
 
-  function photoLoadingFailed() {
+  function loadingFailed(e) {
     self.status.textContent = self.index + '/' + self.urls.length + ': failed'
+    self.title(e)
     loadNextAfter(self.state.interval / 4)
   }
 
