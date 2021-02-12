@@ -26,7 +26,7 @@ export function Photos() {
         content = document.getElementById('photo')
         content.onload = () => loadNextAfter(self.state.interval)
       },
-      renderPhoto(url) {
+      render(url) {
         content.src = self.baseUrl + config.photoUrlPrefix + url
       },
       preloadNext(url) {
@@ -61,7 +61,7 @@ export function Photos() {
         content.oncanplaythrough = playVideo
         content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
       },
-      renderPhoto(url) {
+      render(url) {
         if (isVideo(url))
           content.src = self.baseUrl + config.videoUrlPrefix + url
         else
@@ -181,7 +181,7 @@ export function Photos() {
     if (nextMeta && nextMeta.url == url) metaLoaded(nextMeta.data)
     else loadMeta(url).then(metaLoaded)
 
-    mode.renderPhoto(url)
+    mode.render(url)
 
     clearTimeout(preloadTimer)
     preloadTimer = setTimeout(self.preloadNext, 500)
