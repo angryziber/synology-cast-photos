@@ -24,7 +24,7 @@ function exif_coord($key, $lines) {
 header("Content-type: application/json");
 header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($path)).' GMT');
 
-exec("$exiv2 -g Exif.Image.Model -g Exif.Image.Orientation -g Exif.Image.DateTime -g Exif.Photo.ExposureTime -g Exif.Photo.FNumber -g Exif.Photo.ISOSpeedRatings -g Exif.Photo.FocalLength -g Exif.CanonCs.LensType -g Exif.GPSInfo.GPSLatitude -g Exif.GPSInfo.GPSLongitude -g Exif.GPSInfo.GPSAltitude -PEIkvt ".escapeshellarg($path), $lines, $return);
+exec("$exiv2 -q -g Exif.Image.Model -g Exif.Image.Orientation -g Exif.Image.DateTime -g Exif.Photo.ExposureTime -g Exif.Photo.FNumber -g Exif.Photo.ISOSpeedRatings -g Exif.Photo.FocalLength -g Exif.CanonCs.LensType -g Exif.GPSInfo.GPSLatitude -g Exif.GPSInfo.GPSLongitude -g Exif.GPSInfo.GPSAltitude -PEIkvt ".escapeshellarg($path), $lines, $return);
 $datetime = exif_value('Exif.Image.DateTime', $lines, 1);
 $datetime = preg_replace('/:/', '-', $datetime, 2);
 $datetime = preg_replace('/:[0-9]{2}$/', '', $datetime);

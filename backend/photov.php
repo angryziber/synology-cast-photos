@@ -20,7 +20,7 @@ if (!$h) $h = 2160;
 # /var/packages/VideoStation/target/bin/ffmpeg -vaapi_device /dev/dri/renderD128 -hwaccel vaapi -hwaccel_output_format vaapi -noautorotate -i input-file -vcodec h264_vaapi -vf format=nv12|vaapi,hwupload,scale_vaapi=w=$w:h=$h -vsync 2 -bf 0 -b:v 3192698 - -f mp4 -skip_displaymatrix 1 -map 0:0 -map 0:1 -y ???
 
 if (!$exists) {
-  $exif_orientation = exec("exiv2 -g Exif.Image.Orientation -Pv '$path'");
+  $exif_orientation = exec("exiv2 -q -g Exif.Image.Orientation -Pv '$path'");
   $transpose = "";
   if ($exif_orientation == 6) $transpose = "transpose=1,";
   else if ($exif_orientation == 8) $transpose = "transpose=2,";
