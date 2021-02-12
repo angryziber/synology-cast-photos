@@ -7,14 +7,14 @@ $file = $_GET['file'];
 $path = ensure_safe("$photos_dir/$file");
 $style = $_GET['style'];
 $preload = $_GET['preload'];
-$outfile = sys_get_temp_dir().'/img2mp4$'.str_replace('/', '$', $file).'.mp4';
-$exists = file_exists($outfile);
 
 $w = $_GET['w'];
 if (!$w) $w = 3180;
 $h = $_GET['h'];
 if (!$h) $h = 2160;
 
+$outfile = sys_get_temp_dir().'/img2mp4$'.str_replace('/', '$', $file).".$w:$h.mp4";
+$exists = file_exists($outfile);
 
 # TODO VideoStation with HW acceleration can use something like that:
 # /var/packages/VideoStation/target/bin/ffmpeg -vaapi_device /dev/dri/renderD128 -hwaccel vaapi -hwaccel_output_format vaapi -noautorotate -i input-file -vcodec h264_vaapi -vf format=nv12|vaapi,hwupload,scale_vaapi=w=$w:h=$h -vsync 2 -bf 0 -b:v 3192698 - -f mp4 -skip_displaymatrix 1 -map 0:0 -map 0:1 -y ???
