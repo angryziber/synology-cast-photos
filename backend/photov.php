@@ -33,14 +33,17 @@ if (!$exists) {
 
   $codec = "-vcodec libx264 -profile:v high -crf 22 -tune stillimage -preset ultrafast -pix_fmt yuv420p";
 
-  exec("ffmpeg -hide_banner -noautorotate -i '$path' $codec $scale -r 1 '$outfile'");
+  $command = "ffmpeg -hide_banner -noautorotate -i '$path' $codec $scale -r 1 '$outfile'";
+  exec($command);
 }
 
 header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($path)).' GMT');
 header('Accept-Ranges: none');
 
-if ($preload) {;
-  echo filesize($outfile);
+if ($preload) {
+  $size = filesize($outfile);
+  echo $size."\n";
+  if ($size == 0) echo $command;
 }
 else {
   header("Content-type: video/mp4");
