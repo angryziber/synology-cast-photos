@@ -29,7 +29,7 @@ if (!$exists) {
   if ($style == 'fill')
     $scale = "-filter_complex '[0]${transpose}scale=$w:$h,setsar=1,boxblur=20:20[b];[0]${transpose}scale=-1:${h}[v];[b][v]overlay=(W-w)/2'";
   else
-    $scale = "-vf ${transpose}scale=w=$w:h=$h:force_original_aspect_ratio=decrease";
+    $scale = "-vf ${transpose}scale=w=$w:h=$h:force_original_aspect_ratio=decrease,pad='width=ceil(iw/2)*2:height=ceil(ih/2)*2'";
 
   $codec = "-vcodec libx264 -profile:v high -crf 22 -tune stillimage -preset ultrafast -pix_fmt yuv420p";
 
