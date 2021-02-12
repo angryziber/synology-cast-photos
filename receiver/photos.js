@@ -204,9 +204,8 @@ export function Photos() {
                           (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
   }
 
-  function loadingFailed(e) {
+  function loadingFailed() {
     self.status.textContent = self.index + '/' + self.urls.length + ': failed'
-    self.title(e)
     loadNextAfter(self.state.interval / 4)
   }
 
