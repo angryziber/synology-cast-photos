@@ -237,11 +237,11 @@ export function Photos() {
   function playVideo() {
     fadeIn()
     content.play().then(() => fadeOutAfter(content.duration), e => {
-      console.error(e)
       if (!content.muted) {
         content.muted = true
         playVideo()
       }
+      else console.error(e)
     })
   }
 }
