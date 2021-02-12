@@ -241,7 +241,7 @@ export function Photos() {
         content.muted = true
         playVideo()
       }
-      else console.error(e)
+      else self.title(e)
     })
   }
 }
