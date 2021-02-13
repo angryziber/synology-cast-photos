@@ -13,7 +13,8 @@ export function Receiver(content) {
 
   function initAsReceiver() {
     const receiverManager = cast.receiver.CastReceiverManager.getInstance()
-    content.init4k(receiverManager.canDisplayType('video/mp4', 'hev1.1.2.L150', 3840, 2160), 3840, 2160)
+    const supports4k = receiverManager.canDisplayType('video/mp4', 'hev1.1.2.L150', 3840, 2160)
+    content.init4k(supports4k, supports4k && 3840, supports4k && 2160)
 
     this.messageBus = receiverManager.getCastMessageBus('urn:x-cast:message')
     this.messageBus.onMessage = e => this.onCommand(e.data)
