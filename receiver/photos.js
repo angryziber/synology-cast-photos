@@ -60,7 +60,7 @@ export function Photos() {
         content = document.getElementById('photo')
         content.onloadedmetadata = () => {
           if (content.duration > 1)
-            self.meta.innerHTML += '<br>' + content.videoHeight + 'p ' + Math.round(content.duration) + 's'
+            self.meta.innerHTML += content.videoHeight + 'p ' + Math.round(content.duration) + 's'
         }
         content.oncanplaythrough = playVideo
         content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
