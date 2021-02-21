@@ -180,6 +180,7 @@ export function Photos() {
 
     mode.render(url)
 
+    clearTimeout(nextTimer)
     clearTimeout(preloadTimer)
     preloadTimer = setTimeout(self.preloadNext, 500)
   }
@@ -208,7 +209,6 @@ export function Photos() {
 
   function loadNextAfter(sec) {
     loading = false
-    clearTimeout(nextTimer)
     nextTimer = setTimeout(self.next, sec * 1000)
   }
 
