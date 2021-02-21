@@ -157,7 +157,7 @@ export function Photos() {
   }
 
   async function loadMeta(url) {
-    if (isVideo(url)) return {file: url, datetime: url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'))}
+    if (isVideo(url)) return {file: url, video: true}
     return fetch(config.metaUrlPrefix + url).then(r => r.json())
   }
 
@@ -198,8 +198,11 @@ export function Photos() {
     self.title(title)
     receiver.broadcast(self.index + ': ' + title + '|' + content.src)
     self.status.textContent = self.index + '/' + self.urls.length
-    self.meta.innerHTML = (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
-                          (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
+    self.meta.innerHTML = meta.video ?
+      displayedUrl.substring(displayedUrl.lastIndexOf('/') + 1, displayedUrl.lastIndexOf('.')) + '<br>' +
+      content.videoHeight + 'p ' + content.duration + 's' :
+      (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
+      (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
   }
 
   function loadingFailed() {
