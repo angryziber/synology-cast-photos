@@ -36,13 +36,15 @@ export function Sender(chromecast = new Chromecast(config.castAppId)) {
     else {
       clearTimeout(debounce)
       debounce = setTimeout(() => {
-        const dir = path.value.substring(path.value.lastIndexOf('+') + 1)
+        const plusPos = path.value.lastIndexOf('+') + 1
+        const prefix = path.value.substring(0, plusPos)
+        const dir = path.value.substring(plusPos)
         if (!dir) {
           if (suggestedValues !== years) suggest(years)
         } else {
           if (suggestedValues.some(v => v.includes(dir))) return
           fetch(`${config.photoDirsSuggestUrl}?accessToken=${accessToken}&dir=${dir}`).then(r => r.text()).then(data => {
-            suggest(data.trim().split('\n').sort((a, b) => b.localeCompare(a)))
+            suggest(data.trim().split('\n').sort((a, b) => b.localeCompare(a))).map(s => prefix + s)
           })
         }
       }, 300)
