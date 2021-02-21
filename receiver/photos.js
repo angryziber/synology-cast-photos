@@ -58,6 +58,10 @@ export function Photos() {
       init() {
         content.outerHTML = '<video id="photo"></video>'
         content = document.getElementById('photo')
+        content.onloadedmetadata = () => {
+          if (content.duration > 1)
+            self.meta.innerHTML += '<br>' + content.videoHeight + 'p ' + Math.round(content.duration) + 's'
+        }
         content.oncanplaythrough = playVideo
         content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
       },
@@ -157,7 +161,7 @@ export function Photos() {
   }
 
   async function loadMeta(url) {
-    if (isVideo(url)) return {file: url, video: true}
+    if (isVideo(url)) return {file: url, datetime: url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'))}
     return fetch(config.metaUrlPrefix + url).then(r => r.json())
   }
 
@@ -198,9 +202,7 @@ export function Photos() {
     self.title(title)
     receiver.broadcast(self.index + ': ' + title + '|' + content.src)
     self.status.textContent = self.index + '/' + self.urls.length
-    self.meta.innerHTML = meta.video ?
-      displayedUrl.substring(displayedUrl.lastIndexOf('/') + 1, displayedUrl.lastIndexOf('.')) + '<br>' +
-      content.videoHeight + 'p ' + content.duration + 's' :
+    self.meta.innerHTML =
       (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
       (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
   }
