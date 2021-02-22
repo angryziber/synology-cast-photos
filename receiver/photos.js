@@ -203,7 +203,7 @@ export function Photos() {
     self.meta.innerHTML =
       (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
       (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '') +
-      (meta.format || '') + (meta.fps ? ' ' + meta.fps + ' fps' : '')
+      (meta.format || '') + (meta.fps ? ' ' + meta.fps + 'fps ' : '')
   }
 
   function loadingFailed() {
