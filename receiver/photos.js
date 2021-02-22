@@ -60,7 +60,7 @@ export function Photos() {
         content = document.getElementById('photo')
         content.onloadedmetadata = () => {
           if (content.duration > 1)
-            self.meta.innerHTML += content.videoHeight + 'p ' + Math.round(content.duration) + 's'
+            self.meta.innerHTML += ' ' + content.videoHeight + 'p ' + Math.round(content.duration) + 's'
         }
         content.oncanplaythrough = playVideo
         content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
@@ -203,7 +203,7 @@ export function Photos() {
     self.meta.innerHTML =
       (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
       (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '') +
-      (meta.format || '') + (meta.fps ? ' ' + meta.fps + 'fps ' : '')
+      (meta.format || '') + (meta.fps ? ' @' + meta.fps : '')
   }
 
   function loadingFailed() {
