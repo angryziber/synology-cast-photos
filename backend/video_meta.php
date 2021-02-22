@@ -15,7 +15,10 @@ header("Content-type: application/json");
 header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($path)).' GMT');
 
 exec("ffmpeg -hide_banner -i ".escapeshellarg($path). " 2>&1", $lines, $return);
+
 $datetime = value('creation_time', $lines, 1);
+if ($datetime == null) $datetime = substr($file, strrpos($file, '/') + 1);
+
 $coords = value('location', $lines, 1);
 $lat = substr($coords, 0, 8);
 $lon = substr($coords, 8, 9);
