@@ -155,7 +155,8 @@ export function Photos() {
   function updateMap() {
     self.state.map = true
     const query = meta.latitude ? meta.latitude + ',' + meta.longitude : displayedUrl.substring(5, displayedUrl.lastIndexOf('/'))
-    map.src = 'https://maps.googleapis.com/maps/api/staticmap?markers=' + query + '&zoom=9&size=500x300&maptype=terrain&key=' + config.googleMapsApiKey
+    const zoom = meta.latitude ? 9 : 7
+    map.src = `https://maps.googleapis.com/maps/api/staticmap?markers=${query}&zoom=${zoom}&size=500x300&maptype=terrain&key=${config.googleMapsApiKey}`
   }
 
   function loadMeta(url) {
