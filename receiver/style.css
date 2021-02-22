@@ -53,9 +53,14 @@ html, body {
 }
 
 #map {
-  display: none;
+  opacity: 0;
   position: absolute;
   bottom: 0;
   right: 0;
   border: none;
+  transition: opacity 0.5s;
+}
+
+#map.show {
+  opacity: 0.9;
 }

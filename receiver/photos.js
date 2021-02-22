@@ -139,15 +139,15 @@ export function Photos() {
   self.show = function(key) {
     if (key == 'photos' || key == 'videos') self.changeState(key, true)
     else if (key == 'map') {
-      map.style.display = 'block'
       updateMap()
+      map.classList.add('show')
     }
   }
 
   self.hide = function(key) {
     if (key == 'photos' || key == 'videos') self.changeState(key, false)
     else if (key == 'map') {
-      map.style.display = 'none'
+      map.classList.remove('show')
       self.state.map = false
     }
   }
