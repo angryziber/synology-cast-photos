@@ -21,6 +21,7 @@ $lat = substr($coords, 0, 8);
 $lon = substr($coords, 8);
 $comment = value('comment', $lines, 1);
 $model = value('model', $lines, 1);
+$duration = preg_split("/,? +/", value('Duration', $lines, 1))[0];
 
 $video = value('Video', $lines, 2);
 $parts = preg_split("/,? +/", $video);
@@ -38,6 +39,7 @@ $result = array('file' => $file,
               'kbps' => $kbps,
               'format' => $format,
               'resolution' => $reso,
+              'duration' => $duration,
               'fps' => $fps);
 
 echo json_encode($result);
