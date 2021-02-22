@@ -132,7 +132,7 @@ export function Photos() {
   }
 
   self.mark = function(how) {
-    fetch(config.markPhotoUrl, {method: 'POST', body: JSON.stringify({file: displayedUrl, how: how})}).then(r => {
+    fetch(config.markUrl, {method: 'POST', body: 'file=' + encodeURIComponent(displayedUrl) + '&how=' + how, headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(r => {
       if (r.ok) return r.text()
       else self.title('Failed to mark: ' + r.status + ' ' + r.statusText)
     }).then(text => self.title(text))
