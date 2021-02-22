@@ -7,7 +7,8 @@ export default {
   photoUrlPrefix: '/backend/photo.php?file=',
   photoVideoUrlPrefix: '/backend/photov.php?file=',
   videoUrlPrefix: '/video/',
-  metaUrlPrefix: '/backend/photo_meta.php?file=',
+  photoMetaUrlPrefix: '/backend/photo_meta.php?file=',
+  videoMetaUrlPrefix: '/backend/video_meta.php?file=',
   markUrl: '/backend/photo_mark.php',
   mode: 'video', // 'video' supports 4k/UHD resolution on Google Cast, while 'img' doesn't do server-side processing
   interval: 10, // photo showing interval, in sec

@@ -66,10 +66,8 @@ export function Photos() {
         content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
       },
       render(url) {
-        if (isVideo(url))
-          content.src = self.baseUrl + config.videoUrlPrefix + url
-        else
-          content.src = self.baseUrl + config.photoVideoUrlPrefix + url + this.renderStyle()
+        content.src = self.baseUrl +
+          (isVideo(url) ? config.videoUrlPrefix + url : config.photoVideoUrlPrefix + url + this.renderStyle())
       },
       preloadNext(url) {
         if (!isVideo(url))
@@ -160,9 +158,9 @@ export function Photos() {
       '&zoom=9&size=500x300&maptype=terrain&key=' + config.googleMapsApiKey
   }
 
-  async function loadMeta(url) {
-    if (isVideo(url)) return {file: url, datetime: url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'))}
-    return fetch(config.metaUrlPrefix + url).then(r => r.json())
+  function loadMeta(url) {
+    const metaUrl = (isVideo(url) ? config.videoMetaUrlPrefix : config.photoMetaUrlPrefix) + url
+    return fetch(metaUrl).then(r => r.json())
   }
 
   let preloadTimer
@@ -204,7 +202,8 @@ export function Photos() {
     self.status.textContent = self.index + '/' + self.urls.length
     self.meta.innerHTML =
       (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
-      (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '')
+      (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '') +
+      (meta.format || '') + (meta.fps ? ' ' + meta.fps + ' fps' : '')
   }
 
   function loadingFailed() {
