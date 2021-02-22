@@ -18,17 +18,19 @@ exec("ffmpeg -hide_banner -i ".escapeshellarg($path). " 2>&1", $lines, $return);
 $datetime = value('creation_time', $lines, 1);
 $coords = value('location', $lines, 1);
 $lat = substr($coords, 0, 8);
-$lon = substr($coords, 8);
+$lon = substr($coords, 8, 9);
 $comment = value('comment', $lines, 1);
 $model = value('model', $lines, 1);
-$duration = preg_split("/,? +/", value('Duration', $lines, 1))[0];
+
+$duration = value('Duration', $lines, 1);
+$kbps = value('bitrate', $lines, 3);
+$kbps = substr($kbps, 0, strpos($kbps, ' '));
 
 $video = value('Video', $lines, 2);
-$parts = preg_split("/,? +/", $video);
-$format = $parts[0];
-$reso = $parts[7];
-$kbps = $parts[12];
-$fps = $parts[14];
+$parts = preg_split("/, +/", $video);
+$format = substr($parts[0], 0, strpos($parts[0], ' '));
+$reso = $parts[2];
+$fps = substr($parts[5], 0, strpos($parts[5], ' '));
 
 $result = array('file' => $file,
               'camera' => $model,
