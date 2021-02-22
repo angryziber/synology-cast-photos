@@ -23,6 +23,7 @@ $comment = value('comment', $lines, 1);
 $model = value('model', $lines, 1);
 
 $duration = value('Duration', $lines, 1);
+$duration = substr($duration, 0, strpos($duration, ','));
 $kbps = value('bitrate', $lines, 3);
 $kbps = substr($kbps, 0, strpos($kbps, ' '));
 
