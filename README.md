@@ -6,6 +6,8 @@ Cast photos & videos stored on a NAS directly to Google Chromecast or Android TV
 This is like having a huge photo frame in the house - images are shown in random order by default.
 A good way to break you photo collection free.
 
+![Android TV casting images](tv.jpg)
+
 ## Required hardware
 
 - *Synology NAS* device (or any other server containing photos and running PHP)
