@@ -4,7 +4,7 @@ Cast photos from NAS directly to TV in 4K/UHD
 Cast photos & videos stored on a NAS directly to Google Chromecast or Android TV.
 
 This is like having a huge photo frame in the house - images are shown in random order by default.
-A good way to break you photo collection free.
+A good way to break your photo collection free.
 
 ![Android TV casting images](tv.jpg)
 
