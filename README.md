@@ -63,4 +63,4 @@ it will load the receiver hosted on Github first, and then the sender will tell 
 
 If you want, you can also [register your own Chromecast receiver app](https://cast.google.com/publish/) with Google pointing to **http://your-nas-ip/receiver/**
 You will need to pay Google $5 for the privilege, but it will also be possible to register your Chromecast device for testing,
-enabling remote debugging/insection and use of http (insecure) links.
+enabling remote debugging/inspection and use of http (insecure) links.
