@@ -16,7 +16,7 @@ A good way to break your photo collection free.
 ## Components
 
 * [sender/](sender/) - *Chromecast sender*, use it to start and control the show from Google Chrome, Chromium, Brave or other derived browser.
-  It [looks like this](https://keks.ee/synalogoy-cast-photos/sender/), but you need to deploy your own.
+  It [looks like this](https://keks.ee/synology-cast-photos/sender/), but you need to deploy your own.
 * [receiver/](receiver/) - *Chromecast receiver* - will run on Chromecast dongle/Android TV, or use it stand-alone for in-browser slideshow.
 * [backend/](backend/) - PHP scripts for listing and serving the actual photos & videos from NAS, or any other php-enabled server.
 * `config.php/js` - each directory has a config file, where you can define paths of photos on your server and other options
