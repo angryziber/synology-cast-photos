@@ -49,7 +49,7 @@ There is also an [Android sender app](https://github.com/angryziber/synology-cas
 
 ### Older Synology devices
 
-If you own an older Synology with simple CPU that cannot resize/convert photos, set mode to 'img'.
+If you own an older Synology with simple CPU that cannot resize/convert photos, set mode to 'img' in `receiver/config.js`.
 
 E.g. on DS212j resizing a photo from Canon 5D mk2 takes about a minute with imagemagick, while Chromecast downloads 2.5Mb
 over local Wi-Fi and fits the same image to the screen in just a couple of seconds.
