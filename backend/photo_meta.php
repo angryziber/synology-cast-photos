@@ -29,11 +29,7 @@ $datetime = exif_value('Exif.Image.DateTime', $lines, 1);
 $datetime = preg_replace('/:/', '-', $datetime, 2);
 $datetime = preg_replace('/:[0-9]{2}$/', '', $datetime);
 
-$exposure = exif_value('Exif.Photo.ExposureTime', $lines, 1);
-if (substr($exposure, 0, 2) != '1/') {
-    $parts = preg_split('/\//', $exposure, 2);
-    $exposure = $parts[0] / $parts[1];
-}
+$exposure = exif_value('Exif.Photo.ExposureTime', $lines, 2);
 
 $result = array('file' => $file,
               'camera' => str_replace('DIGITAL REBEL', '300D', str_replace('DIGITAL REBEL XT', '350D', exif_value('Exif.Image.Model', $lines, 2))),
@@ -43,6 +39,7 @@ $result = array('file' => $file,
               'fnumber' => exif_value('Exif.Photo.FNumber', $lines, 2),
               'iso' => exif_value('Exif.Photo.ISOSpeedRatings', $lines, 1),
               'focal' => exif_value('Exif.Photo.FocalLength', $lines, 2),
+              'focal35mm' => exif_value('Exif.Photo.FocalLengthIn35mmFilm', $lines, 2),
               'lens' => str_replace('(65535)', '', exif_value('Exif.CanonCs.LensType', $lines, 2)),
               'latitude' => exif_coord('Exif.GPSInfo.GPSLatitude', $lines),
               'longitude' => exif_coord('Exif.GPSInfo.GPSLongitude', $lines),
