@@ -10,7 +10,7 @@ export function BaseContent() {
   self.listUrls = [config.listUrl]
 
   const title = document.getElementById('title')
-  if (location.host != 'keks.ee') title.textContent += ': ' + location.host
+  if (location.host != 'keks.ee') self.title(': ' + location.host, true)
 
   self.state = {
     url: location.href,
@@ -71,8 +71,9 @@ export function BaseContent() {
     updateIndex(self.currentUrl(), self.urlsSequential || (self.urlsSequential = self.urls.slice().sort()))
   }
 
-  self.title = function(text) {
-    title.textContent = text
+  self.title = function(text, add = false) {
+    if (add) title.textContent += text
+    else title.textContent = text
   }
 
   function updateIndex(currentUrl, newUrls) {

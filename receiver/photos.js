@@ -90,6 +90,7 @@ export function Photos() {
 
   self.init4k = function(supports, w_, h_) {
     supports4k = supports
+    if (supports4k) self.title(' (4K)', true)
     if (w_) w = w_; if (h_) h = h_
     self.changeMode(supports4k ? 'video' : 'img')
   }
