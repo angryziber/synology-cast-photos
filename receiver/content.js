@@ -10,7 +10,7 @@ export function BaseContent() {
   self.listUrls = [config.listUrl]
 
   const title = document.getElementById('title')
-  if (location.host != 'keks.ee') self.title(': ' + location.host, true)
+  if (location.host != 'keks.ee') title.textContent += ': ' + location.host
 
   self.state = {
     url: location.href,
