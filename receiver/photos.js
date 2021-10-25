@@ -202,8 +202,10 @@ export function Photos() {
     receiver.broadcast(self.index + ': ' + title + '|' + content.src)
     self.status.textContent = self.index + '/' + self.urls.length
     self.meta.innerHTML =
-      (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '') : '') +
-      (meta.exposure ? ', ' + meta.exposure : '') + (meta.fnumber ? ', ' + meta.fnumber : '') +
+      (meta.datetime || '') + '<br>' + (meta.focal ? meta.focal.replace('.0', '').replace(' ', '') : '') +
+      (meta.focal35mm && meta.focal35mm != meta.focal ? ' (' + meta.focal35mm.replace('.0', '').replace(' mm', '') + 'eq)' : '') +
+      (meta.exposure ? ', ' + meta.exposure.replace(' ', '') : '') + (meta.fnumber ? ', ' + meta.fnumber : '') +
+      (meta.camera ? '<br>' + meta.camera : '') + (meta.iso ? ', iso' + meta.iso : '') +
       (meta.format || '') + (meta.fps ? ' @' + meta.fps : '')
   }
 
