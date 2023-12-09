@@ -15,11 +15,16 @@ function exif_value($key, $lines, $n) {
     return count($lines) > 0 ? preg_split("/\\s{2,}/", current($lines), 3)[$n] : null;
 }
 
+function ratio($s) {
+    $parts = preg_split('/\//', $s);
+    return $parts[0] / $parts[1];
+}
+
 function exif_coord($key, $lines) {
     $ref = exif_value($key.'Ref', $lines, 1);
     if (!$ref) return null;
-    $parts = preg_split("/ /", exif_value($key, $lines, 2));
-    return ($ref == 'S' || $ref == 'W' ? -1 : 1) * (double)$parts[0] + (double)$parts[1] / 60;
+    $parts = preg_split("/ /", exif_value($key, $lines, 1));
+    return ($ref == 'S' || $ref == 'W' ? -1 : 1) * (ratio($parts[0]) + ratio($parts[1]) / 60 + ratio($parts[2]) / 3600);
 }
 
 header("Content-type: application/json");
@@ -44,6 +49,6 @@ $result = array('file' => $file,
               'lens' => str_replace('(65535)', '', exif_value('Exif.CanonCs.LensType', $lines, 2)),
               'latitude' => exif_coord('Exif.GPSInfo.GPSLatitude', $lines),
               'longitude' => exif_coord('Exif.GPSInfo.GPSLongitude', $lines),
-              'altitude' => exif_value('Exif.GPSInfo.GPSAltitude', $lines, 2));
+              'altitude' => exif_value('Exif.GPSInfo.GPSAltitude', $lines, 2) * 1);
 
 echo json_encode($result);
