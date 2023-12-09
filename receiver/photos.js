@@ -250,7 +250,7 @@ export function Photos() {
         content.muted = true
         playVideo()
       }
-      else self.title(e)
+      else if (!content.ended) self.title(e)
     })
   }
 }
