@@ -22,7 +22,7 @@ $marks_file = "$photos_list_dir/marks.txt";
 # If defined, requests will be allowed only from these hosts (comma-separated)
 $allowed_hosts = '';
 
-$origin = $_SERVER['HTTP_ORIGIN'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 if ($origin) {
 	$origin_host = preg_replace('/^https?:\/\//', '', $origin);
 	if ($allowed_hosts && strpos($allowed_hosts, $origin_host) === false) forbidden();
