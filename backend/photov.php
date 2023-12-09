@@ -5,13 +5,11 @@ include 'config.php';
 
 $file = $_GET['file'];
 $path = ensure_safe("$photos_dir/$file");
-$style = $_GET['style'];
-$preload = $_GET['preload'];
+$style = $_GET['style'] ?? null;
+$preload = $_GET['preload'] ?? false;
 
-$w = $_GET['w'];
-if (!$w) $w = 3180;
-$h = $_GET['h'];
-if (!$h) $h = 2160;
+$w = $_GET['w'] ?? 3180;
+$h = $_GET['h'] ?? 2160;
 
 $outfile = sys_get_temp_dir().'/img2mp4$'.str_replace('/', '$', $file).".$w:$h.mp4";
 $exists = file_exists($outfile);
