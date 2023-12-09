@@ -32,7 +32,9 @@ Set `mode: 'img'` in [receiver/config](receiver/config.js) if you are fine with 
 ## Installing on Synology NAS
 
 - Enable *Web Station* in DSM web interface
-- In PHP settings (in a tab), add your photos and videos directories to PHP open_basedir - otherwise they won't be accessible to PHP
+- Create PHP 7 or 8 profile in Script Language Settings
+- Add your photos and videos and tmp directories to PHP open_basedir - otherwise they won't be accessible to PHP
+  e.g. `/volume1/photo:/volume1/video:/var/services/tmp` or just `/volume1`
 - Copy/clone this repository to the *'web'* directory on your NAS
 - Open **http://your-nas-ip/sender/** in your browser, start casting!
 - Or open **http://your-nas-ip/receiver/** to watch photos in the browser (Use Esc key to specify the directory to watch)
