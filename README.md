@@ -34,14 +34,16 @@ Set `mode: 'img'` in [receiver/config](receiver/config.js) if you are fine with 
 - Enable *Web Station* in DSM web interface
 - Create PHP 7 or 8 profile in Script Language Settings
 - Add your photos and videos and tmp directories to PHP open_basedir - otherwise they won't be accessible to PHP
-  e.g. `/volume1/photo:/volume1/video:/var/services/tmp` or just `/volume1`
+  e.g. `/volume1/web:/volume1/photo:/volume1/video:/var/services/tmp`
 - Copy/clone this repository to the *'web'* directory on your NAS
+- Review `backend/config.php` and set correct paths of your photos and videos.
+- Create a file `php-access-token.txt` in your photos_list_dir, specify there whatever password you will use for listing of your directories, or use an empty string in `backend/config.php`. Sender will ask for it when used for the first time.
 - Open **http://your-nas-ip/sender/** in your browser, start casting!
 - Or open **http://your-nas-ip/receiver/** to watch photos in the browser (Use Esc key to specify the directory to watch)
 - Optionally, enable DynamicDNS/Quick Connect, and request Let's Encrypt *https* certificate to have your URL as **https://your-nas.synology.me/**
 
 Note: backend PHP scripts can take advantage of [rawfs](http://github.com/angryziber/rawfs) running on the NAS making it
-possible to cast raw (e.g. Canon CR2) photos directly, without converting them to jpeg first. This is optional if your photos are already
+possible to cast raw (e.g. Canon CR2) photos directly, without converting them to jpeg first. This is not needed if your photos are already
 in jpeg format.
 
 Videos are streamed directly without transcoding, so your Chromecast must support their format. H264 works the best across devices.
