@@ -49,6 +49,6 @@ $result = array('file' => $file,
               'lens' => str_replace('(65535)', '', exif_value('Exif.CanonCs.LensType', $lines, 2)),
               'latitude' => exif_coord('Exif.GPSInfo.GPSLatitude', $lines),
               'longitude' => exif_coord('Exif.GPSInfo.GPSLongitude', $lines),
-              'altitude' => exif_value('Exif.GPSInfo.GPSAltitude', $lines, 2) * 1);
+              'altitude' => (int)exif_value('Exif.GPSInfo.GPSAltitude', $lines, 2));
 
 echo json_encode($result);
