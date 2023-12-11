@@ -37,6 +37,7 @@ if ($allowed_hosts && strpos($allowed_hosts, $host) === false) forbidden();
 function ensure_safe($path) {
     global $photos_dir, $photos_list_dir, $videos_dir;
     $canonical = realpath($path);
+    if (!$canonical) not_found($path);
     if (strpos($canonical, $photos_dir) !== 0 &&
         strpos($canonical, $photos_list_dir) !== 0 &&
         strpos($canonical, $videos_dir) !== 0)
@@ -46,13 +47,18 @@ function ensure_safe($path) {
 
 function check_access() {
     global $access_token;
-    if ($access_token && $access_token != $_GET['accessToken'])
+    if ($access_token && $access_token != ($_GET['accessToken'] ?? ''))
         forbidden();
 }
 
 function forbidden() {
-    header("HTTP/1.0 403 Forbidden");
+    header("HTTP/1.1 403 Forbidden");
     echo "Forbidden";
     exit;
 }
 
+function not_found($path) {
+    header("HTTP/1.1 404 Not Found");
+    echo "Not Found ".$path;
+    exit;
+}
