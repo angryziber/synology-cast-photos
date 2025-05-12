@@ -62,8 +62,12 @@ export function Photos() {
           if (content.duration > 1)
             self.meta.innerHTML += ' ' + content.videoHeight + 'p ' + Math.round(content.duration) + 's'
         }
-        content.oncanplaythrough = playVideo
-        content.onended = () => isVideo(content.src) ? self.next() : loadNextAfter(self.state.interval)
+        content.oncanplaythrough = () => {
+          content.duration > 1 ? playVideo() : loadNextAfter(self.state.interval)
+        }
+        content.onended = () => {
+          content.duration > 1 ? loadNextAfter(self.state.interval) : self.next()
+        }
       },
       render(url) {
         content.src = self.baseUrl +
